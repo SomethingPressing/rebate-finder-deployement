@@ -8,10 +8,14 @@ This repo contains everything needed to deploy and update the **Incenva Rebate F
 rebate-finder-deployement/
 ├── README.md                          ← You are here
 │
+├── seeds/
+│   └── json/                          ← Seed data (JSON exports, admin-users, brand config)
+│
 ├── scripts/
 │   ├── rebate-finder/
 │   │   ├── setup-server.sh            ← Full server setup (run once on fresh VPS)
-│   │   ├── deploy.sh                  ← Pull + build + restart (run on every update)
+│   │   ├── deploy.sh                  ← Pull + build + restart (run on every code update)
+│   │   ├── seed.sh                    ← Load seed data from seeds/json → DB (run separately)
 │   │   └── create-admin.sh            ← Add/update an admin user
 │   │
 │   └── scraper/
@@ -32,16 +36,19 @@ rebate-finder-deployement/
 
 ```bash
 # 1. Clone this repo onto the server
-git clone <this-repo-url> /home/rf/deployment
+git clone <this-deployment-repo-url> /home/rf/deployment
 cd /home/rf/deployment
 
-# 2. Set up the main Next.js app
-sudo bash scripts/rebate-finder/setup-server.sh
+# 2. Set up the main Next.js app (installs prerequisites, DB, builds, starts PM2)
+sudo APP_REPO_URL=<rebate-finder-repo-url> bash scripts/rebate-finder/setup-server.sh
 
-# 3. Set up the Go scraper service
-sudo bash scripts/scraper/setup-server.sh
+# 3. Load seed data (separate from code deploys)
+bash scripts/rebate-finder/seed.sh
 
-# 4. Install Nginx config + SSL
+# 4. Set up the Go scraper service
+sudo APP_REPO_URL=<scraper-repo-url> bash scripts/scraper/setup-server.sh
+
+# 5. Install Nginx config + SSL
 sudo cp nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder
 sudo ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx

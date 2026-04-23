@@ -237,8 +237,10 @@ ok "Regenerating Prisma client…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma generate" 2>&1 | tail -1
 
 # Seed is idempotent (upserts by email/unique key) — safe to always run
-ok "Running seed (idempotent)…"
-sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db seed"
+# Seed is NOT run automatically here — run it explicitly after setup:
+#   bash scripts/rebate-finder/seed.sh
+# This keeps seed data (in seeds/json/) decoupled from app code deployments.
+warn "Seed not run automatically. Run: bash scripts/rebate-finder/seed.sh"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 10 — Build and PM2
@@ -280,10 +282,15 @@ echo "  App URL:    http://localhost:3000"
 echo "  PM2 status: pm2 status"
 echo "  Logs:       pm2 logs '$PM2_APP_NAME'"
 echo ""
-echo -e "  ${YELLOW}Default admin login:${NC}  admin@incenva.com / Admin1234!"
-echo -e "  ${YELLOW}→ Change this immediately after first login.${NC}"
+echo -e "  ${YELLOW}Next steps:${NC}"
+echo "  1. Edit $ENV_FILE"
+echo "     → OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
+echo "  2. Load seed data (once, or when data changes):"
+echo "     bash scripts/rebate-finder/seed.sh"
+echo "  3. Rebuild after editing .env:"
+echo "     bash scripts/rebate-finder/deploy.sh"
 echo ""
-echo "  Still to configure in $ENV_FILE:"
-echo "    OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
+echo -e "  ${YELLOW}Default admin login (after seed):${NC}  admin@incenva.com / Admin1234!"
+echo -e "  ${YELLOW}→ Change this immediately after first login.${NC}"
 echo ""
 hr

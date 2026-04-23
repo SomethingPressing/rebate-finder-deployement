@@ -19,9 +19,8 @@ ok()   { echo -e "  ${GREEN}✔${NC}  $*"; }
 fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
 warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-ENV_FILE="$PROJECT_DIR/.env"
+APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
+ENV_FILE="$APP_DIR/.env"
 
 EMAIL="${1:-}"
 PASSWORD="${2:-}"
@@ -41,7 +40,7 @@ fi
 export $(grep -v '^#' "$ENV_FILE" | grep -E '^DATABASE_URL=' | xargs)
 [[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE"
 
-cd "$PROJECT_DIR"
+cd "$APP_DIR"
 
 echo ""
 echo -e "  ${BOLD}Creating / updating admin user${NC}"
@@ -97,7 +96,7 @@ fs.writeFileSync(tmpFile, script);
 
 try {
   const result = execSync(\`pnpm exec tsx "\${tmpFile}"\`, {
-    cwd: ${JSON.stringify(PROJECT_DIR)},
+    cwd: ${JSON.stringify(APP_DIR)},
     env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
     encoding: "utf8",
   });

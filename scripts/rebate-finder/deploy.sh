@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 # =============================================================================
-# deploy.sh — Pull latest code, rebuild, and restart Incenva Rebate Finder
+# deploy.sh — Pull latest app code, rebuild, and restart Incenva Rebate Finder
 #
-# Usage (from project root, as the app user or root):
-#   bash scripts/deploy.sh
+# This script deploys code changes only. Seed data is managed separately via
+# seed.sh — it is NOT run here to keep data changes decoupled from code deploys.
+#
+# Usage:
+#   bash scripts/rebate-finder/deploy.sh
+#
+# Overrides:
+#   APP_DIR=/custom/path bash scripts/rebate-finder/deploy.sh
 #
 # Safe to run multiple times.
 # =============================================================================
@@ -15,17 +21,19 @@ log()  { echo -e "\n${BLUE}[deploy]${NC} ${BOLD}$*${NC}"; }
 ok()   { echo -e "  ${GREEN}✔${NC}  $*"; }
 warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
+hr()   { echo -e "${BLUE}────────────────────────────────────────────────────${NC}"; }
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-ENV_FILE="$PROJECT_DIR/.env"
+APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
+ENV_FILE="$APP_DIR/.env"
 PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
 
-cd "$PROJECT_DIR"
+[[ -d "$APP_DIR" ]]  || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
+[[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
 
-[[ -f "$ENV_FILE" ]] || fail ".env not found. Run setup-server.sh first."
 # shellcheck disable=SC2046
 export $(grep -v '^#' "$ENV_FILE" | grep -E '^(DATABASE_URL|JWT_SECRET)=' | xargs)
+
+cd "$APP_DIR"
 
 log "1/5  git pull"
 git pull
@@ -48,9 +56,14 @@ if pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
   pm2 restart "$PM2_APP_NAME"
   ok "Restarted '$PM2_APP_NAME'"
 else
-  warn "PM2 process '$PM2_APP_NAME' not found — start it with setup-server.sh"
+  warn "PM2 process '$PM2_APP_NAME' not found — run setup-server.sh first"
 fi
 
+hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Deploy complete.${NC}"
 echo ""
+echo "  Note: seed data was NOT touched. To update seed data separately:"
+echo "    bash scripts/rebate-finder/seed.sh"
+echo ""
+hr
