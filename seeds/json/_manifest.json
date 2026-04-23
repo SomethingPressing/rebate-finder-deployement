@@ -1,0 +1,558 @@
+[
+  {
+    "table": "asset_program_links",
+    "sourceCsv": "prisma/seeds/supabase/asset_program_links_rows.csv",
+    "outputJson": "prisma/seeds/json/asset_program_links.json",
+    "rowCount": 207,
+    "columns": [
+      "id",
+      "asset_id",
+      "program_id",
+      "usage_type",
+      "linked_at"
+    ]
+  },
+  {
+    "table": "assets",
+    "sourceCsv": "prisma/seeds/supabase/assets_rows.csv",
+    "outputJson": "prisma/seeds/json/assets.json",
+    "rowCount": 206,
+    "columns": [
+      "id",
+      "file_name",
+      "storage_path",
+      "public_url",
+      "mime_type",
+      "file_size",
+      "uploaded_by",
+      "uploaded_at",
+      "tags",
+      "alt_text",
+      "created_at"
+    ]
+  },
+  {
+    "table": "brand_settings",
+    "sourceCsv": "prisma/seeds/supabase/brand_settings_rows.csv",
+    "outputJson": "prisma/seeds/json/brand_settings.json",
+    "rowCount": 7,
+    "columns": [
+      "id",
+      "primary_light",
+      "primary_dark",
+      "secondary",
+      "logo_url",
+      "created_at",
+      "updated_at",
+      "heading_font",
+      "body_font",
+      "border_radius",
+      "org_slug",
+      "org_display_name",
+      "button_color"
+    ]
+  },
+  {
+    "table": "clients",
+    "sourceCsv": "prisma/seeds/supabase/clients_rows.csv",
+    "outputJson": "prisma/seeds/json/clients.json",
+    "rowCount": 1,
+    "columns": [
+      "id",
+      "name",
+      "region",
+      "utility_type",
+      "is_demo",
+      "created_at"
+    ]
+  },
+  {
+    "table": "data_source_status",
+    "sourceCsv": "prisma/seeds/supabase/data_source_status_rows.csv",
+    "outputJson": "prisma/seeds/json/data_source_status.json",
+    "rowCount": 4,
+    "columns": [
+      "id",
+      "client_id",
+      "source",
+      "status",
+      "last_sync_at",
+      "error_message",
+      "updated_at"
+    ]
+  },
+  {
+    "table": "energy_savings",
+    "sourceCsv": "prisma/seeds/supabase/energy_savings_rows.csv",
+    "outputJson": "prisma/seeds/json/energy_savings.json",
+    "rowCount": 126,
+    "columns": [
+      "id",
+      "client_id",
+      "user_id",
+      "program_id",
+      "portfolio_id",
+      "period_start",
+      "period_end",
+      "kwh_saved",
+      "co2_lbs_avoided",
+      "cost_savings_usd",
+      "recorded_at"
+    ]
+  },
+  {
+    "table": "engagement_events",
+    "sourceCsv": "prisma/seeds/supabase/engagement_events_rows.csv",
+    "outputJson": "prisma/seeds/json/engagement_events.json",
+    "rowCount": 3200,
+    "columns": [
+      "id",
+      "client_id",
+      "user_id",
+      "program_id",
+      "portfolio_id",
+      "event_type",
+      "session_id",
+      "duration_seconds",
+      "occurred_at"
+    ]
+  },
+  {
+    "table": "filter_groups",
+    "sourceCsv": "prisma/seeds/supabase/filter_groups_rows.csv",
+    "outputJson": "prisma/seeds/json/filter_groups.json",
+    "rowCount": 120,
+    "columns": [
+      "id",
+      "label",
+      "page_contexts",
+      "segments",
+      "categories",
+      "sort_order",
+      "is_expanded",
+      "is_enabled",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  {
+    "table": "filters",
+    "sourceCsv": "prisma/seeds/supabase/filters_rows.csv",
+    "outputJson": "prisma/seeds/json/filters.json",
+    "rowCount": 609,
+    "columns": [
+      "id",
+      "group_id",
+      "label",
+      "page_contexts",
+      "segments",
+      "categories",
+      "sort_order",
+      "is_enabled",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  {
+    "table": "homepage_categories",
+    "sourceCsv": "prisma/seeds/supabase/homepage_categories_rows.csv",
+    "outputJson": "prisma/seeds/json/homepage_categories.json",
+    "rowCount": 7,
+    "columns": [
+      "id",
+      "slug",
+      "label",
+      "db_values",
+      "icon_name",
+      "tagline",
+      "display_order",
+      "is_visible",
+      "gradient_from",
+      "gradient_to",
+      "icon_color",
+      "glow_color",
+      "created_at",
+      "updated_at",
+      "hero_description",
+      "hero_bg_color",
+      "hero_image_url",
+      "featured_curation_mode",
+      "featured_program_ids",
+      "featured_card_count"
+    ]
+  },
+  {
+    "table": "homepage_section_settings",
+    "sourceCsv": "prisma/seeds/supabase/homepage_section_settings_rows.csv",
+    "outputJson": "prisma/seeds/json/homepage_section_settings.json",
+    "rowCount": 3,
+    "columns": [
+      "id",
+      "section_key",
+      "is_visible",
+      "curation_mode",
+      "manual_program_ids",
+      "card_count",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  {
+    "table": "iq_entries",
+    "sourceCsv": "prisma/seeds/supabase/iq_entries_rows.csv",
+    "outputJson": "prisma/seeds/json/iq_entries.json",
+    "rowCount": 6,
+    "columns": [
+      "id",
+      "title",
+      "summary",
+      "key_insights",
+      "best_for",
+      "avoid_when",
+      "why_it_matters",
+      "how_to_explain",
+      "category_tags",
+      "audience",
+      "intent",
+      "source_type",
+      "raw_content",
+      "status",
+      "created_by",
+      "created_at",
+      "updated_at",
+      "fts"
+    ]
+  },
+  {
+    "table": "marketing_channels",
+    "sourceCsv": "prisma/seeds/supabase/marketing_channels_rows.csv",
+    "outputJson": "prisma/seeds/json/marketing_channels.json",
+    "rowCount": 4,
+    "columns": [
+      "id",
+      "client_id",
+      "name",
+      "channel_type",
+      "created_at"
+    ]
+  },
+  {
+    "table": "page_traffic",
+    "sourceCsv": "prisma/seeds/supabase/page_traffic_rows.csv",
+    "outputJson": "prisma/seeds/json/page_traffic.json",
+    "rowCount": 15300,
+    "columns": [
+      "id",
+      "client_id",
+      "program_id",
+      "portfolio_id",
+      "channel_id",
+      "data_source",
+      "ga4_source",
+      "ga4_medium",
+      "campaign_name",
+      "campaign_type",
+      "ad_group_name",
+      "page_path",
+      "sessions",
+      "impressions",
+      "clicks",
+      "conversions",
+      "sends",
+      "opens",
+      "recorded_date"
+    ]
+  },
+  {
+    "table": "portfolios",
+    "sourceCsv": "prisma/seeds/supabase/portfolios_rows.csv",
+    "outputJson": "prisma/seeds/json/portfolios.json",
+    "rowCount": 3,
+    "columns": [
+      "id",
+      "client_id",
+      "name",
+      "code",
+      "created_at"
+    ]
+  },
+  {
+    "table": "program_enrollments",
+    "sourceCsv": "prisma/seeds/supabase/program_enrollments_rows.csv",
+    "outputJson": "prisma/seeds/json/program_enrollments.json",
+    "rowCount": 324,
+    "columns": [
+      "id",
+      "client_id",
+      "user_id",
+      "program_id",
+      "portfolio_id",
+      "status",
+      "enrolled_at",
+      "completed_at",
+      "withdrawn_at"
+    ]
+  },
+  {
+    "table": "program_roi",
+    "sourceCsv": "prisma/seeds/supabase/program_roi_rows.csv",
+    "outputJson": "prisma/seeds/json/program_roi.json",
+    "rowCount": 126,
+    "columns": [
+      "id",
+      "client_id",
+      "program_id",
+      "portfolio_id",
+      "period_start",
+      "period_end",
+      "program_cost_usd",
+      "revenue_or_savings_usd",
+      "participants",
+      "recorded_at"
+    ]
+  },
+  {
+    "table": "program_translations",
+    "sourceCsv": "prisma/seeds/supabase/program_translations_rows.csv",
+    "outputJson": "prisma/seeds/json/program_translations.json",
+    "rowCount": 6,
+    "columns": [
+      "id",
+      "organization_id",
+      "program_id",
+      "locale",
+      "field_name",
+      "original_text",
+      "translated_text",
+      "status",
+      "confidence_score",
+      "created_by",
+      "approved_by",
+      "approved_at",
+      "reviewer_id",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  {
+    "table": "programs",
+    "sourceCsv": "prisma/seeds/supabase/programs_rows.csv",
+    "outputJson": "prisma/seeds/json/programs.json",
+    "rowCount": 9,
+    "columns": [
+      "id",
+      "client_id",
+      "portfolio_id",
+      "name",
+      "program_type",
+      "is_active",
+      "created_at"
+    ]
+  },
+  {
+    "table": "rebate_click_counts",
+    "sourceCsv": "prisma/seeds/supabase/rebate_click_counts_rows.csv",
+    "outputJson": "prisma/seeds/json/rebate_click_counts.json",
+    "rowCount": 28,
+    "columns": [
+      "rebate_id",
+      "click_count",
+      "last_clicked_at"
+    ]
+  },
+  {
+    "table": "rebate_source_raw",
+    "sourceCsv": "prisma/seeds/supabase/rebate_source_raw_rows.csv",
+    "outputJson": "prisma/seeds/json/rebate_source_raw.json",
+    "rowCount": 200,
+    "columns": [
+      "id",
+      "scraper_version",
+      "created_at",
+      "updated_at",
+      "processed",
+      "zip_code",
+      "available_nationwide",
+      "utility_company",
+      "service_territory",
+      "program_name",
+      "program_category",
+      "program_type",
+      "program_level",
+      "consumer_rebate",
+      "funding_source",
+      "administrator",
+      "product_category",
+      "items",
+      "technologies",
+      "incentive_amount",
+      "maximum_amount",
+      "incentive_description",
+      "percent_value",
+      "percent_cap_min",
+      "percent_cap_max",
+      "per_unit_amount",
+      "max_units",
+      "financing_apr",
+      "financing_max_amount",
+      "financing_term_months",
+      "bill_credit_amount",
+      "bill_credit_duration",
+      "incentive_narrative",
+      "bonus_amount",
+      "bonus_percent",
+      "bonus_condition",
+      "average_savings",
+      "program_budget",
+      "project_cost_cap",
+      "recipient",
+      "income_limits",
+      "low_income_eligible",
+      "moderate_income_eligible",
+      "high_income_eligible",
+      "special_requirements",
+      "energy_audit_required",
+      "building_type",
+      "customer_type",
+      "eligibility_summary",
+      "application_process",
+      "application_url",
+      "contractor_required",
+      "instant_rebate_available",
+      "free_products_included",
+      "start_date",
+      "end_date",
+      "currently_active",
+      "program_url",
+      "source_page",
+      "additional_information",
+      "contact_email",
+      "contact_phone",
+      "program_details",
+      "notes",
+      "technical_details",
+      "source",
+      "state",
+      "incentive_format",
+      "unit_type",
+      "bill_credit_period",
+      "tax_exemption_type",
+      "image_url",
+      "image_urls",
+      "normalized_category",
+      "segment",
+      "portfolio",
+      "is_featured",
+      "seo_meta",
+      "faq_data",
+      "iq_context",
+      "image_focal_points",
+      "category_tag",
+      "category_filter",
+      "status",
+      "stackable_with_rebates",
+      "related_program_ids",
+      "while_funds_last",
+      "hide_related_incentives"
+    ]
+  },
+  {
+    "table": "rebate_stacking",
+    "sourceCsv": "prisma/seeds/supabase/rebate_stacking_rows.csv",
+    "outputJson": "prisma/seeds/json/rebate_stacking.json",
+    "rowCount": 24,
+    "columns": [
+      "id",
+      "program_id",
+      "stacked_program_id",
+      "source",
+      "created_by",
+      "created_at"
+    ]
+  },
+  {
+    "table": "rebate_stacking_suggestions",
+    "sourceCsv": "prisma/seeds/supabase/rebate_stacking_suggestions_rows.csv",
+    "outputJson": "prisma/seeds/json/rebate_stacking_suggestions.json",
+    "rowCount": 307,
+    "columns": [
+      "id",
+      "program_id",
+      "suggested_program_id",
+      "reason",
+      "dismissed",
+      "created_at"
+    ]
+  },
+  {
+    "table": "rebates",
+    "sourceCsv": "prisma/seeds/supabase/rebates_rows.csv",
+    "outputJson": "prisma/seeds/json/rebates.json",
+    "rowCount": 252,
+    "columns": [
+      "id",
+      "client_id",
+      "user_id",
+      "program_id",
+      "portfolio_id",
+      "rebate_type",
+      "amount_usd",
+      "status",
+      "claimed_at",
+      "paid_at",
+      "sponsor_level"
+    ]
+  },
+  {
+    "table": "user_org_roles",
+    "sourceCsv": "prisma/seeds/supabase/user_org_roles_rows.csv",
+    "outputJson": "prisma/seeds/json/user_org_roles.json",
+    "rowCount": 7,
+    "columns": [
+      "id",
+      "user_id",
+      "organization_id",
+      "console_role",
+      "created_at",
+      "created_by"
+    ]
+  },
+  {
+    "table": "user_roles",
+    "sourceCsv": "prisma/seeds/supabase/user_roles_rows.csv",
+    "outputJson": "prisma/seeds/json/user_roles.json",
+    "rowCount": 8,
+    "columns": [
+      "id",
+      "user_id",
+      "role"
+    ]
+  },
+  {
+    "table": "users",
+    "sourceCsv": "prisma/seeds/supabase/users_rows.csv",
+    "outputJson": "prisma/seeds/json/users.json",
+    "rowCount": 440,
+    "columns": [
+      "id",
+      "client_id",
+      "customer_segment",
+      "created_at"
+    ]
+  },
+  {
+    "table": "tag_link_configs",
+    "sourceCsv": null,
+    "outputJson": "prisma/seeds/json/tag_link_configs.json",
+    "rowCount": 8,
+    "note": "Manually created — no Supabase CSV source. Matches TagLinkConfig Prisma model.",
+    "columns": [
+      "id",
+      "category",
+      "name",
+      "value",
+      "active",
+      "sort_order"
+    ]
+  }
+]

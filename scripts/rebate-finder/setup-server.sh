@@ -3,11 +3,14 @@
 # setup-server.sh — Idempotent server setup for Incenva Rebate Finder
 #
 # Installs prerequisites, creates the system user/group, sets up PostgreSQL,
-# writes .env, pushes the Prisma schema, seeds admin users, builds the app,
-# and registers it with PM2.
+# clones the app repo, writes .env, pushes the Prisma schema, seeds the DB,
+# builds the app, and registers it with PM2.
 #
 # Usage:
-#   sudo bash scripts/setup-server.sh
+#   sudo bash scripts/rebate-finder/setup-server.sh
+#
+# Override defaults via environment variables before running:
+#   APP_REPO_URL=git@github.com:org/rebate-finder.git sudo bash ...
 #
 # Safe to run multiple times — every step checks if work is already done.
 # =============================================================================
@@ -26,39 +29,33 @@ warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
 hr()   { echo -e "${BLUE}────────────────────────────────────────────────────${NC}"; }
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-ENV_FILE="$PROJECT_DIR/.env"
-TMP_PASS_FILE="$PROJECT_DIR/.db_pass_setup_tmp"
+# ── Root guard ────────────────────────────────────────────────────────────────
+[[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
 
 # ── Configurable defaults ─────────────────────────────────────────────────────
 APP_USER="${APP_USER:-rf}"
 APP_GROUP="${APP_GROUP:-rf}"
+APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
+APP_REPO_URL="${APP_REPO_URL:-}"                  # required if APP_DIR doesn't exist yet
 DB_NAME="${DB_NAME:-rebate_finder}"
 DB_USER="${DB_USER:-rf}"
 NODE_MAJOR="${NODE_MAJOR:-20}"
 PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
 
-# ── Root guard ────────────────────────────────────────────────────────────────
-[[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
-
-# ── OS check (Debian/Ubuntu) ──────────────────────────────────────────────────
-if ! command -v apt-get &>/dev/null; then
-  warn "apt-get not found. This script is written for Debian/Ubuntu."
-  warn "You may need to adapt the package-install steps for your OS."
-fi
+ENV_FILE="$APP_DIR/.env"
+TMP_PASS_FILE="/tmp/.rf_db_pass_setup"
 
 hr
 echo ""
 echo -e "  ${BOLD}Incenva Rebate Finder — Server Setup${NC}"
+echo "  App directory: $APP_DIR"
 echo ""
 hr
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 1 — System group & user
 # ─────────────────────────────────────────────────────────────────────────────
-log "1/9  System group and user"
+log "1/10  System group and user"
 
 if getent group "$APP_GROUP" &>/dev/null; then
   skip "Group '$APP_GROUP'"
@@ -77,13 +74,16 @@ else
     --home-dir "/home/$APP_USER" \
     --create-home \
     "$APP_USER"
-  ok "Created user '$APP_USER' (home: /home/$APP_USER)"
+  ok "Created user '$APP_USER'"
 fi
+
+mkdir -p "$(dirname "$APP_DIR")"
+chown "$APP_USER:$APP_GROUP" "$(dirname "$APP_DIR")"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 2 — Node.js
 # ─────────────────────────────────────────────────────────────────────────────
-log "2/9  Node.js $NODE_MAJOR"
+log "2/10  Node.js $NODE_MAJOR"
 
 CURRENT_NODE_MAJOR=""
 if command -v node &>/dev/null; then
@@ -102,7 +102,7 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 3 — pnpm
 # ─────────────────────────────────────────────────────────────────────────────
-log "3/9  pnpm"
+log "3/10  pnpm"
 
 if command -v pnpm &>/dev/null; then
   skip "pnpm $(pnpm --version)"
@@ -114,7 +114,7 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 4 — PM2
 # ─────────────────────────────────────────────────────────────────────────────
-log "4/9  PM2"
+log "4/10  PM2"
 
 if command -v pm2 &>/dev/null; then
   skip "PM2 $(pm2 --version 2>/dev/null || echo 'installed')"
@@ -126,7 +126,7 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 5 — PostgreSQL
 # ─────────────────────────────────────────────────────────────────────────────
-log "5/9  PostgreSQL"
+log "5/10  PostgreSQL"
 
 if command -v psql &>/dev/null; then
   skip "PostgreSQL $(psql --version | head -1)"
@@ -136,28 +136,26 @@ else
   ok "Installed and started PostgreSQL"
 fi
 
-# Ensure PostgreSQL is running
 if ! systemctl is-active --quiet postgresql; then
   systemctl start postgresql
   ok "Started PostgreSQL"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STEP 6 — Database role + database
+# STEP 6 — PostgreSQL role + database
 # ─────────────────────────────────────────────────────────────────────────────
-log "6/9  Database role '$DB_USER' and database '$DB_NAME'"
+log "6/10  Database role '$DB_USER' and database '$DB_NAME'"
 
 if sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_USER'" | grep -q 1; then
   skip "DB role '$DB_USER'"
 else
-  # Generate a secure random password
   DB_PASS="$(openssl rand -base64 30 | tr -dc 'a-zA-Z0-9' | head -c 32)"
   sudo -u postgres psql -c "CREATE ROLE $DB_USER WITH LOGIN PASSWORD '$DB_PASS';" >/dev/null
   echo "$DB_PASS" > "$TMP_PASS_FILE"
   chmod 600 "$TMP_PASS_FILE"
   ok "Created DB role '$DB_USER'"
   echo ""
-  warn "DB password (shown once — stored temporarily in $TMP_PASS_FILE):"
+  warn "DB password (shown once, stored temporarily in $TMP_PASS_FILE):"
   echo -e "     ${BOLD}$DB_USER  →  $DB_PASS${NC}"
   echo ""
 fi
@@ -171,21 +169,34 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STEP 7 — .env file
+# STEP 7 — Clone the repository
 # ─────────────────────────────────────────────────────────────────────────────
-log "7/9  Environment file (.env)"
+log "7/10  Application repository"
+
+if [[ -d "$APP_DIR/.git" ]]; then
+  skip "Repo already at $APP_DIR"
+  sudo -u "$APP_USER" bash -c "cd '$APP_DIR' && git pull"
+  ok "git pull done"
+else
+  [[ -n "$APP_REPO_URL" ]] || fail "APP_DIR does not exist and APP_REPO_URL is not set.\nSet it: APP_REPO_URL=git@github.com:org/rebate-finder.git sudo bash $0"
+  sudo -u "$APP_USER" git clone "$APP_REPO_URL" "$APP_DIR"
+  ok "Cloned $APP_REPO_URL → $APP_DIR"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 8 — .env file
+# ─────────────────────────────────────────────────────────────────────────────
+log "8/10  Environment file"
 
 if [[ -f "$ENV_FILE" ]]; then
   skip ".env already exists — not overwriting"
   warn "If DATABASE_URL or JWT_SECRET are wrong, edit $ENV_FILE manually."
 else
-  cp "$PROJECT_DIR/.env.example" "$ENV_FILE"
+  cp "$APP_DIR/.env.example" "$ENV_FILE"
 
-  # Inject JWT secret
   JWT_SECRET="$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")"
   sed -i "s|your-long-random-secret-here-min-32-chars|$JWT_SECRET|" "$ENV_FILE"
 
-  # Inject DATABASE_URL if we just created the DB role
   if [[ -f "$TMP_PASS_FILE" ]]; then
     DB_PASS="$(cat "$TMP_PASS_FILE")"
     sed -i \
@@ -194,107 +205,85 @@ else
     rm -f "$TMP_PASS_FILE"
     ok "DATABASE_URL set in .env"
   else
-    warn "DB role existed before setup — set DATABASE_URL in $ENV_FILE manually."
+    warn "DB role already existed — set DATABASE_URL in $ENV_FILE manually."
   fi
 
   chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
-  ok "Created $ENV_FILE with auto-generated JWT_SECRET"
-  warn "Review .env and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, etc."
+  ok "Created $ENV_FILE (JWT_SECRET auto-generated)"
+  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
 fi
 
-# Load DATABASE_URL from .env for Prisma commands
+# Load DATABASE_URL for Prisma commands
 # shellcheck disable=SC2046
 export $(grep -v '^#' "$ENV_FILE" | grep -E '^(DATABASE_URL|JWT_SECRET)=' | xargs)
-
-if [[ -z "${DATABASE_URL:-}" ]]; then
-  fail "DATABASE_URL is not set in $ENV_FILE. Edit it and re-run this script."
-fi
+[[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE. Edit it and re-run."
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STEP 8 — Install deps, push schema, seed
+# STEP 9 — Install deps, push schema, seed
 # ─────────────────────────────────────────────────────────────────────────────
-log "8/9  Dependencies, schema, and seed"
+log "9/10  Dependencies, schema, and seed"
 
-cd "$PROJECT_DIR"
-
-# Ensure app user owns the project directory (so pnpm writes work)
-chown -R "$APP_USER:$APP_GROUP" "$PROJECT_DIR"
-chmod g+rw "$PROJECT_DIR"
+cd "$APP_DIR"
+chown -R "$APP_USER:$APP_GROUP" "$APP_DIR"
 
 ok "Installing npm dependencies…"
 sudo -u "$APP_USER" pnpm install --frozen-lockfile 2>&1 | tail -3
 
-ok "Pushing Prisma schema to database…"
+ok "Pushing Prisma schema…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db push --skip-generate"
-ok "Schema up to date"
 
 ok "Regenerating Prisma client…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma generate" 2>&1 | tail -1
 
-# Check whether admin users already exist
-EXISTING_USERS="$(sudo -u postgres psql -d "$DB_NAME" -tAc \
-  "SELECT COUNT(*) FROM users;" 2>/dev/null || echo "0")"
-EXISTING_USERS="${EXISTING_USERS//[[:space:]]/}"
-
-if [[ "${EXISTING_USERS:-0}" -gt 0 ]]; then
-  skip "Seed ($EXISTING_USERS user(s) already in DB — upsert-safe, running anyway)"
-fi
-
-ok "Running seed (upserts are idempotent — safe to repeat)…"
+# Seed is idempotent (upserts by email/unique key) — safe to always run
+ok "Running seed (idempotent)…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db seed"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STEP 9 — Build and PM2
+# STEP 10 — Build and PM2
 # ─────────────────────────────────────────────────────────────────────────────
-log "9/9  Production build and PM2"
+log "10/10  Production build and PM2"
 
 ok "Building Next.js app…"
-sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm build"
+sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; cd '$APP_DIR' && pnpm build"
 ok "Build complete"
 
 if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
   sudo -u "$APP_USER" pm2 restart "$PM2_APP_NAME"
-  ok "Restarted PM2 process '$PM2_APP_NAME'"
+  ok "Restarted '$PM2_APP_NAME'"
 else
   sudo -u "$APP_USER" bash -c "
-    cd '$PROJECT_DIR'
+    cd '$APP_DIR'
     pm2 start 'pnpm start' \
       --name '$PM2_APP_NAME' \
       --env-file '$ENV_FILE'
   "
-  ok "Started PM2 process '$PM2_APP_NAME'"
+  ok "Started '$PM2_APP_NAME'"
 fi
 
 sudo -u "$APP_USER" pm2 save >/dev/null
 
-# Configure PM2 to start on boot
 STARTUP_CMD="$(sudo -u "$APP_USER" pm2 startup systemd \
   -u "$APP_USER" --hp "/home/$APP_USER" 2>/dev/null | grep '^sudo' | head -1 || true)"
 if [[ -n "$STARTUP_CMD" ]]; then
   eval "$STARTUP_CMD" >/dev/null 2>&1 || true
 fi
-ok "PM2 startup configured for user '$APP_USER'"
+ok "PM2 startup configured"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Done
 # ─────────────────────────────────────────────────────────────────────────────
 hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Setup complete!${NC}"
 echo ""
-echo "  App URL:    http://localhost:3000  (proxy port 80/443 with Nginx)"
+echo "  App URL:    http://localhost:3000"
 echo "  PM2 status: pm2 status"
-echo "  App logs:   pm2 logs '$PM2_APP_NAME'"
+echo "  Logs:       pm2 logs '$PM2_APP_NAME'"
 echo ""
-echo -e "  ${YELLOW}Default admin login:${NC}"
-echo "    Email:    admin@incenva.com"
-echo "    Password: Admin1234!"
+echo -e "  ${YELLOW}Default admin login:${NC}  admin@incenva.com / Admin1234!"
 echo -e "  ${YELLOW}→ Change this immediately after first login.${NC}"
 echo ""
-echo "  Review and complete these settings in $ENV_FILE:"
-echo "    • OPENAI_API_KEY"
-echo "    • NEXT_PUBLIC_SUPABASE_URL / _ANON_KEY / _PROJECT_ID / SUPABASE_SERVICE_KEY"
-echo "    • NEXT_BASE_URL  (set to your public domain)"
+echo "  Still to configure in $ENV_FILE:"
+echo "    OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
 echo ""
 hr

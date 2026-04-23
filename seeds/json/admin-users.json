@@ -1,0 +1,8 @@
+[
+  {
+    "email": "admin@incenva.com",
+    "password": "Admin1234!",
+    "full_name": "Admin User",
+    "role": "super_admin"
+  }
+]

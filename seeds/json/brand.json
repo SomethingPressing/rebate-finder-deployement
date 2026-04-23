@@ -1,0 +1,16 @@
+{
+  "org_display_name": "Incenva Energy Solutions",
+  "org_slug": "incenva",
+  "logo_url": null,
+  "primary_light": "#16a34a",
+  "primary_dark": "#15803d",
+  "secondary": "#0ea5e9",
+  "heading_font": "Inter",
+  "body_font": "Inter",
+  "border_radius": 8,
+  "trial_status": "active",
+  "subscription_type": "trial",
+  "trial_start_date": "1970-01-01",
+  "trial_end_date": "1970-01-15",
+  "trial_duration_days": 14
+}

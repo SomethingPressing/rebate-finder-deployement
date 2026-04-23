@@ -1,0 +1,121 @@
+id,label,page_contexts,segments,categories,sort_order,is_expanded,is_enabled,created_at,updated_at
+008f4a97-8872-445c-b95d-0b2477694b8c,Incentive Type,"[""category""]","[""Multifamily""]","[""retrofitting""]",44,true,true,2026-03-24 01:44:54.699256+00,2026-03-25 00:34:14.465188+00
+01dc97e7-e216-457d-9847-6635665df9ca,Incentive Type,"[""all_incentives""]","[""Multifamily""]",,91,true,true,2026-03-24 01:45:07.238898+00,2026-03-24 01:45:07.238898+00
+01fe6589-cb43-407c-bbbc-a5f050fc3385,Incentive Type,"[""all_incentives""]","[""Commercial""]",,83,true,true,2026-03-24 01:45:05.135255+00,2026-03-24 01:45:05.135255+00
+099eb058-44d5-4cc3-8f83-2b25b3c4aad2,Incentive Type,"[""category""]","[""Residential""]","[""heat-pumps""]",6,true,true,2026-03-24 01:44:43.925908+00,2026-03-25 00:34:14.465188+00
+0ceeb934-b2f9-4c3b-9fd8-78141fc6e5d7,How to Qualify,"[""category""]","[""Low-Income""]","[""solar""]",73,true,true,2026-03-24 01:45:02.512344+00,2026-03-25 00:34:14.465188+00
+0d1548d1-a15e-4fac-b019-00c55f305899,What's Covered,"[""category""]","[""Commercial""]","[""appliances""]",28,true,true,2026-03-24 01:44:50.638228+00,2026-03-25 00:34:14.465188+00
+11e4fe67-b84f-4c1d-86cd-1c57b317f51b,Equipment Type,"[""category""]","[""Commercial""]","[""heat-pumps""]",26,true,true,2026-03-24 01:44:50.078401+00,2026-03-25 00:34:14.465188+00
+123086c7-0949-4606-b827-517fca17edd4,Incentive Type,"[""category""]","[""Commercial""]","[""retrofitting""]",42,true,true,2026-03-24 01:44:54.166152+00,2026-03-25 00:34:14.465188+00
+13e9aeb2-0e9c-4fbf-a95b-fd70242650b2,Incentive Type,"[""category""]","[""Commercial""]","[""ev""]",21,true,true,2026-03-24 01:44:48.744188+00,2026-03-25 00:34:14.465188+00
+14398c06-32df-4b76-a9a9-67d1f236f745,Customer Eligibility,"[""category""]","[""Residential""]","[""solar""]",11,true,true,2026-03-24 01:44:45.987481+00,2026-03-25 00:34:14.465188+00
+1ede37fc-defe-463d-8054-30fcbf8bc107,Service Type,"[""category""]","[""Commercial""]","[""retrofitting""]",43,true,true,2026-03-24 01:44:54.433971+00,2026-03-25 00:34:14.465188+00
+1f9ce404-91e1-4134-bc8d-76ac6ac1a7a4,Equipment Type,"[""category""]","[""Agricultural""]","[""appliances""]",59,true,true,2026-03-24 01:44:58.734939+00,2026-03-25 00:34:14.465188+00
+23a106c3-fd99-4db2-a0d1-a6b03d5c22f9,Incentive Type,"[""category""]","[""Commercial""]","[""retrofitting""]",33,true,true,2026-03-24 01:44:51.973265+00,2026-03-25 00:34:14.465188+00
+27feeaaa-730d-434c-8f42-84a4fa9578ca,Technology / Category,"[""search""]","[""all""]",,114,true,true,2026-03-24 01:45:13.353396+00,2026-03-24 01:45:13.353396+00
+290ec738-e74e-450e-9e03-0b0b004b6bb9,Availability,"[""all_incentives""]","[""Residential""]",,80,true,true,2026-03-24 01:45:04.345872+00,2026-03-24 01:45:04.345872+00
+33d148c8-b954-418b-bb85-a8bce38aed0c,Application Effort,"[""search""]","[""all""]",,119,true,true,2026-03-24 01:45:14.658694+00,2026-03-24 01:45:14.658694+00
+37a4d326-c4d2-4258-9d36-299a96c7f057,How You Apply,"[""all_incentives""]","[""Commercial""]",,87,true,true,2026-03-24 01:45:06.181449+00,2026-03-24 01:45:06.181449+00
+37e84870-43b7-4604-9da4-caa64e63178f,Who Can Apply,"[""all_incentives""]","[""Residential""]",,78,true,true,2026-03-24 01:45:03.819082+00,2026-03-24 01:45:03.819082+00
+3912ff33-44e8-4fe9-8e97-af839df0bfdd,Who Offers It,"[""search""]","[""all""]",,112,true,true,2026-03-24 01:45:12.818169+00,2026-03-24 01:45:12.818169+00
+3e346c3f-1db8-4cf2-a61d-fc3357325fd6,Customer Eligibility,"[""category""]","[""Residential""]","[""heat-pumps""]",5,true,true,2026-03-24 01:44:43.414977+00,2026-03-24 01:44:43.414977+00
+40557413-7460-4900-99dd-c26bc16f82ce,Availability,"[""all_incentives""]","[""Agricultural""]",,104,true,true,2026-03-24 01:45:10.679793+00,2026-03-24 01:45:10.679793+00
+44214ac0-570e-4dfb-9d87-44e065125e7a,Incentive Type,"[""search""]","[""all""]",,113,true,true,2026-03-24 01:45:13.080862+00,2026-03-24 01:45:13.080862+00
+4523eafa-6240-41da-9528-1ad87b100e5e,What's Covered,"[""category""]","[""Commercial""]","[""solar""]",31,true,true,2026-03-24 01:44:51.446472+00,2026-03-25 00:34:14.465188+00
+474a5c6f-e1eb-4d1d-94f5-fe785fba2e6f,Incentive Type,"[""category""]","[""Commercial""]","[""heat-pumps""]",25,true,true,2026-03-24 01:44:49.825238+00,2026-03-25 00:34:14.465188+00
+4ae206b5-7092-4e3a-a1ef-dc2f9c03d66b,Program Type,"[""category""]","[""Low-Income""]","[""retrofitting""]",70,true,true,2026-03-24 01:45:01.685056+00,2026-03-25 00:34:14.465188+00
+4ce5dd3e-ab2d-4a3d-a352-8373a2e172ba,Is There a Wait,"[""all_incentives""]","[""Low-Income""]",,111,true,true,2026-03-24 01:45:12.562805+00,2026-03-24 01:45:12.562805+00
+4f1c59c7-9cc5-439c-b77f-5c8365822234,Incentive Type,"[""category""]","[""Agricultural""]","[""retrofitting""]",62,true,true,2026-03-24 01:44:59.539677+00,2026-03-25 00:34:14.465188+00
+4f1c6392-1f3a-4975-8389-417534f6fd48,Who Offers It,"[""all_incentives""]","[""Residential""]",,76,true,true,2026-03-24 01:45:03.291402+00,2026-03-24 01:45:03.291402+00
+4ffa06c6-f6fc-43a9-83a7-ab12f84b5c68,Incentive Type,"[""category""]","[""Agricultural""]","[""appliances""]",56,true,true,2026-03-24 01:44:57.927496+00,2026-03-25 00:34:14.465188+00
+504b971c-b0b0-44e8-a97e-200e5ff12046,Incentive Type,"[""category""]","[""Residential""]","[""solar""]",9,true,true,2026-03-24 01:44:45.18748+00,2026-03-25 00:34:14.465188+00
+538b66a4-ce7c-40c8-aefa-84232d7f1422,Business Eligibility,"[""category""]","[""Commercial""]","[""solar""]",32,true,true,2026-03-24 01:44:51.716113+00,2026-03-25 00:34:14.465188+00
+54181272-a7f5-4dd2-adc7-8fb9579b0f53,Technology / Category,"[""all_incentives""]","[""Commercial""]",,82,true,true,2026-03-24 01:45:04.886828+00,2026-03-24 01:45:04.886828+00
+5513b516-456b-426d-9d25-17681df3013b,Program Type,"[""category""]","[""Agricultural""]",,66,true,true,2026-03-24 01:45:00.624439+00,2026-03-25 00:34:14.465188+00
+5831b5fd-3d43-48c4-8a96-f60ecfb38084,Incentive Type,"[""category""]","[""Multifamily""]","[""appliances""]",47,true,true,2026-03-24 01:44:55.502438+00,2026-03-25 00:34:14.465188+00
+5832a51f-56e1-4327-a6b3-b30b3196c6c3,Incentive Value,"[""search""]","[""all""]",,115,true,true,2026-03-24 01:45:13.616829+00,2026-03-24 01:45:13.616829+00
+595c61ff-1f08-434f-be8b-e5f3a5d793b1,What's Covered,"[""category""]","[""Multifamily""]","[""appliances""]",48,true,true,2026-03-24 01:44:55.772553+00,2026-03-25 00:34:14.465188+00
+59d3edc2-2436-45ec-865d-c6a9702116ba,Incentive Type,"[""category""]","[""Agricultural""]","[""appliances""]",60,true,true,2026-03-24 01:44:58.999075+00,2026-03-25 00:34:14.465188+00
+5b339e73-8177-41dd-adcd-de354a0276e7,Customer Eligibility,"[""category""]","[""Residential""]","[""heat-pumps""]",8,true,true,2026-03-24 01:44:44.8862+00,2026-03-25 00:34:14.465188+00
+5b4cbb91-ef3b-4c10-830f-4130336dafab,Technology / Category,"[""all_incentives""]","[""Residential""]",,74,true,true,2026-03-24 01:45:02.759484+00,2026-03-24 01:45:02.759484+00
+5e4fcf6b-460d-49ee-ade4-677004cfc371,What's Covered,"[""category""]","[""Residential""]","[""ev""]",1,true,true,2026-03-24 01:44:41.215453+00,2026-03-25 00:34:14.465188+00
+5f7c41ef-05c6-462b-acd7-f75317dbc6ab,My Housing Situation,"[""all_incentives""]","[""Low-Income""]",,110,true,true,2026-03-24 01:45:12.297533+00,2026-03-24 01:45:12.297533+00
+5fd9ceee-6391-443f-9606-680f3a3ba592,Incentive Type,"[""category""]","[""Agricultural""]","[""appliances""]",58,true,true,2026-03-24 01:44:58.455641+00,2026-03-25 00:34:14.465188+00
+609cbec2-af66-4bec-b7a8-80adadc507fb,Estimated Project Incentive Value,"[""all_incentives""]","[""Commercial""]",,85,true,true,2026-03-24 01:45:05.65214+00,2026-03-24 01:45:05.65214+00
+66fb8c46-01be-4f83-bcea-eeb08ea7ed0e,Program Type,"[""category""]","[""Multifamily""]","[""retrofitting""]",53,true,true,2026-03-24 01:44:57.103167+00,2026-03-25 00:34:14.465188+00
+671ff12d-6d6d-4ac2-a6a4-6bddd80a99a5,What's Covered,"[""category""]","[""Residential""]","[""retrofitting""]",13,true,true,2026-03-24 01:44:46.61391+00,2026-03-25 00:34:14.465188+00
+67d0c520-5afa-4be9-87d9-958d5544975f,Who's Eligible,"[""search""]","[""all""]",,117,true,true,2026-03-24 01:45:14.143106+00,2026-03-24 01:45:14.143106+00
+6819502d-0ae3-4745-9d90-e87483b0bdc1,Incentive Type,"[""category""]","[""Residential""]","[""appliances""]",19,true,true,2026-03-24 01:44:48.212272+00,2026-03-25 00:34:14.465188+00
+6845074f-2a8b-4b0a-89c8-56eef7cd9886,Who Offers It,"[""all_incentives""]","[""Agricultural""]",,100,true,true,2026-03-24 01:45:09.612439+00,2026-03-24 01:45:09.612439+00
+68da0875-bbcd-46ba-9e75-97c0b65550a6,Incentive Type,"[""category""]","[""Multifamily""]","[""ev""]",49,true,true,2026-03-24 01:44:56.054416+00,2026-03-25 00:34:14.465188+00
+69ab83c9-db69-4c70-a264-31392078d36d,Equipment Type,"[""category""]","[""Residential""]","[""heat-pumps""]",4,true,true,2026-03-24 01:44:42.902784+00,2026-03-24 01:44:42.902784+00
+6b980ed8-2177-4ee2-b1d8-09103e4a6897,Incentive Type,"[""all_incentives""]","[""Residential""]",,75,true,true,2026-03-24 01:45:03.023954+00,2026-03-24 01:45:03.023954+00
+6e861dcc-ce74-41e5-815d-fdfb14625f68,How Do I Qualify,"[""all_incentives""]","[""Low-Income""]",,108,true,true,2026-03-24 01:45:11.742252+00,2026-03-24 01:45:11.742252+00
+6ee83391-7046-4843-bfb8-f40035a6abd6,Business Size & Type,"[""all_incentives""]","[""Commercial""]",,86,true,true,2026-03-24 01:45:05.914535+00,2026-03-24 01:45:05.914535+00
+7144a709-3fa7-4f2e-afdf-eaf1fbe9b3db,How You Apply,"[""all_incentives""]","[""Multifamily""]",,96,true,true,2026-03-24 01:45:08.553294+00,2026-03-24 01:45:08.553294+00
+7254e952-8f93-452d-8df4-00d1a6dd5ccb,Helpful Extras,"[""all_incentives""]","[""Residential""]",,81,true,true,2026-03-24 01:45:04.611654+00,2026-03-24 01:45:04.611654+00
+730b91ba-4f34-46af-ab23-62e512c6baf6,Property Qualification,"[""category""]","[""Multifamily""]","[""retrofitting""]",54,true,true,2026-03-24 01:44:57.398391+00,2026-03-25 00:34:14.465188+00
+757e468e-d74d-4a57-9d71-0d924d9552ef,Tenant Income Level Required,"[""all_incentives""]","[""Multifamily""]",,95,true,true,2026-03-24 01:45:08.289322+00,2026-03-24 01:45:08.289322+00
+7817a14e-7e2a-485c-9864-f8922bdacae9,What's Covered,"[""category""]","[""Multifamily""]","[""retrofitting""]",45,true,true,2026-03-24 01:44:54.957901+00,2026-03-25 00:34:14.465188+00
+7f0da2f7-a073-4238-a540-e133b1234c85,Incentive Type,"[""category""]","[""Residential""]","[""ev""]",0,true,true,2026-03-24 01:45:25.87181+00,2026-03-25 00:34:14.465188+00
+7f7064c8-62a1-49da-9428-4205ad809fe1,What's Covered,"[""category""]","[""Residential""]","[""appliances""]",20,true,true,2026-03-24 01:44:48.467517+00,2026-03-25 00:34:14.465188+00
+816d549a-a7f2-4e0c-ad3f-793250398376,Who Offers It,"[""all_incentives""]","[""Low-Income""]",,107,true,true,2026-03-24 01:45:11.471362+00,2026-03-24 01:45:11.471362+00
+84d7a366-75d8-4a94-bd19-f2cc98f2f55c,How to Qualify,"[""category""]","[""Low-Income""]","[""retrofitting""]",71,true,true,2026-03-24 01:45:01.984883+00,2026-03-25 00:34:14.465188+00
+86e961a5-fa50-454e-9aaf-6a174a1d598f,Incentive Type,"[""all_incentives""]","[""Agricultural""]",,99,true,true,2026-03-24 01:45:09.362716+00,2026-03-24 01:45:09.362716+00
+87f8612d-6563-4705-a9d2-8a279a841948,Business Type,"[""category""]","[""Commercial""]","[""appliances""]",37,true,true,2026-03-24 01:44:53.029054+00,2026-03-25 00:34:14.465188+00
+893a6af1-7d50-47e1-99ef-95ac055236d2,Technology / Category,"[""all_incentives""]","[""Multifamily""]",,90,true,true,2026-03-24 01:45:06.980415+00,2026-03-24 01:45:06.980415+00
+897d923a-fdf4-4a66-ac6e-4f1af2cddb51,What's Covered (Often Free),"[""category""]","[""Low-Income""]","[""retrofitting""]",68,true,true,2026-03-24 01:45:01.165866+00,2026-03-25 00:34:14.465188+00
+8acd6805-1904-45dd-a349-3d1ee81fb301,Will Someone Do the Work for Me,"[""all_incentives""]","[""Low-Income""]",,109,true,true,2026-03-24 01:45:12.021011+00,2026-03-24 01:45:12.021011+00
+8c18efa7-ff2d-4e8c-b95e-dacbb6c8c12f,Program Type,"[""category""]","[""Residential""]",,17,true,true,2026-03-24 01:44:47.686601+00,2026-03-25 00:34:14.465188+00
+8c8af932-e576-4113-9ce2-8ae3c2f12a6b,Incentive Type,"[""category""]","[""Residential""]","[""heat-pumps""]",3,true,true,2026-03-24 01:44:42.571808+00,2026-03-24 01:44:42.571808+00
+8e703cbb-7916-498b-a29c-8884ac38a71f,Incentive Type,"[""category""]","[""Residential""]","[""retrofitting""]",12,true,true,2026-03-24 01:44:46.307508+00,2026-03-25 00:34:14.465188+00
+8ef7e803-43b6-4331-902e-06bd38a09793,Property Type,"[""all_incentives""]","[""Multifamily""]",,94,true,true,2026-03-24 01:45:08.037054+00,2026-03-24 01:45:08.037054+00
+8fa2ed17-d17a-46c2-972d-9b2f9687cd1d,Charging Type,"[""category""]","[""Multifamily""]","[""ev""]",50,true,true,2026-03-24 01:44:56.316331+00,2026-03-25 00:34:14.465188+00
+9744ecf5-efce-4702-8057-1155ec81a898,Incentive Type,"[""category""]","[""Commercial""]","[""solar""]",30,true,true,2026-03-24 01:44:51.185782+00,2026-03-25 00:34:14.465188+00
+995bd189-70d0-4768-b710-3c27a446fe9b,Who Qualifies,"[""category""]","[""Residential""]",,18,true,true,2026-03-24 01:44:47.954558+00,2026-03-25 00:34:14.465188+00
+9960c1a5-171e-430d-8691-eab6a571a2eb,Helpful Extras,"[""all_incentives""]","[""Commercial""]",,89,true,true,2026-03-24 01:45:06.705274+00,2026-03-24 01:45:06.705274+00
+9a827896-cc93-4193-9d36-bea2d1bbdc3a,What's Covered,"[""category""]","[""Agricultural""]","[""solar""]",65,true,true,2026-03-24 01:45:00.361856+00,2026-03-25 00:34:14.465188+00
+9dee05b7-2096-4e61-8f4e-1e2652e78288,What's Covered,"[""category""]","[""Commercial""]","[""retrofitting""]",34,true,true,2026-03-24 01:44:52.239717+00,2026-03-25 00:34:14.465188+00
+a1070a5b-32a4-4db3-bfaa-0734ee541d3c,Estimated Savings or Incentive Amount,"[""all_incentives""]","[""Residential""]",,77,true,true,2026-03-24 01:45:03.556956+00,2026-03-24 01:45:03.556956+00
+a2c1a756-f419-4704-af3e-1547fe5aaa59,Who Offers It,"[""all_incentives""]","[""Multifamily""]",,92,true,true,2026-03-24 01:45:07.514047+00,2026-03-24 01:45:07.514047+00
+a861f772-a9c9-4e7c-9dbe-5643408a3d1c,Incentive Type,"[""category""]","[""Multifamily""]","[""solar""]",51,true,true,2026-03-24 01:44:56.581028+00,2026-03-25 00:34:14.465188+00
+a8a4d1d3-c16e-48ff-8d41-6136cf4324eb,Incentive Type,"[""category""]","[""Commercial""]","[""appliances""]",35,true,true,2026-03-24 01:44:52.509544+00,2026-03-25 00:34:14.465188+00
+a926d2d7-acf8-4264-842e-3bb5fab7a525,Program Type,"[""category""]","[""Low-Income""]","[""retrofitting""]",67,true,true,2026-03-24 01:45:00.905017+00,2026-03-25 00:34:14.465188+00
+aa7695cf-b762-4a56-99ec-74d16aba7a77,Business Eligibility,"[""category""]","[""Commercial""]",,41,true,true,2026-03-24 01:44:53.912219+00,2026-03-25 00:34:14.465188+00
+ac0b9e99-6be2-47e2-afa6-f5690b48263c,Farm or Operation Type,"[""all_incentives""]","[""Agricultural""]",,102,true,true,2026-03-24 01:45:10.135332+00,2026-03-24 01:45:10.135332+00
+b118279f-ff51-49f1-8d41-e3f1ebd42ce5,Incentive Type,"[""category""]","[""Commercial""]","[""heat-pumps""]",38,true,true,2026-03-24 01:44:53.29219+00,2026-03-25 00:34:14.465188+00
+b3635c71-69ab-42a8-9f18-2d0fc976cc6c,What It Covers,"[""all_incentives""]","[""Low-Income""]",,105,true,true,2026-03-24 01:45:10.942342+00,2026-03-24 01:45:10.942342+00
+b6baef4c-2cc9-402d-96e1-1bd0a98828b4,Estimated Incentive Value,"[""all_incentives""]","[""Agricultural""]",,101,true,true,2026-03-24 01:45:09.873988+00,2026-03-24 01:45:09.873988+00
+bb7258e6-17b2-4bb4-9c1d-93a2cb23ba0a,Availability,"[""all_incentives""]","[""Multifamily""]",,97,true,true,2026-03-24 01:45:08.82283+00,2026-03-24 01:45:08.82283+00
+be1f13db-6be0-431c-88f7-1ac003ad34bb,Incentive Type,"[""category""]","[""Residential""]","[""appliances""]",15,true,true,2026-03-24 01:44:47.160144+00,2026-03-24 01:44:47.160144+00
+c4a05ab7-85dd-49f1-9fe1-1273e6442135,Customer Eligibility,"[""category""]","[""Residential""]","[""ev""]",2,true,true,2026-03-24 01:44:41.834095+00,2026-03-25 00:34:14.465188+00
+cd752540-2b37-4658-877e-ab906e9adeb7,Program Type,"[""category""]","[""Commercial""]",,40,true,true,2026-03-24 01:44:53.64953+00,2026-03-25 00:34:14.465188+00
+cd9941bd-ffbf-4315-a34a-8ac8da37ffb2,How to Qualify,"[""category""]","[""Low-Income""]","[""retrofitting""]",69,true,true,2026-03-24 01:45:01.420779+00,2026-03-25 00:34:14.465188+00
+ce4af679-27b1-4d56-b151-0d66552d24cc,What's Covered,"[""category""]","[""Residential""]","[""solar""]",10,true,true,2026-03-24 01:44:45.503127+00,2026-03-25 00:34:14.465188+00
+cf4dfcd9-bcf4-4e44-84ca-9797b6e700f5,How You Get It,"[""search""]","[""all""]",,116,true,true,2026-03-24 01:45:13.875981+00,2026-03-24 01:45:13.875981+00
+d18e0fef-ba79-4c43-a955-b91595c97cc1,Business Eligibility,"[""category""]","[""Commercial""]","[""ev""]",24,true,true,2026-03-24 01:44:49.553431+00,2026-03-25 00:34:14.465188+00
+d34ea501-c9c9-4c02-bac0-c665e1718768,Charging Infrastructure,"[""category""]","[""Commercial""]","[""ev""]",23,true,true,2026-03-24 01:44:49.279832+00,2026-03-25 00:34:14.465188+00
+d92396ad-ef65-4b71-a8e2-2df1a67fcc4b,What's Covered,"[""category""]","[""Multifamily""]","[""solar""]",52,true,true,2026-03-24 01:44:56.84912+00,2026-03-25 00:34:14.465188+00
+d9bf1dd6-10f6-46d5-9546-25a4c587e374,Availability & Timing,"[""search""]","[""all""]",,118,true,true,2026-03-24 01:45:14.398021+00,2026-03-24 01:45:14.398021+00
+d9c2e182-43ec-41fd-9612-74dbbf075357,Estimated Project Incentive Value,"[""all_incentives""]","[""Multifamily""]",,93,true,true,2026-03-24 01:45:07.770222+00,2026-03-24 01:45:07.770222+00
+dabe263b-ef0e-442e-ad89-af36a33aacb0,What's Covered,"[""category""]","[""Agricultural""]","[""retrofitting""]",63,true,true,2026-03-24 01:44:59.82976+00,2026-03-25 00:34:14.465188+00
+dda49d45-2a92-49c5-861e-7ccddc4d52b7,How You Apply,"[""all_incentives""]","[""Residential""]",,79,true,true,2026-03-24 01:45:04.073877+00,2026-03-24 01:45:04.073877+00
+de730d1f-8d4f-429b-9593-b68444c755c8,Vehicle / Fleet Type,"[""category""]","[""Commercial""]","[""ev""]",22,true,true,2026-03-24 01:44:49.009351+00,2026-03-25 00:34:14.465188+00
+e98f7adb-3009-4700-9182-8c1bd55b20f3,Equipment Type,"[""category""]","[""Agricultural""]","[""appliances""]",61,true,true,2026-03-24 01:44:59.263606+00,2026-03-25 00:34:14.465188+00
+ea05a37f-66d9-4e3c-a369-6b53c4db47d0,Equipment Type,"[""category""]","[""Commercial""]","[""appliances""]",36,true,true,2026-03-24 01:44:52.776981+00,2026-03-25 00:34:14.465188+00
+ea5508b8-35a6-4862-96da-5e5b1aa6f172,Technology / Category,"[""all_incentives""]","[""Agricultural""]",,98,true,true,2026-03-24 01:45:09.107363+00,2026-03-24 01:45:09.107363+00
+edf7ac71-b605-4488-9b42-29d475d711f6,Program Type,"[""category""]","[""Low-Income""]","[""solar""]",72,true,true,2026-03-24 01:45:02.248302+00,2026-03-25 00:34:14.465188+00
+eeb6391c-06e0-4be8-8b42-9baacb5cd782,Who Offers It,"[""all_incentives""]","[""Commercial""]",,84,true,true,2026-03-24 01:45:05.395538+00,2026-03-24 01:45:05.395538+00
+eee76545-c289-4f98-8720-5b551b0738bf,How Much Does It Cost Me,"[""all_incentives""]","[""Low-Income""]",,106,true,true,2026-03-24 01:45:11.200497+00,2026-03-24 01:45:11.200497+00
+f0250cca-fd3e-495d-94c1-b587e6c86699,Availability,"[""all_incentives""]","[""Commercial""]",,88,true,true,2026-03-24 01:45:06.430535+00,2026-03-24 01:45:06.430535+00
+f04a8061-a702-47bd-93fd-0371a1011493,Property Type,"[""category""]","[""Multifamily""]","[""retrofitting""]",46,true,true,2026-03-24 01:44:55.227121+00,2026-03-25 00:34:14.465188+00
+f0e364ea-07d2-413a-933b-a3bb8e7a343f,Program Type,"[""category""]","[""Multifamily""]",,55,true,true,2026-03-24 01:44:57.662658+00,2026-03-25 00:34:14.465188+00
+f320ae7b-b80b-4237-840b-978c31f70b41,Equipment Type,"[""category""]","[""Commercial""]","[""heat-pumps""]",39,true,true,2026-03-24 01:44:53.389161+00,2026-03-25 00:34:14.465188+00
+f4314b31-3685-4210-9dca-1bbad1b2dbf6,Customer Eligibility,"[""category""]","[""Residential""]","[""retrofitting""]",14,true,true,2026-03-24 01:44:46.895867+00,2026-03-25 00:34:14.465188+00
+f5468267-0c53-47da-9c27-96542ca215d7,How You Apply,"[""all_incentives""]","[""Agricultural""]",,103,true,true,2026-03-24 01:45:10.403302+00,2026-03-24 01:45:10.403302+00
+f55092e9-848f-4448-8986-1f2d7e54f3f4,Business Size,"[""category""]","[""Commercial""]","[""heat-pumps""]",27,true,true,2026-03-24 01:44:50.353751+00,2026-03-25 00:34:14.465188+00
+f72bff70-3591-4567-a1ba-79d3c9d29577,Customer Eligibility,"[""category""]","[""Residential""]","[""appliances""]",16,true,true,2026-03-24 01:44:47.424961+00,2026-03-24 01:44:47.424961+00
+f8fe6a8c-7ced-47d2-aff0-a9871b0650e8,Equipment Type,"[""category""]","[""Residential""]","[""heat-pumps""]",7,true,true,2026-03-24 01:44:44.569786+00,2026-03-25 00:34:14.465188+00
+fa731165-9e38-4d0f-9d49-c10cac0daf4b,What's Covered,"[""category""]","[""Agricultural""]","[""appliances""]",57,true,true,2026-03-24 01:44:58.189305+00,2026-03-25 00:34:14.465188+00
+fcc34201-ff82-4804-a6bb-eaf812a3b878,Incentive Type,"[""category""]","[""Agricultural""]","[""solar""]",64,true,true,2026-03-24 01:45:00.100913+00,2026-03-25 00:34:14.465188+00
+fed2a326-d59e-4a7f-b49f-b542a26e3809,Business / Facility Type,"[""category""]","[""Commercial""]","[""appliances""]",29,true,true,2026-03-24 01:44:50.907187+00,2026-03-25 00:34:14.465188+00

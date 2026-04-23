@@ -1,0 +1,319 @@
+[
+  {
+    "table": "admin-users",
+    "model": "User+UserRole",
+    "jsonFile": "admin-users.json",
+    "rowsInFile": 1,
+    "importedRows": 1,
+    "skipped": false
+  },
+  {
+    "table": "asset_program_links",
+    "model": "AssetProgramLink",
+    "jsonFile": "asset_program_links.json",
+    "rowsInFile": 207,
+    "importedRows": 188,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "assets",
+    "model": "Asset",
+    "jsonFile": "assets.json",
+    "rowsInFile": 206,
+    "importedRows": 206,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "brand",
+    "model": "BrandSettings",
+    "jsonFile": "brand.json",
+    "rowsInFile": 1,
+    "importedRows": 1,
+    "skipped": false
+  },
+  {
+    "table": "brand_settings",
+    "model": "BrandSettings",
+    "jsonFile": "brand_settings.json",
+    "rowsInFile": 1,
+    "importedRows": 1,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "clients",
+    "model": "Client",
+    "jsonFile": "clients.json",
+    "rowsInFile": 1,
+    "importedRows": 1,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "data_source_status",
+    "model": "DataSourceStatus",
+    "jsonFile": "data_source_status.json",
+    "rowsInFile": 4,
+    "importedRows": 4,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "energy_savings",
+    "model": "EnergySavings",
+    "jsonFile": "energy_savings.json",
+    "rowsInFile": 126,
+    "importedRows": 126,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "engagement_events",
+    "model": "EngagementEvent",
+    "jsonFile": "engagement_events.json",
+    "rowsInFile": 3200,
+    "importedRows": 3200,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "filter_groups",
+    "model": "FilterGroup",
+    "jsonFile": "filter_groups.json",
+    "rowsInFile": 120,
+    "importedRows": 120,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "filters",
+    "model": "Filter",
+    "jsonFile": "filters.json",
+    "rowsInFile": 609,
+    "importedRows": 609,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "homepage_categories",
+    "model": "HomepageCategory",
+    "jsonFile": "homepage_categories.json",
+    "rowsInFile": 7,
+    "importedRows": 7,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "homepage_section_settings",
+    "model": "HomepageSectionSettings",
+    "jsonFile": "homepage_section_settings.json",
+    "rowsInFile": 3,
+    "importedRows": 3,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "iq_entries",
+    "model": "IQEntry",
+    "jsonFile": "iq_entries.json",
+    "rowsInFile": 6,
+    "importedRows": 6,
+    "skipped": false,
+    "droppedColumns": [
+      "fts"
+    ],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "marketing_channels",
+    "model": "MarketingChannel",
+    "jsonFile": "marketing_channels.json",
+    "rowsInFile": 4,
+    "importedRows": 4,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "page_traffic",
+    "model": "PageTraffic",
+    "jsonFile": "page_traffic.json",
+    "rowsInFile": 15300,
+    "importedRows": 15300,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "portfolios",
+    "model": "Portfolio",
+    "jsonFile": "portfolios.json",
+    "rowsInFile": 3,
+    "importedRows": 3,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "program_enrollments",
+    "model": "ProgramEnrollment",
+    "jsonFile": "program_enrollments.json",
+    "rowsInFile": 324,
+    "importedRows": 324,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "program_roi",
+    "model": "ProgramROI",
+    "jsonFile": "program_roi.json",
+    "rowsInFile": 126,
+    "importedRows": 126,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "program_translations",
+    "model": "ProgramTranslation",
+    "jsonFile": "program_translations.json",
+    "rowsInFile": 6,
+    "importedRows": 6,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "programs",
+    "model": "Program",
+    "jsonFile": "programs.json",
+    "rowsInFile": 9,
+    "importedRows": 9,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "rebate_click_counts",
+    "model": "RebateClickCount",
+    "jsonFile": "rebate_click_counts.json",
+    "rowsInFile": 28,
+    "importedRows": 28,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "rebate_stacking",
+    "model": "RebateStacking",
+    "jsonFile": "rebate_stacking.json",
+    "rowsInFile": 24,
+    "importedRows": 24,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "rebate_stacking_suggestions",
+    "model": "RebateStackingSuggestion",
+    "jsonFile": "rebate_stacking_suggestions.json",
+    "rowsInFile": 307,
+    "importedRows": 307,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "rebates",
+    "model": "Rebate",
+    "jsonFile": "rebate_source_raw.json→rebates",
+    "rowsInFile": 212,
+    "importedRows": 193,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "tag_link_configs",
+    "model": "TagLinkConfig",
+    "jsonFile": "tag_link_configs.json",
+    "rowsInFile": 8,
+    "importedRows": 8,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "user_org_roles",
+    "model": "UserOrgRole",
+    "jsonFile": "user_org_roles.json",
+    "rowsInFile": 7,
+    "importedRows": 7,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "user_roles",
+    "model": "UserRole",
+    "jsonFile": "user_roles.json",
+    "rowsInFile": 8,
+    "importedRows": 8,
+    "skipped": false,
+    "droppedColumns": [],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  },
+  {
+    "table": "users",
+    "model": "User",
+    "jsonFile": "users.json",
+    "rowsInFile": 447,
+    "importedRows": 447,
+    "skipped": false,
+    "droppedColumns": [
+      "customer_segment"
+    ],
+    "imageDownloads": 0,
+    "imageDownloadFailed": 0
+  }
+]

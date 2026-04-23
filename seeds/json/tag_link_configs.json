@@ -1,0 +1,66 @@
+[
+  {
+    "id": "1d5b5deb-012f-47ab-9f6f-ee9beea1a1ad",
+    "category": "UTM Parameters",
+    "name": "utm_source",
+    "value": "google",
+    "active": true,
+    "sort_order": 1
+  },
+  {
+    "id": "9e31eb51-cd5d-480a-b718-d4edff331e55",
+    "category": "UTM Parameters",
+    "name": "utm_medium",
+    "value": "cpc",
+    "active": true,
+    "sort_order": 2
+  },
+  {
+    "id": "3b2af0d4-1882-4020-a224-edc98490d90b",
+    "category": "UTM Parameters",
+    "name": "utm_campaign",
+    "value": "solar_rebate_2024",
+    "active": true,
+    "sort_order": 3
+  },
+  {
+    "id": "812520d0-4181-4750-b943-f2d4583825d5",
+    "category": "GA4",
+    "name": "Measurement ID",
+    "value": "G-XXXXXXXXXX",
+    "active": true,
+    "sort_order": 4
+  },
+  {
+    "id": "3a0c635f-3876-4b3f-8f54-7f8e0014fccc",
+    "category": "GTM",
+    "name": "Container ID",
+    "value": "GTM-XXXXXX",
+    "active": true,
+    "sort_order": 5
+  },
+  {
+    "id": "3c72df19-f4f6-4d30-b4c7-b534b49d1d94",
+    "category": "Meta Pixel",
+    "name": "Pixel ID",
+    "value": "1234567890",
+    "active": false,
+    "sort_order": 6
+  },
+  {
+    "id": "120d2d47-0f94-4985-89e2-64b4c1edd1f0",
+    "category": "Conversion Tracking",
+    "name": "Google Ads Tag",
+    "value": "AW-XXXXXXXXX/XXXX",
+    "active": true,
+    "sort_order": 7
+  },
+  {
+    "id": "0c64f4dd-0c03-41c3-8f05-136bec4128d4",
+    "category": "Remarketing",
+    "name": "LinkedIn Insight Tag",
+    "value": "12345678",
+    "active": false,
+    "sort_order": 8
+  }
+]

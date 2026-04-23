@@ -1,0 +1,32 @@
+[
+  {
+    "id": "7c37a1e3-2a65-47d4-8a26-1a94b7db1a6b",
+    "section_key": "featured",
+    "is_visible": "true",
+    "curation_mode": "manual",
+    "manual_program_ids": "[\"bed1c591-7fcc-4213-9d2b-ac56f7e8a5f1\",\"a77373ac-31fb-4516-91b3-84023c2a70b9\",\"79465cd1-d722-4a7b-8e77-cf2ae8dbdb92\",\"f867bd8c-b5e2-4439-a37c-0f95adff7b2b\",\"6ab1d395-0e75-4a24-9585-8d786f17016a\",\"9ebd4ebe-d635-42c5-9e2d-3f84d5b14d7e\"]",
+    "card_count": "6",
+    "created_at": "2026-03-23 23:37:25.247189+00",
+    "updated_at": "2026-03-26 22:27:18.731+00"
+  },
+  {
+    "id": "c1bd48a4-5e5e-4c7e-bd41-25a1b38f9e73",
+    "section_key": "local",
+    "is_visible": "true",
+    "curation_mode": "auto",
+    "manual_program_ids": "[]",
+    "card_count": "6",
+    "created_at": "2026-03-23 23:37:25.247189+00",
+    "updated_at": "2026-03-23 23:37:25.247189+00"
+  },
+  {
+    "id": "d5a9155b-60b9-4982-8f20-c91a5ad1969f",
+    "section_key": "state_federal",
+    "is_visible": "true",
+    "curation_mode": "manual",
+    "manual_program_ids": "[\"a143495f-ce31-4aca-81fa-53a34a4e173b\",\"e337a889-63b9-45cf-bc6f-aeddefb0efbb\",\"0ff7c877-395d-452f-ab40-2335199a0a05\",\"37dba51c-4149-4c2e-99b6-b13d2dbbbde3\"]",
+    "card_count": "6",
+    "created_at": "2026-03-23 23:37:25.247189+00",
+    "updated_at": "2026-03-25 04:42:52.518+00"
+  }
+]

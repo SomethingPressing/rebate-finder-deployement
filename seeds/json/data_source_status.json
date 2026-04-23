@@ -1,0 +1,38 @@
+[
+  {
+    "id": "894027ba-f98d-46df-b0a6-871e5934674a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "source": "google_ads_search",
+    "status": "pending",
+    "last_sync_at": "",
+    "error_message": "",
+    "updated_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "eace2bd7-5a36-42a6-a348-68d29c89caaa",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "source": "email",
+    "status": "pending",
+    "last_sync_at": "",
+    "error_message": "",
+    "updated_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ec6d8e7e-0e85-480a-b1d4-07d58bc7a0ec",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "source": "ga4",
+    "status": "pending",
+    "last_sync_at": "",
+    "error_message": "",
+    "updated_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "effb3268-fda6-4e34-8671-dfb260f1eff4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "source": "google_ads_pmax",
+    "status": "pending",
+    "last_sync_at": "",
+    "error_message": "",
+    "updated_at": "2026-03-24 17:00:03.152763+00"
+  }
+]

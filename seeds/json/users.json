@@ -1,0 +1,2642 @@
+[
+  {
+    "id": "010c0f8c-8ccb-40f1-8715-145e31a8cb6f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "0147cded-c29e-4248-9e0c-baa2062db54c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "034dd9a0-8baf-4e80-84df-8a223e3110b2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "03848e01-efbe-4c66-a39e-b2ba83890a34",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "03bf557c-ac47-4672-a996-32b251b10885",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "03ed6f44-68b3-4ea1-aff8-c5051162c1a7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "04b15f35-b577-4c78-8dd2-92394b31c2b9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "05beb600-68c0-4fbb-ae0d-6e12161e2ccd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "05e3234c-2fc2-46bd-9b42-5be429fc8434",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "067683d8-be49-4b6c-9fda-3a6c926df6c6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "06a13fe0-c59f-4c0b-9cca-5de37c4cdb79",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "06f2af58-cacd-40c5-8ccc-347e478dfca2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "071354eb-9416-4240-a964-c08ce4be00e6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "07615357-0d22-4255-a819-63a63c51a141",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "07940ae8-4ff1-4aa1-9eb2-9425cd4db827",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0838c389-e7c9-4126-bddf-f0bed418d0a5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "09551a27-a957-45cb-b9d3-36845492c00f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "096fdb60-0c9b-46fe-9fa4-566a78fc1123",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0a0ece5d-8264-4049-b5b0-fd8b1521aa7c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0a2955b9-94df-4122-b25b-3f9ac41f4908",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0b1559fb-5b00-49dc-9078-4d3cc9df88bd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "0b3bf934-9019-4069-bcaf-da73a60e71ba",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0b40d836-ff50-4306-82cd-a0409e27d9e5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0c36b9b8-aa1c-4abf-a91f-775082c8e6f6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0cb40a81-0f84-4934-a4ad-886fc7bf7743",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0d08e296-a3f7-47ec-9dc5-190c47a2b142",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0dcc6b28-e415-47ae-8879-e349fa6387d3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0dd89eb1-a2bf-4222-9ea7-d250d9f344d0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0e0fde32-0287-4081-aecb-cbb5e478cfb0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "0eae2cee-81e4-4817-aee2-025242a0f980",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0f1395c0-3009-4799-a91d-5e1661887eb2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "0f4d8f4f-6887-43dd-bc2b-f33cd3087273",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "10815bf0-4da8-45b4-a980-1db8dea9cb52",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "10fbfea0-2f5f-48f0-b505-438a3f123177",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "119aa258-f5d3-4d55-a5ba-b79f1c427e6b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "124c2738-be95-4c74-9398-5c5a16bb74d5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "12e01297-c525-4443-a1eb-b05c4c7f8870",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "13406acd-7934-4d5b-bb87-c8f0a4839e8e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "13e6de1c-c84b-414a-a3fe-fd6b7d25a3a3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1453b927-506f-4196-ad4d-34c493cac091",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "146b4836-2691-42f2-854b-028dafc5784a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "15f59c58-e699-445b-b467-65c946b3b8ef",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "162336d3-6036-43ff-a6a9-1f24fab05ec4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "18872d03-d569-4b06-a0e0-b52e95ba26a7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1900756b-713b-4605-aac7-169881afe4e2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "193314ed-041c-4a04-b159-390154baa8b3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1a653714-a0de-4126-a61a-f67c7e859745",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1b8797a3-77c9-40f8-9778-fb9154af1978",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1d74e6cb-8cdb-443a-a20d-4f7e2ba859c0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1d78c997-f90f-4fbf-a670-b77de537f07c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1de181b7-93db-47e8-9358-72ab4fbacb05",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1f2d3686-32e8-441b-92b4-ce53d5555a03",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1f95de8b-30c9-4aae-8ed0-14da7701b0e1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "1ff987de-b898-4212-a8d7-08d65589df3d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "2047abd5-43b7-4516-923e-b9e80058c86b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2122369e-1770-4f86-90a8-7c7c85c732b9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "21e9c79f-e46a-41cc-9189-88caa1d3934c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2233e144-94cd-4e4b-92bf-a28122990efa",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "22aa407f-4568-4274-9eef-2b81aab5863c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2317fb55-fd77-4543-98cf-0b82ec4b4bc3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "233dbb6d-53b6-4325-84a9-8845735190dc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "24447a1c-3c35-4aca-9dc6-deea9471c709",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2474ec85-5cd5-4c7d-91d3-80e0b4ed4300",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "24d3f6c4-d557-415a-9a07-fc78de74a2bd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "251d37da-278c-4e69-a61e-c99bef10290f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "26b7b87b-552d-411f-b04b-7d7fad71b874",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "26c92d0a-670c-45af-b404-bab753cba9b3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "27486aeb-1225-43f1-acde-2ae9c9bd3292",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "278b8a09-8b57-4797-a566-e8066fd2280b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "285fb4dc-fe13-4cf5-91ac-1c1f565853c4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "29abca94-c517-4e85-8c88-c2802a8a22e4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2b2578f3-9a21-4e8f-bf8c-0c9148ae2aad",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2b61177d-dbae-48b5-a410-2f71b6c12e48",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2b99572a-71ae-4268-a2e3-ad5f64bc7420",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2c6e3d2b-8183-40fc-82ab-7a9e3b914b80",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2d3ddf43-4e89-4199-b434-1c13bb30c524",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2d98ef62-1f2a-4a40-82bf-c7dc3801e02d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2ebed895-2965-40ee-ad64-60ee32c7bf77",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2ec69d08-b90d-4e04-a8a1-31f1f7c4a862",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "2f190015-c194-4cb5-8e36-f9683112820b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "30c70c2d-7946-488a-9b5d-f708e9982969",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "30ed60ed-7d3e-4872-840b-69074da06819",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "31290a79-3610-47c8-8686-40bfb235e719",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "319376b8-c0d0-4630-87b4-08e033eaf6b7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "32222647-c0f3-41b4-9e13-47e9e76be8b3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "327c97c0-4783-4324-800a-7d89343a409f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "32f43ff0-a60f-4415-9718-5775ae6ae528",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "3371b5b2-112b-468f-9024-c84b3ef2e368",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "348d4666-fbda-4d79-8f0c-6b6ac7116fda",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "34a8ca7b-e8db-4108-ad49-d627a47c9b5a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "34de8035-c9c2-4db3-855a-24ed72ad231c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "351899f9-8fad-47d2-846d-0eff47d72fc7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "35e12280-d296-42c4-84fa-bd79ab6e2663",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "35ef242b-ddec-4c39-97fe-c0bcfde55236",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3732e6d2-49cb-4267-b88b-bb1d205c4ef1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "37a4de4d-78aa-48ee-8447-00bfb7731a36",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "37bbe385-f8fc-409e-b4f4-225cdcfbf12d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "37eb403a-3b59-4e6f-bff7-029cd9497d1e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "385355f6-c989-47ff-995f-cfae96ce19b9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "38568808-d06a-4e71-8bf0-8bd53c453bac",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "392fa6dd-72be-4ffe-b105-6ba997671382",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3c1aae56-da81-4a01-9430-ec16918775e9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3c3229d6-d550-4de5-9f4c-b67230f4de97",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3d2ae2bc-6480-4b91-aac9-c2e604ff00ab",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3d712609-8935-4ade-825a-a7bfe4e7b7d8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3dbafb66-1641-409c-8352-711d37f18b9f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3e145a50-7fce-43be-8540-7f97209218f0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3e56b58f-d182-41c9-885a-3f8de0a812ba",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3eae95e8-e6f7-4b43-89bc-03aac2b0b904",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3ecea715-f8f7-4d1a-81d7-4290c91971b1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3eefb775-19d2-4d0f-b5e0-52605d5faf4b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "3fa485a9-6c90-4d3f-aa5a-40738103da22",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "41f981f7-450e-417d-88e8-42e727f12700",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "42f3f475-8163-4943-a9c0-2e764d813c2d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "43671cfc-ebb0-43fe-8fa0-e4d98d591c68",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "43a88925-7a0e-41a3-b846-8ad9dc6eabc4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "43d161bd-d8ae-4451-89d8-957bb818d64d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "43d606ad-3509-4ed5-b660-369bbab935a5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "44ad9631-25ed-409b-8eab-94d8b4365106",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "44b63722-d3df-44a4-a1f5-07b174f88d6d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "45dd4209-df44-4837-bcdc-30c02e1b3e34",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4854afe4-0921-4eda-9b05-3bf79fe80c01",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "49bc2505-edf1-4731-9107-b4e680189a87",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "49cb678e-4000-4934-af1d-dec1fab3fe73",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4a5d6209-305b-4ad4-8bdc-b0fe4b61f753",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4a865d5b-1485-476a-93f9-d84713c2d756",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4bd0cb30-e273-4f85-b463-fb5bd429edc4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4c8b01dd-7f7b-4278-a34c-ff810e314315",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4cc69fb7-9700-4067-a788-ed590f7c5de9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4d02a433-92d7-4689-a651-762ceed21651",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4d94da0b-da8e-48b4-a556-f3c1b9100abc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4df4b15a-6826-4fea-ab94-fe09aced8afc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4e221d57-62be-439a-9bff-dd000a914e6e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4ec6ef9d-1db6-4592-bf8e-28a0bbcbe99b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4f9540c4-2a5f-4271-9dc8-04455e901062",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "4f9da583-5ea8-470f-a248-2717b6232e76",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "50485f05-a9b3-4ce7-bc71-0d2f42161021",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "50c919f5-e577-4860-8972-897d3bd6c399",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "51100667-6228-4eee-9d51-22826a5bf053",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5200dbb8-6314-47a8-9012-e556a328ccc8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5279b21f-1441-49fe-a2cd-cfff32bd5fc1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "53ae8f51-bf09-4926-a6ce-cfbebed09c04",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5483d2fc-8fdb-4417-b387-170302608d3f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "55025272-30b2-424d-9738-1be2a1a49cf9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "55144802-99bc-41dc-ba6a-03d2cad4729d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "55b91b8e-1680-4ad3-acc6-20de5b2085b7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "56005e18-790a-4469-9d78-1efd4785fb74",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "563436dd-f40d-40f3-b0b4-f97eca64b17d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5806e914-635c-4a7b-a014-197688fd191b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "59b07244-b663-4761-a21a-5693f3ed5094",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5b610136-1282-42b6-be3a-57b5e4bffb46",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5c098ae5-ce16-4907-8163-bcc8357ddf5f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5c32c7a4-7746-4a2b-928e-e75d5969b7b7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5c447ae7-0590-4adc-bb5b-ba5dac17d7e8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5c630123-ce2c-4d0d-b944-73e88f17038f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5cf4fddc-af49-4fc5-aafd-b384db1322c1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5dc3c2cb-1311-4827-8260-8408e61cdeab",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5e776563-ae69-44f9-9c12-9dc38df8483b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5e912276-3558-4c79-9216-bc80e3274d1d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5f46ac58-14c0-47b9-9e83-ebe72dac3125",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "5f874f3d-6d9f-4863-ab6f-2fce39caa1bd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "611ce862-82a4-4f0e-8841-78a4013f3689",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "628b2a78-794a-4d90-aa13-85314c973d43",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "62cdefe5-1eae-4e98-8123-658fd4ddbcca",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "63655230-b467-4c3d-b13c-44202742758d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "63656108-7274-452e-a605-5e8f6bf27a7a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "63a3fae7-ddf5-4de6-b072-6e1f343df393",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6431533c-c1d0-453d-8444-f16da4e28e73",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "645815bd-5c97-4df5-b54c-bdd8613c30aa",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "65028382-db27-453a-8e7d-ab0d8e2ab674",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6538055f-6ea2-4c06-9029-ff0af5471053",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "653bb06f-6acf-4d10-96aa-c6e06afcae64",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "654d6ad5-7972-4e26-8427-0cd418aeed3d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "65a84db7-0372-4c8f-b34b-91949212f25e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "65d02092-5b90-428c-9a2c-2012c3428ba6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "662087b2-ca65-44ea-9f1b-7d9699db7358",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "662d9381-1507-462d-88e3-56fea8c7935e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "66d7efcf-ed7e-40ed-90ac-03e360163877",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "675e9814-28ef-4e44-b67c-c69b987f42d4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "68b7991d-55a5-4ae6-a255-1180b8a23314",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6aeb6ff7-226b-4c1e-9b04-1e7fd30e9ceb",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6bf0f58a-e133-4644-899e-79a31c40d46d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6ca1469f-c999-43f9-a1a2-a5612ebdf899",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6d26b04d-37b2-49f4-9e9a-8c31865455fd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6d990c45-7ed8-4b07-bef4-c309c9c5e539",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6dda11ba-a22e-4745-b1f0-31506654cd82",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6e899006-46a6-41d8-b7ab-ae8aeeee0680",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "6edac898-4256-4177-87d1-f8185ce87c9c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6ee1405a-4591-48bb-98e0-01866adfed4b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6f690794-4e31-450f-9b03-f44ec42acb51",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "6fdbc5c1-594f-434b-a61f-49b2f3a88e0b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "707cde1c-544d-4621-819c-afde5d54f2b2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "71708508-a0aa-4e02-9cea-d38fbf1091ef",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "717b8b71-6555-4e35-9d3c-6419ea23ba59",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "719c91ed-3bb2-4e4f-ba46-de1b3731758a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "71cf11fc-9992-43a9-8bb9-13706212039c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "71f87d1a-962a-430c-9d93-0508bd4a3ff9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "723ae016-9932-4e76-982b-7043db496757",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "727903fc-a087-441a-a954-d3c7c9edca65",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7304cf0c-9f94-43aa-b822-e53b14dbb401",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "762c6bd3-2ae1-402f-a084-0257080aa38d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "76c10050-b193-4b9f-b809-ae40329f2af0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "77001737-8f3e-4230-b92c-b647cd9d368d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "77b467d9-c5b7-49f6-bb1b-a54b7d8da09a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7832aab3-f513-4b3b-b9e3-d37473e84b76",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "78352294-8849-4140-8b07-c66c5c71ba50",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "796f5fbe-9d22-4ecc-a8cc-b2f715ef4730",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7b73302d-daca-4d61-8fe7-6e5274707db9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7c9d0593-a3bc-4e5c-87ce-eabb12f0c829",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7d0de335-0f91-40f2-abab-27c2aaf7dc20",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7d8be940-127a-489a-a4a4-c598067b2a8e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7d8e5465-9854-4204-a788-cca7662d80ff",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7e4d4a39-3127-46ff-86ea-07c1d44efe02",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "7f0e132a-5602-4aff-8ad8-4e820a3b1030",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "7f9bc71d-c18e-4065-8cb8-bf4e5cf4128f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "80c42218-9468-4a06-9ac3-a72a472f9d2f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "80e7214b-8f61-4538-833a-4886e28e199b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "811a9ff1-6b0d-42dd-affd-7439fadba042",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8135d7f8-5ee6-448d-bcdb-865e19a086ba",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "83301fa1-d5a1-4d01-9e1c-8cc7b741643c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "838f02bf-cf19-4146-a625-5ddd7b749fa6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "846bc107-28eb-4a2a-a359-cee32d0684a6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "84df840f-5a5d-49f7-bc3d-8b858b5d14aa",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "851c8b29-0ea7-44a4-b134-0bb4907a68af",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8524e7f1-be4b-4ae8-b310-66d36aef4a96",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "871486ed-5cd3-4403-aec6-66289e61e1b1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "87aa7e41-4b44-468c-b82f-267499b19117",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "88522cce-3c0f-4796-b788-243ea40cc36b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "89ad0016-5e00-4a1f-bfd5-cee87dd20deb",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "89cb388e-dbeb-416b-a6db-ccd8c82bab69",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8a0c4ed5-1873-4bf2-9ebe-e664ebb5bd8f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8b08dfc6-87db-4298-9c54-4575224d8712",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8b8884e7-c37f-49b7-bd22-1eee634e4547",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8bd8759f-f725-4d76-b526-03e94dd4c0d7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "8c5a7d86-2c86-4990-a902-a3c74e741cb5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8c99565c-62e3-497f-adb2-478b13d37c6d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8d0cca83-2719-4c76-9536-8720b7ba7554",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8df7f028-3636-48f5-9a81-f2baf963828e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "8ebb2cfa-75af-4300-8f74-f0ffb79fe8d3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "8eeb45e7-744e-49ef-9f5b-6848a21b5af4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "91d6e490-25d4-4548-96b9-f7bf3018fc96",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "920f60f4-7dad-47f8-9a72-4022ba29a7a9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "927d098e-9211-4590-856c-6aecc23a3a5f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "92f2e114-035c-44b0-945e-6b0d77d059c0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9320ccba-1b59-4463-9fe4-290cdb4ed815",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "93428dae-d017-45ca-8531-2b7fe018db81",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "936527f3-4d4f-4458-9b18-2bcdc32c7ca6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "93e1335c-7d4c-4eaa-9b97-6d3948beaeb2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "93f38850-d71d-4994-80a3-c388fbbe01f5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "94e345ba-6a40-4ca4-a79f-35016fa4f25f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9557f5ca-a573-4330-916a-5c5f6d48cd4e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "958a0821-3c2b-4248-8431-132924673ab8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "95a932cf-5cd0-4a12-844f-fb13f135981f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "95e05f21-ce35-4921-8cb2-9498ddf8c250",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9606c241-038a-4533-91a8-ae9b1231779c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "96415c97-22ef-4ab7-acce-fe8ee905d26b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "964ce5b6-b4eb-4273-9d9e-ce7bb7397fd2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "96e39572-3ea4-48e0-9367-1317bd8bb601",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "96e3e78e-9295-486a-b91e-5c8cb3deaa87",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "973a4d9a-2a42-44be-ba26-f8af77351ad6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "97b8b174-58c7-4287-94f0-99d32269a544",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "97be0993-9900-45ff-afd1-84ced54cd7f3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "98806da1-de2a-4b71-8337-39af1ca31e67",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "98f9e1ea-ee21-460d-acc4-a8ca8abb396b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9907557d-6714-41a3-ab91-2e1bc7e2b147",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9aea06d1-66d6-4f85-aac9-101c06719c15",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "9b25c25d-ebff-4826-b58f-d92e7e69398f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9c41718b-79a4-46bd-94d7-176a901dac86",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9c55b7cf-f815-4445-b515-ed0d97779ed9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9cf6ff8b-41f3-4127-8ae5-1416569d2eff",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9d43637a-d30c-4672-a63a-798b3527c17f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9dc9d13d-d1e4-43a0-aa94-4e7df1e976c7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9dfa2d7e-844b-46c7-a01a-ecbc5f69fe01",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9dfa4724-ad00-4ebb-857f-2448fb92def8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9e7deb5c-26ff-4093-b1fd-a7b2dcbe2fab",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9f069257-1e30-4706-928f-8957eb710bd5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "9f0a2674-2e00-4561-8cf5-58e09b235007",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a0d88046-6750-472f-be9c-18c887ad26b5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a1672be4-068e-4ae7-aa1a-6cf2f8cc5ad4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a23fc0cf-223a-4c6d-a6c7-7d26bc061d75",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a3704a63-eb57-41e7-ba9e-c71a188901ba",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a422db2b-2289-4677-b568-56f2955064cb",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a47bab90-9ea0-4aa6-966f-fe7b78681984",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a49aeaf9-e2b7-424c-9bf1-22bbd25840d4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a50e906d-f58a-4928-a0ad-fd895b5b117f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "a578adaf-3ebb-4c8c-9392-cc37bc52a546",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a6ef26de-040f-4bec-a2e2-207b9edbb31e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a7e6a3f1-fe72-4559-a628-44864f59027b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a8dc0dde-66d5-494d-9a09-3445c775249a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "a9c1c7ff-31d9-46ca-bb4d-385edbdc063c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "aa939eb1-2350-4409-b78a-8942be24202d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ae4692f0-248d-493e-9744-14cf3a554115",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "aec3508d-ae2e-4371-8e29-a88eaf515986",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "afb79491-c4c9-47ee-a502-2cbafb9d8eab",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b167c38a-148e-4524-94da-c782b7a252b8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b1e6f1d9-df7c-48f9-96c6-9f51a507e870",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b24a7b4c-b26f-484f-925e-c66237103c1b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b2c9d5f8-e751-4833-8c79-026f83c06b30",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b38a635e-75f3-4f64-9408-b1a5fa42352f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b40560c7-e2c5-4615-91fc-e05c1249d2bf",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b42a65d4-4963-4f6c-aab8-3ca63e8f5774",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b44a78cd-d72b-40dd-89e9-db2395453b6b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b49ba80b-42ca-43b1-933b-2aad0d143180",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b5ed6f41-0973-4e34-aeea-17e0e061d1d7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "b61f1517-6184-4192-b021-398fdaa77490",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b6e228f2-9b98-47d6-97e8-66d6e4d5569c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b7832bbb-045c-4598-9e3c-c8e4afdf46f3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "b79189bf-2e72-4437-a2d3-c0c0baa703b4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b7d29017-3001-4485-b672-b3a2d899fc90",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b891fc57-b420-4b73-a176-22c98ffc74fe",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b8a27676-50fa-4c40-a44d-68f2f23f018b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b90a1ee6-752b-4391-806e-7dc29db11fa0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b916418c-07be-470e-8b31-ea2a9fc8a706",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b954df4b-94ac-4785-be26-9924a76f7a85",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "b9d94b0a-7deb-4d26-898e-10d3cfc0d898",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "b9dd3929-e682-4660-a50c-1ae3093db0f3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ba78e807-abec-43be-a54d-c7e98fde37e3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bac5b924-190e-4636-a7db-041ff582d7c8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bb928b95-069a-4cb9-b255-a1d17db73fd2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bb95aa05-6d42-43db-a1ca-9e1105ff85f8",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bc07da49-e73f-4d93-86c2-9fca2eaa2a01",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bc39badd-1116-4e9e-a630-4cbb59815f5d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bc469147-5cc9-4b7f-8dd9-8fc99c3921ad",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "be5d9d21-9da1-4906-87bf-b4023f23c2f7",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bef812ac-f21f-4598-931a-4390b80bb639",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bf2fc4a1-718f-44ef-8ebb-35ee7961e1d9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "bf847a66-43ad-473b-9d5b-e03394d4ca42",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c02b01a8-60ed-41c1-9b26-155cb12ae875",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c18fa1b5-6a5c-4877-8fbe-d39df6619ccb",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c29cc2e7-c283-4fd6-a112-87ceb5b8a469",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c3025f49-6fbc-4fde-a96c-65dc103e4181",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c388fd20-82aa-4fcb-a86b-2e3d8dd71d41",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c42bec63-c59c-4d98-b8b5-a1a427c154ea",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c483495e-4bd1-40c4-9bf1-4ea00d40d475",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c6a966fd-ef23-4543-b8a7-7e87d7a7511f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c6e637a0-cbe6-40dd-b88c-fe499f306e96",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c79cba37-d1fe-40aa-a865-f1b66cf02f93",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c7c48797-f4de-4661-8d8b-e8e77a690f70",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "c7e54988-663c-4eab-89a1-7c3f0d945d60",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c8928f84-99e2-4228-9845-324babca3c32",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c8b4bed6-a0b3-449e-b571-e78a3281d224",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ca2cc556-59f9-4be6-93ef-148255fe9529",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "cacf6ac5-9c7b-42b0-9238-e3a91633de7b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "cbf97ba0-aff0-4b83-b668-ab3f99ae9a7a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "cc7000b0-df1c-4e21-accd-3f18141be322",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ccb9296c-3762-4a93-b699-e8050f4b097a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "cd102b29-076e-4efa-a75c-d717122b581b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "cdd50f75-5304-4637-8919-05528ef794ad",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "cdf095c6-4902-470f-bcb8-5168af599a3a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ce7dc17a-121e-4908-a10e-ce2cfd32bb7e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d19f8208-1603-463a-90f5-eb31bdf1d675",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d1e0263b-2c89-4125-b986-1ff767c8e4b5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d4c77799-6f35-493b-a520-84d925f6aab0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d5f2b049-171e-4f69-a975-5010e66d25ea",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d61f77eb-f0b4-4e56-b23f-1dbdf9211529",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "d66870c6-d498-4fb9-9767-1b4984c182e2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d679983e-ca24-4c92-b811-cc33f8293080",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d73b7515-7b79-46f9-8a88-02a7ef605a32",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d7530946-7eb5-49b8-a8ea-2f662f018217",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d8a216e5-5479-4393-8c03-9688e18b0125",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d9acf550-bd9f-4116-91ed-f439e66180c2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d9af5902-b685-466b-98f8-00a31b2c4314",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d9d2bccf-f10b-4dfb-b1da-40b483eb0348",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "d9da8f2f-19ec-4e96-a23d-e7c8a73f4ac9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "da6149b0-cd5b-4080-a9f8-79d38f1307c6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dbfcce61-ae30-4016-9435-4f80cf6d8241",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dc368d8e-3437-41e9-b1de-f3d5b0111617",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dcb31ef8-755b-499a-9027-5c0673c85a15",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dcd53feb-0ce5-44a4-a77d-c959e5199499",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dd2ee02a-7a13-4f23-aa5b-4ce08d72f60f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dd70ff7b-7cf7-4f3d-8379-ef06d43fa71b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dd9403dd-0094-496b-857c-97f5ab729001",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "de4bf952-e462-4336-bcc0-65232d127ad3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "de7ce94d-0adc-4c54-a229-46ea502ec56c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "dedb3a8b-cf34-4898-b8db-573faa961eb0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "df0d0240-d8b9-4666-9c0e-67b0c3ee7b99",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "dfbd97d1-d336-465f-b94c-c5db269ee704",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e028672f-e3f2-4202-9d00-c2b8806b60a3",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e176ea69-3f93-43f5-9d3b-8d3c695729ef",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e1a9ac6d-042d-41a2-abb2-bd5ca117ae3a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "e1ba4f6a-377d-45ee-a79b-89843d2ae8f0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e2120c23-c94d-4b69-8191-0801ddb6b031",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e2a9c686-8e18-449a-bc9a-d19e9f5a9c32",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e2be63d8-538a-47f1-8437-a1925c2ec2ce",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e31d1442-aed0-461b-88b0-8aa66aac153d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e4b7879f-2f47-46ea-b7e1-22bd5aa0e9bd",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e57360db-ecdd-4a6b-98c8-3464794a6d24",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e5f3a5d9-a760-452f-9105-0519c2bb0cf6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e6e03f88-287d-48e2-a0f0-d0a8956298a1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "e83eaf14-c744-4244-b307-0344f42d105b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e8677cde-fb1b-4f51-9b74-33035a5bb2a6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e893279e-8af0-4e98-904b-9d857659b027",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e94b6c7e-4c05-422f-a9f4-c96978c4b221",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e981d94a-9242-4be1-92c3-0e8e61fa50bc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e99631ef-f4f3-4a6e-9051-3a18aa4092dc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "e99ed35c-fabe-430f-8648-2a71cd7fc920",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ea4ad733-2ae4-4521-8bd1-5aa5895f08ae",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "government",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "eb8b2801-f345-45df-aa0a-298f59cfe16c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "eb930638-5a9a-491f-8a62-334ba35563f1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ebb7210d-4edb-4e57-9f39-7f7638b8ca2c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ec3fd880-2ccf-400d-a268-4dcb20db0d7d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ed080c5b-d0cb-48e4-8b9f-9bfeb6244525",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ed42153a-8f5c-4712-b794-3bb715f3a3fa",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "edbbe50f-30b7-482c-898e-e76cb19801c6",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ee372749-0cb3-4b0c-9cfb-701d74e1056e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "eeb26497-28b9-478d-97ad-75b4af60bce9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "eec70507-286d-4e0d-9755-e733f1849bb4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ef238c25-3ad9-4e1e-ade1-b7babba25fbc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "efc595ca-a798-402e-b19d-93ce012dbb45",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "eff8b3a6-aac5-4dd8-b207-758e7072a479",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f148b836-ed26-4f73-852e-43958d7162cc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "f156d119-d2b3-461d-90a5-1bbe30a64e24",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f20eda01-ab14-416e-80f4-15018016d8ef",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f2806c5f-3feb-4d9b-b3f9-9fded5aafb07",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f33845b1-4a35-45e2-b3ab-4dd9b33c8eb1",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f389cedb-533d-484f-b2e5-600428960e8c",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f3e26be5-9eaf-41fb-a8c0-9f9740797c30",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f835d5b7-0446-4d63-91ad-be58ce6c6139",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f8a8afbc-b79d-4540-b279-eede7e78a4e5",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f8fa7941-f311-4f84-a7ea-cca733bacd1d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "f9068216-a46c-4765-ac69-ee0ebffad1dc",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f9241e6d-84d5-45f1-8bd1-9cfab0d97cc0",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f98a13d9-6f1e-475a-93c1-37998a9cea21",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f9b2cbaa-a867-4190-bcb1-0ffeea2a5458",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "f9e8909f-7dc3-4975-abf8-0a276992cc6b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fa66db2d-0a06-423f-a432-6d1685956cd4",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fc43ca70-fecb-4259-94f2-0529a934bc2a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fc73fc86-45b4-439d-86d8-efa2d5ee9ecf",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fd54d569-ef4b-431e-b580-5391eaba5b5b",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fd9a0eb5-dab2-4243-b9f4-df6ca3a80d9f",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fdc15a4e-17d8-4ccc-abb9-300329308f58",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fdc791e5-28e0-4606-963e-716078745a9d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fdd6ea34-fd60-4b54-bf80-1cf0f056bd23",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fdfac63d-0b43-417e-b7bd-b25a9d2aa602",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "residential",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fe210721-0b34-4e1f-a372-0e981ad2b45e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "industrial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "fe22c297-c7ce-4a2a-a29c-69938811fb8e",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ff245efe-3539-4144-bf5f-3edaf801f45a",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "lmi",
+    "created_at": "2026-03-24 18:56:31.373762+00"
+  },
+  {
+    "id": "ff2cd927-a3f5-4436-9b6d-7e6681852cb2",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ff997367-e97f-407a-b69f-f4d9d9e7418d",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "ffcb8502-ce3d-4c1a-a2e4-cd9b9619ffc9",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "customer_segment": "commercial",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  }
+]

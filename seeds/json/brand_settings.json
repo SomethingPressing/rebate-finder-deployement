@@ -1,0 +1,23 @@
+[
+  {
+    "id": "496bc593-85ab-483f-a589-b3eae946db10",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "org_display_name": "Incenva Energy Solutions",
+    "org_slug": "incenva",
+    "logo_url": null,
+    "primary_light": "136 76% 42%",
+    "primary_dark": "104 78% 67%",
+    "secondary": "142 35% 20%",
+    "button_color": "136 76% 42%",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "border_radius": "0",
+    "trial_status": "active",
+    "subscription_type": "trial",
+    "trial_start_date": "2026-01-01",
+    "trial_end_date": "2026-01-15",
+    "trial_duration_days": 14,
+    "created_at": "2026-03-26 21:36:03.428684+00",
+    "updated_at": "2026-03-26 21:36:03.428684+00"
+  }
+]

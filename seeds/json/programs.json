@@ -1,0 +1,83 @@
+[
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000010",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000002",
+    "name": "Home Upgrade Program",
+    "program_type": "efficiency",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000011",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000002",
+    "name": "Smart HVAC Incentive",
+    "program_type": "efficiency",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000012",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000002",
+    "name": "Weatherization Assistance",
+    "program_type": "weatherization",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000013",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000002",
+    "name": "Commercial Efficiency Rebate",
+    "program_type": "efficiency",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000020",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000003",
+    "name": "Residential Solar Rebate",
+    "program_type": "solar",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000021",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000003",
+    "name": "Battery Storage Incentive",
+    "program_type": "other",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000022",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000003",
+    "name": "EV Charger Rebate",
+    "program_type": "ev",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000030",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000004",
+    "name": "Peak Time Rewards",
+    "program_type": "demand_response",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  },
+  {
+    "id": "c1ea2000-0000-0000-0000-000000000031",
+    "client_id": "c1ea2000-0000-0000-0000-000000000001",
+    "portfolio_id": "c1ea2000-0000-0000-0000-000000000004",
+    "name": "Smart AC Cycling",
+    "program_type": "demand_response",
+    "is_active": "true",
+    "created_at": "2026-03-24 17:00:03.152763+00"
+  }
+]
