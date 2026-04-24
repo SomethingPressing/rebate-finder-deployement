@@ -9,7 +9,7 @@
 #   sudo bash scripts/scraper/setup-server.sh
 #
 # Override defaults:
-#   APP_REPO_URL=git@github.com:org/rebate-finder-scrapers.git sudo bash ...
+#   APP_REPO_URL=git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git sudo bash ...
 #
 # Safe to run multiple times.
 # =============================================================================
@@ -112,7 +112,7 @@ if [[ -d "$APP_DIR/.git" ]]; then
   sudo -u "$APP_USER" bash -c "cd '$APP_DIR' && git pull"
   ok "git pull done"
 else
-  [[ -n "$APP_REPO_URL" ]] || fail "APP_DIR does not exist and APP_REPO_URL is not set.\nSet it: APP_REPO_URL=git@github.com:org/scrapers.git sudo bash $0"
+  [[ -n "$APP_REPO_URL" ]] || fail "APP_DIR does not exist and APP_REPO_URL is not set.\nSet it: APP_REPO_URL=git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git sudo bash $0"
   sudo -u "$APP_USER" git clone "$APP_REPO_URL" "$APP_DIR"
   ok "Cloned $APP_REPO_URL → $APP_DIR"
 fi

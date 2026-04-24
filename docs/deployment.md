@@ -59,12 +59,59 @@ Both apps share the same local PostgreSQL database via `DATABASE_URL`.
 
 The fastest path on a fresh Ubuntu 22.04 server. Each script is **idempotent** — safe to run multiple times.
 
+### 2.0 Set up GitHub deploy keys (first time only)
+
+Before cloning anything, you need SSH deploy keys configured so the `rf` user can pull from GitHub without a password.
+
+**→ Follow the complete guide: [docs/github-deploy-keys.md](./github-deploy-keys.md)**
+
+The short version — run this block as root, then add the three printed public keys to their respective repos on GitHub:
+
+```bash
+mkdir -p /home/rf/.ssh && chmod 700 /home/rf/.ssh
+ssh-keygen -t ed25519 -C "rf@server:rebate-finder"             -f /home/rf/.ssh/id_ed25519_rebate_finder             -N ""
+ssh-keygen -t ed25519 -C "rf@server:rebate-finder-scrapers"    -f /home/rf/.ssh/id_ed25519_rebate_finder_scrapers    -N ""
+ssh-keygen -t ed25519 -C "rf@server:rebate-finder-deployement" -f /home/rf/.ssh/id_ed25519_rebate_finder_deployement -N ""
+chown -R rf:rf /home/rf/.ssh && chmod 600 /home/rf/.ssh/id_ed25519_*
+cat > /home/rf/.ssh/config << 'EOF'
+Host github-rebate-finder
+    HostName github.com
+    User git
+    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder
+    IdentitiesOnly yes
+Host github-rebate-finder-scrapers
+    HostName github.com
+    User git
+    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder_scrapers
+    IdentitiesOnly yes
+Host github-rebate-finder-deployement
+    HostName github.com
+    User git
+    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder_deployement
+    IdentitiesOnly yes
+EOF
+chown rf:rf /home/rf/.ssh/config && chmod 600 /home/rf/.ssh/config
+# Print the three public keys and add each to GitHub → Repo Settings → Deploy keys
+cat /home/rf/.ssh/id_ed25519_rebate_finder.pub
+cat /home/rf/.ssh/id_ed25519_rebate_finder_scrapers.pub
+cat /home/rf/.ssh/id_ed25519_rebate_finder_deployement.pub
+```
+
+After adding the keys to GitHub, test each connection:
+```bash
+sudo -u rf ssh -T github-rebate-finder            # "Hi SomethingPressing/rebate-finder!"
+sudo -u rf ssh -T github-rebate-finder-scrapers
+sudo -u rf ssh -T github-rebate-finder-deployement
+```
+
 ### 2.1 Clone this deployment repo
 
 ```bash
-# run as root
-git clone <this-deployment-repo-url> /home/rf/deployment
-cd /home/rf/deployment
+# run as rf user (after deploy keys are set up above)
+sudo -u rf git clone \
+  git@github-rebate-finder-deployement:SomethingPressing/rebate-finder-deployement.git \
+  /home/rf/apps/deployment
+cd /home/rf/apps/deployment
 ```
 
 ### 2.2 Run main app setup
@@ -263,7 +310,7 @@ Run as the **`rf` user** (`sudo -u rf -i`):
 ```bash
 mkdir -p /home/rf/apps
 cd /home/rf/apps
-git clone <main-app-repository-url> rebate-finder
+git clone git@github-rebate-finder:SomethingPressing/rebate-finder.git rebate-finder
 cd rebate-finder
 
 pnpm install --frozen-lockfile
@@ -315,7 +362,7 @@ Run as the **`rf` user**:
 
 ```bash
 cd /home/rf/apps
-git clone <scraper-repository-url> incenva-scraper-service
+git clone git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git incenva-scraper-service
 cd incenva-scraper-service
 
 go mod download

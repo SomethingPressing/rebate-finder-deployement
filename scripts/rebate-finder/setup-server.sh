@@ -10,7 +10,7 @@
 #   sudo bash scripts/rebate-finder/setup-server.sh
 #
 # Override defaults via environment variables before running:
-#   APP_REPO_URL=git@github.com:org/rebate-finder.git sudo bash ...
+#   APP_REPO_URL=git@github-rebate-finder:SomethingPressing/rebate-finder.git sudo bash ...
 #
 # Safe to run multiple times — every step checks if work is already done.
 # =============================================================================
@@ -178,7 +178,7 @@ if [[ -d "$APP_DIR/.git" ]]; then
   sudo -u "$APP_USER" bash -c "cd '$APP_DIR' && git pull"
   ok "git pull done"
 else
-  [[ -n "$APP_REPO_URL" ]] || fail "APP_DIR does not exist and APP_REPO_URL is not set.\nSet it: APP_REPO_URL=git@github.com:org/rebate-finder.git sudo bash $0"
+  [[ -n "$APP_REPO_URL" ]] || fail "APP_DIR does not exist and APP_REPO_URL is not set.\nSet it: APP_REPO_URL=git@github-rebate-finder:SomethingPressing/rebate-finder.git sudo bash $0"
   sudo -u "$APP_USER" git clone "$APP_REPO_URL" "$APP_DIR"
   ok "Cloned $APP_REPO_URL → $APP_DIR"
 fi
