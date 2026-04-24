@@ -60,6 +60,19 @@ else
   warn "PM2 process '$PM2_APP_NAME' not found — run setup-server.sh first"
 fi
 
+PROMOTER_NAME="incenva-promoter"
+if pm2 list 2>/dev/null | grep -q "$PROMOTER_NAME"; then
+  ok "Promoter cron '$PROMOTER_NAME' already registered — no change needed"
+else
+  pm2 start 'node scripts/run-promoter.mjs' \
+    --name "$PROMOTER_NAME" \
+    --cron '0 * * * *' \
+    --no-autorestart
+  ok "Registered '$PROMOTER_NAME' (runs every hour)"
+fi
+
+pm2 save >/dev/null
+
 hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Deploy complete.${NC}"

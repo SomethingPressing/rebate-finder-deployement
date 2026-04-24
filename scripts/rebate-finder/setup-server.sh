@@ -268,6 +268,21 @@ else
   ok "Started '$PM2_APP_NAME' (pnpm start)"
 fi
 
+# Hourly promoter — promotes staged scraper data to production
+PROMOTER_NAME="incenva-promoter"
+if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PROMOTER_NAME"; then
+  skip "PM2 cron '$PROMOTER_NAME' already registered"
+else
+  sudo -u "$APP_USER" bash -c "
+    cd '$APP_DIR'
+    pm2 start 'node scripts/run-promoter.mjs' \
+      --name '$PROMOTER_NAME' \
+      --cron '0 * * * *' \
+      --no-autorestart
+  "
+  ok "Registered '$PROMOTER_NAME' (runs every hour)"
+fi
+
 sudo -u "$APP_USER" pm2 save >/dev/null
 
 STARTUP_CMD="$(sudo -u "$APP_USER" pm2 startup systemd \

@@ -112,23 +112,24 @@ if [[ -f "$ENV_FILE" ]]; then
   skip ".env already exists"
 else
   cp "$APP_DIR/.env.example" "$ENV_FILE"
-
-  CONSUMER_ENV="$CONSUMER_APP_DIR/.env"
-  if [[ -f "$CONSUMER_ENV" ]]; then
-    INHERITED="$(grep -E '^DATABASE_URL=' "$CONSUMER_ENV" | head -1 || true)"
-    if [[ -n "$INHERITED" ]]; then
-      sed -i "s|^DATABASE_URL=.*|$INHERITED|" "$ENV_FILE"
-      ok "DATABASE_URL inherited from consumer app"
-    fi
-  else
-    warn "Consumer app .env not found at $CONSUMER_ENV"
-    warn "Set DATABASE_URL in $ENV_FILE manually."
-  fi
-
   chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
   ok "Created $ENV_FILE"
   warn "Set REWIRING_AMERICA_API_KEY in $ENV_FILE."
+fi
+
+# Always sync DATABASE_URL from the consumer app (covers first run and re-runs)
+CONSUMER_ENV="$CONSUMER_APP_DIR/.env"
+if [[ -f "$CONSUMER_ENV" ]]; then
+  INHERITED="$(grep -E '^DATABASE_URL=' "$CONSUMER_ENV" | head -1 || true)"
+  if [[ -n "$INHERITED" ]]; then
+    sed -i "s|^DATABASE_URL=.*|$INHERITED|" "$ENV_FILE"
+    ok "DATABASE_URL synced from consumer app"
+  else
+    warn "DATABASE_URL not found in $CONSUMER_ENV — set it manually in $ENV_FILE."
+  fi
+else
+  warn "Consumer app .env not found at $CONSUMER_ENV — set DATABASE_URL in $ENV_FILE manually."
 fi
 
 DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
