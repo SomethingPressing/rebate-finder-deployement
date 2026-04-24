@@ -176,8 +176,7 @@ else
     cd '$APP_DIR'
     pm2 start bin/scraper \
       --name '$PM2_APP_NAME' \
-      --interpreter none \
-      --env-file '$ENV_FILE'
+      --interpreter none
   "
   ok "Started '$PM2_APP_NAME'"
 fi
