@@ -33,7 +33,7 @@ test_key() {
 
   # ssh -T returns exit code 1 even on success (GitHub quirk), so capture output
   local output
-  output=$(sudo -u "$APP_USER" ssh -T "$alias" 2>&1 || true)
+  output=$(sudo -u "$APP_USER" ssh -T "$alias" </dev/null 2>&1 || true)
 
   if echo "$output" | grep -q "successfully authenticated"; then
     ok "$label → authenticated"

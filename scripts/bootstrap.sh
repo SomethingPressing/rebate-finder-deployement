@@ -222,7 +222,7 @@ log "Step 6/10 — Verify GitHub connections"
 _test_key() {
   local alias="$1" label="$2"
   local out
-  out=$(sudo -u "$APP_USER" ssh -T "$alias" 2>&1 || true)
+  out=$(sudo -u "$APP_USER" ssh -T "$alias" </dev/null 2>&1 || true)
   if echo "$out" | grep -q "successfully authenticated"; then
     ok "$label"
     return 0
