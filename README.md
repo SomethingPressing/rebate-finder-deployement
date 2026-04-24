@@ -19,9 +19,7 @@ Scripts and configuration to deploy the **Incenva Rebate Finder** stack on a fre
 Run this on a **fresh Ubuntu 22.04 server** as root, replacing the domain with your real one:
 
 ```bash
-APP_DOMAIN=dev.incenva.com \
-  curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh \
-  | sudo bash
+APP_DOMAIN=dev.incenva.com curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
 ```
 
 > **No curl yet?** Run `apt-get update && apt-get install -y curl` first.
