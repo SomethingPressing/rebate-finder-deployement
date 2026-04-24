@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
 # =============================================================================
-# bootstrap.sh — First script to run on a blank Ubuntu 22.04 server
+# bootstrap.sh — Single entry point. Sets up everything on a blank Ubuntu server.
 #
-# Does everything needed BEFORE you can clone any private repo:
-#   - Updates apt packages
-#   - Installs git, curl, and other system tools
-#   - Creates the rf system user
-#   - Generates GitHub SSH deploy keys
-#   - Writes ~/.ssh/config
-#   - Clones this deployment repo
-#   - Prints next steps
+# What it does (each step is skipped if already complete):
+#   1.  Install system packages (git, curl, ufw, etc.)
+#   2.  Create the rf system user
+#   3.  Generate GitHub SSH deploy keys
+#   4.  Write SSH config
+#   5.  Print public keys — PAUSE for you to add them to GitHub
+#   6.  Verify all three GitHub connections
+#   7.  Clone this deployment repo
+#   8.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
+#   9.  Run Go scraper setup    (Go, build, PM2)
+#   10. Prompt to load seed data
+#   11. Print Nginx + SSL instructions
 #
 # Usage (run as root on a fresh Ubuntu 22.04 VPS):
-#   curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
 #
-#   OR after copying this file to the server manually:
+#   OR after copying this file manually:
 #   sudo bash bootstrap.sh
 #
-# Safe to run multiple times — every step is idempotent.
+# Idempotent — safe to re-run. Already-completed steps are skipped.
 # =============================================================================
 
 set -euo pipefail
@@ -27,12 +31,14 @@ IFS=$'\n\t'
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 BLUE='\033[0;34m'; BOLD='\033[1m'; NC='\033[0m'
 
-log()  { echo -e "\n${BLUE}[bootstrap]${NC} ${BOLD}$*${NC}"; }
-ok()   { echo -e "  ${GREEN}✔${NC}  $*"; }
-skip() { echo -e "  ${YELLOW}─${NC}  $* (already done)"; }
-warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
-fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
-hr()   { echo -e "${BLUE}────────────────────────────────────────────────────${NC}"; }
+log()   { echo -e "\n${BLUE}━━━${NC} ${BOLD}$*${NC}"; }
+ok()    { echo -e "  ${GREEN}✔${NC}  $*"; }
+skip()  { echo -e "  ${YELLOW}─${NC}  $* (already done, skipping)"; }
+warn()  { echo -e "  ${YELLOW}⚠${NC}  $*"; }
+info()  { echo -e "  ${BLUE}→${NC}  $*"; }
+fail()  { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
+hr()    { echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"; }
+pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done... "; }
 
 # ── Root guard ────────────────────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
@@ -40,43 +46,52 @@ hr()   { echo -e "${BLUE}──────────────────�
 # ── Config ────────────────────────────────────────────────────────────────────
 APP_USER="${APP_USER:-rf}"
 SSH_DIR="/home/$APP_USER/.ssh"
-DEPLOY_REPO_URL="git@github-rebate-finder-deployement:SomethingPressing/rebate-finder-deployement.git"
-DEPLOY_DIR="/home/$APP_USER/apps/deployment"
+APPS_DIR="/home/$APP_USER/apps"
+DEPLOY_DIR="$APPS_DIR/deployment"
+APP_DIR="$APPS_DIR/rebate-finder"
+SCRAPER_DIR="$APPS_DIR/incenva-scraper-service"
+
+DEPLOY_REPO="git@github-rebate-finder-deployement:SomethingPressing/rebate-finder-deployement.git"
+APP_REPO="git@github-rebate-finder:SomethingPressing/rebate-finder.git"
+SCRAPER_REPO="git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git"
 
 hr
 echo ""
-echo -e "  ${BOLD}Incenva Server Bootstrap${NC}"
-echo "  Ubuntu $(lsb_release -rs 2>/dev/null || echo 'version unknown')"
-echo "  App user: $APP_USER"
+echo -e "  ${BOLD}Incenva — Full Server Setup${NC}"
+echo -e "  Ubuntu $(lsb_release -rs 2>/dev/null || echo '?')  •  $(date '+%Y-%m-%d %H:%M')"
+echo -e "  App user: ${BOLD}$APP_USER${NC}"
 echo ""
+echo -e "  This script is idempotent — already-completed steps are skipped."
 hr
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ═════════════════════════════════════════════════════════════════════════════
 # STEP 1 — System packages
-# ─────────────────────────────────────────────────────────────────────────────
-log "1/6  System packages (git, curl, openssh-client, ufw)"
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 1/10 — System packages"
 
 apt-get update -qq
-apt-get install -y \
-  git \
-  curl \
-  wget \
-  unzip \
-  openssh-client \
-  ufw \
-  ca-certificates \
-  gnupg \
-  lsb-release \
-  software-properties-common \
-  >/dev/null
+PACKAGES=(git curl wget unzip openssh-client ufw ca-certificates gnupg
+          lsb-release software-properties-common nginx certbot python3-certbot-nginx)
 
-ok "Packages installed"
+MISSING=()
+for pkg in "${PACKAGES[@]}"; do
+  dpkg -s "$pkg" &>/dev/null || MISSING+=("$pkg")
+done
+
+if [[ ${#MISSING[@]} -eq 0 ]]; then
+  skip "All packages already installed"
+else
+  info "Installing: ${MISSING[*]}"
+  apt-get install -y "${MISSING[@]}" >/dev/null
+  ok "Packages installed"
+fi
+
 ok "git $(git --version | awk '{print $3}')"
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ═════════════════════════════════════════════════════════════════════════════
 # STEP 2 — System user
-# ─────────────────────────────────────────────────────────────────────────────
-log "2/6  System user '$APP_USER'"
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 2/10 — System user '$APP_USER'"
 
 if getent group "$APP_USER" &>/dev/null; then
   skip "Group '$APP_USER'"
@@ -98,57 +113,43 @@ else
   ok "Created user '$APP_USER'"
 fi
 
-mkdir -p "/home/$APP_USER/apps"
-chown "$APP_USER:$APP_USER" "/home/$APP_USER/apps"
+mkdir -p "$APPS_DIR"
+chown "$APP_USER:$APP_USER" "$APPS_DIR"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# STEP 3 — .ssh directory
-# ─────────────────────────────────────────────────────────────────────────────
-log "3/6  SSH directory"
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 3 — SSH deploy keys
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 3/10 — GitHub SSH deploy keys"
 
 mkdir -p "$SSH_DIR"
 chmod 700 "$SSH_DIR"
 chown "$APP_USER:$APP_USER" "$SSH_DIR"
-ok "Directory $SSH_DIR (700)"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# STEP 4 — Generate deploy keypairs
-# ─────────────────────────────────────────────────────────────────────────────
-log "4/6  GitHub deploy keypairs"
-
-generate_key() {
-  local name="$1"
-  local label="$2"
+_gen_key() {
+  local name="$1" label="$2"
   local key_file="$SSH_DIR/id_ed25519_${name}"
-
   if [[ -f "$key_file" ]]; then
     skip "Key: $label"
   else
-    ssh-keygen -t ed25519 \
-      -C "$APP_USER@$(hostname):$label" \
-      -f "$key_file" \
-      -N "" \
-      >/dev/null 2>&1
-    ok "Generated key: $label"
+    ssh-keygen -t ed25519 -C "$APP_USER@$(hostname):$label" -f "$key_file" -N "" >/dev/null 2>&1
+    ok "Generated: $label"
   fi
-
   chown "$APP_USER:$APP_USER" "$key_file" "${key_file}.pub"
   chmod 600 "$key_file"
   chmod 644 "${key_file}.pub"
 }
 
-generate_key "rebate_finder"             "rebate-finder"
-generate_key "rebate_finder_scrapers"    "rebate-finder-scrapers"
-generate_key "rebate_finder_deployement" "rebate-finder-deployement"
+_gen_key "rebate_finder"             "rebate-finder"
+_gen_key "rebate_finder_scrapers"    "rebate-finder-scrapers"
+_gen_key "rebate_finder_deployement" "rebate-finder-deployement"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# STEP 5 — Write SSH config
-# ─────────────────────────────────────────────────────────────────────────────
-log "5/6  SSH config"
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 4 — SSH config
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 4/10 — SSH config"
 
 cat > "$SSH_DIR/config" << EOF
-# Auto-generated by bootstrap.sh — do not edit manually
-# Each host alias routes to github.com with the correct deploy key.
+# Auto-generated by bootstrap.sh
 
 Host github-rebate-finder
     HostName github.com
@@ -176,66 +177,153 @@ chown "$APP_USER:$APP_USER" "$SSH_DIR/config"
 chmod 600 "$SSH_DIR/config"
 ok "Written $SSH_DIR/config"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# STEP 6 — Print public keys with GitHub instructions
-# ─────────────────────────────────────────────────────────────────────────────
-log "6/6  Public keys (add these to GitHub)"
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 5 — Print public keys and wait for GitHub
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 5/10 — Add public keys to GitHub"
 
-declare -A REPOS=(
-  ["rebate_finder"]="rebate-finder"
-  ["rebate_finder_scrapers"]="rebate-finder-scrapers"
-  ["rebate_finder_deployement"]="rebate-finder-deployement"
-)
+declare -a KEY_NAMES=("rebate_finder" "rebate_finder_scrapers" "rebate_finder_deployement")
+declare -a REPO_SLUGS=("rebate-finder" "rebate-finder-scrapers" "rebate-finder-deployement")
 
 echo ""
-hr
-echo ""
-echo -e "  ${BOLD}${GREEN}Bootstrap complete.${NC}"
-echo ""
-echo -e "  ${BOLD}Now add each public key to GitHub:${NC}"
-echo -e "  1. Open the link shown for each repo"
+echo -e "  For each repo below:"
+echo -e "  1. Open the GitHub link"
 echo -e "  2. Click  ${BOLD}Add deploy key${NC}"
 echo -e "  3. Title: ${BOLD}rf@$(hostname)${NC}"
-echo -e "  4. Paste the key shown below"
-echo -e "  5. Leave 'Allow write access' unchecked → ${BOLD}Add key${NC}"
+echo -e "  4. Paste the public key"
+echo -e "  5. Leave 'Allow write access' ${BOLD}unchecked${NC}"
+echo -e "  6. Click  ${BOLD}Add key${NC}"
 echo ""
-hr
 
-for key_suffix in rebate_finder rebate_finder_scrapers rebate_finder_deployement; do
-  repo_name="${REPOS[$key_suffix]}"
-  pub_key_file="$SSH_DIR/id_ed25519_${key_suffix}.pub"
-
+for i in 0 1 2; do
+  slug="${REPO_SLUGS[$i]}"
+  key_file="$SSH_DIR/id_ed25519_${KEY_NAMES[$i]}.pub"
+  echo -e "  ${BOLD}▸ $slug${NC}"
+  echo -e "  ${BLUE}https://github.com/SomethingPressing/$slug/settings/keys${NC}"
   echo ""
-  echo -e "  ${BOLD}▸ $repo_name${NC}"
-  echo -e "  GitHub: ${BLUE}https://github.com/SomethingPressing/$repo_name/settings/keys${NC}"
-  echo -e "  Key to paste:"
+  echo "    $(cat "$key_file")"
   echo ""
-  echo "    $(cat "$pub_key_file")"
-  echo ""
-  hr
 done
 
+pause "Add all three keys to GitHub, then press Enter to continue."
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 6 — Verify GitHub connections
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 6/10 — Verify GitHub connections"
+
+_test_key() {
+  local alias="$1" label="$2"
+  local out
+  out=$(sudo -u "$APP_USER" ssh -T "$alias" 2>&1 || true)
+  if echo "$out" | grep -q "successfully authenticated"; then
+    ok "$label"
+    return 0
+  else
+    return 1
+  fi
+}
+
+RETRIES=3
+for attempt in $(seq 1 $RETRIES); do
+  FAILED=0
+  _test_key "github-rebate-finder"             "rebate-finder"             || FAILED=$((FAILED+1))
+  _test_key "github-rebate-finder-scrapers"    "rebate-finder-scrapers"    || FAILED=$((FAILED+1))
+  _test_key "github-rebate-finder-deployement" "rebate-finder-deployement" || FAILED=$((FAILED+1))
+
+  if [[ $FAILED -eq 0 ]]; then
+    break
+  fi
+
+  if [[ $attempt -lt $RETRIES ]]; then
+    warn "$FAILED connection(s) failed. Make sure all keys are added on GitHub."
+    pause "Fix the keys on GitHub, then press Enter to try again."
+  else
+    fail "$FAILED GitHub connection(s) still failing after $RETRIES attempts.\nSee docs/github-deploy-keys.md for troubleshooting."
+  fi
+done
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 7 — Clone deployment repo
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 7/10 — Clone deployment repo"
+
+if [[ -d "$DEPLOY_DIR/.git" ]]; then
+  skip "Deployment repo already at $DEPLOY_DIR"
+  sudo -u "$APP_USER" git -C "$DEPLOY_DIR" pull --ff-only
+  ok "git pull done"
+else
+  sudo -u "$APP_USER" git clone "$DEPLOY_REPO" "$DEPLOY_DIR"
+  ok "Cloned → $DEPLOY_DIR"
+fi
+
+SCRIPT_DIR="$DEPLOY_DIR/scripts"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 8 — Next.js app setup
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 8/10 — Next.js app (Node, pnpm, PM2, PostgreSQL, build)"
+
+APP_REPO_URL="$APP_REPO" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 9 — Go scraper setup
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 9/10 — Go scraper service"
+
+APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 10 — Seed data
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 10/10 — Seed data"
+
 echo ""
-echo -e "  ${YELLOW}${BOLD}Once all three keys are added on GitHub, run these in order:${NC}"
+read -rp "  Load seed data into the database now? [Y/n] " SEED_ANSWER
+SEED_ANSWER="${SEED_ANSWER:-Y}"
+
+if [[ "$SEED_ANSWER" =~ ^[Yy]$ ]]; then
+  bash "$SCRIPT_DIR/rebate-finder/seed.sh"
+  ok "Seed data loaded"
+else
+  warn "Skipped. Run manually when ready:"
+  info "bash $SCRIPT_DIR/rebate-finder/seed.sh"
+fi
+
+# ═════════════════════════════════════════════════════════════════════════════
+# DONE — Print next steps
+# ═════════════════════════════════════════════════════════════════════════════
+hr
 echo ""
-echo -e "  ${BOLD}# 1. Verify GitHub connections${NC}"
-echo -e "  sudo -u $APP_USER ssh -T github-rebate-finder"
-echo -e "  sudo -u $APP_USER ssh -T github-rebate-finder-scrapers"
-echo -e "  sudo -u $APP_USER ssh -T github-rebate-finder-deployement"
+echo -e "  ${GREEN}${BOLD}Server setup complete!${NC}"
 echo ""
-echo -e "  ${BOLD}# 2. Clone this deployment repo${NC}"
-echo -e "  sudo -u $APP_USER git clone \\"
-echo -e "    $DEPLOY_REPO_URL \\"
-echo -e "    $DEPLOY_DIR"
+echo -e "  ${BOLD}Check app status:${NC}"
+echo -e "    pm2 status"
+echo -e "    pm2 logs 'Rebate Finder'"
 echo ""
-echo -e "  ${BOLD}# 3. Run main app setup${NC}"
-echo -e "  sudo bash $DEPLOY_DIR/scripts/rebate-finder/setup-server.sh"
+echo -e "  ${BOLD}Edit .env files (fill in your API keys):${NC}"
+echo -e "    nano $APP_DIR/.env"
+echo -e "    # Required: NEXT_BASE_URL, NEXT_PUBLIC_SUPABASE_URL,"
+echo -e "    #           NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY,"
+echo -e "    #           OPENAI_API_KEY"
 echo ""
-echo -e "  ${BOLD}# 4. Run scraper setup${NC}"
-echo -e "  sudo bash $DEPLOY_DIR/scripts/scraper/setup-server.sh"
+echo -e "    nano $SCRAPER_DIR/.env"
+echo -e "    # Required: REWIRING_AMERICA_API_KEY"
 echo ""
-echo -e "  ${BOLD}# 5. Load seed data${NC}"
-echo -e "  bash $DEPLOY_DIR/scripts/rebate-finder/seed.sh"
+echo -e "  ${BOLD}Rebuild after editing .env:${NC}"
+echo -e "    bash $SCRIPT_DIR/rebate-finder/deploy.sh"
 echo ""
+echo -e "  ${BOLD}Set up Nginx + SSL:${NC}"
+echo -e "    sudo cp $DEPLOY_DIR/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder"
+echo -e "    sudo nano /etc/nginx/sites-available/rebate-finder  # set your domain"
+echo -e "    sudo ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/"
+echo -e "    sudo nginx -t && sudo systemctl reload nginx"
+echo -e "    sudo certbot --nginx -d rebates.yourclient.com"
+echo ""
+echo -e "  ${BOLD}Add an admin user:${NC}"
+echo -e "    bash $SCRIPT_DIR/rebate-finder/create-admin.sh email@example.com Pass123! \"Name\" super_admin"
+echo ""
+echo -e "  ${YELLOW}Default login (after seed): admin@incenva.com / Admin1234!${NC}"
+echo -e "  ${YELLOW}→ Change this immediately after first login.${NC}"
 hr
 echo ""
