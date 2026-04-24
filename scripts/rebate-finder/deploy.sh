@@ -45,7 +45,7 @@ pnpm install --frozen-lockfile 2>&1 | tail -3
 ok "Dependencies up to date"
 
 log "3/5  prisma db push (schema sync)"
-pnpm prisma db push --skip-generate
+pnpm prisma db push --skip-generate --accept-data-loss
 ok "Schema synced"
 
 log "4/5  Production build"

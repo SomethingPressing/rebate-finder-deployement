@@ -242,7 +242,7 @@ ok "Installing npm dependencies…"
 sudo -u "$APP_USER" pnpm install --frozen-lockfile 2>&1 | tail -3
 
 ok "Pushing Prisma schema…"
-sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db push --skip-generate"
+sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db push --skip-generate --accept-data-loss"
 
 ok "Regenerating Prisma client…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma generate" 2>&1 | tail -1
