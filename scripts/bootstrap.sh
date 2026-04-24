@@ -11,7 +11,7 @@
 #   6.  Verify all three GitHub connections
 #   7.  Clone this deployment repo
 #   8.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
-#   9.  Run Go scraper setup    (Go, build, PM2)
+#   9.  Run Go scraper setup    (Go, build binaries)
 #   10. Configure nginx reverse proxy (port 80 → localhost:3000)
 #
 # Usage (run as root on a fresh Ubuntu 22.04 VPS):

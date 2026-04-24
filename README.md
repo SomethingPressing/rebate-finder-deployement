@@ -38,7 +38,7 @@ The script will pause once to let you add SSH deploy keys to GitHub, then comple
 | 6 | Verify all three GitHub connections (3 retries) |
 | 7 | Clone this deployment repo |
 | 8 | Set up Next.js app (Node, pnpm, PM2, PostgreSQL, build, start on port 3000) |
-| 9 | Set up Go scraper service (Go, build, PM2) |
+| 9 | Set up Go scraper service (Go, build binaries) |
 | 10 | Configure nginx reverse proxy (port 80 → localhost:3000) |
 
 Safe to re-run — every step checks if work is already done and skips it.

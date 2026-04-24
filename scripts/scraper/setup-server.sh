@@ -2,8 +2,8 @@
 # =============================================================================
 # setup-server.sh — Idempotent server setup for Incenva Scraper Service
 #
-# Installs Go, builds the scraper binaries, clones the repo, writes .env,
-# and registers the scheduled scraper with PM2.
+# Installs Go, clones the repo, writes .env, and builds the scraper binaries.
+# The scraper is NOT registered with PM2 — run it manually or via cron.
 #
 # Usage:
 #   sudo bash scripts/scraper/setup-server.sh
@@ -36,7 +36,6 @@ APP_REPO_URL="${APP_REPO_URL:-}"
 CONSUMER_APP_DIR="${CONSUMER_APP_DIR:-/home/rf/apps/rebate-finder}"
 GO_VERSION="${GO_VERSION:-1.22.3}"
 GO_ARCH="${GO_ARCH:-linux-amd64}"
-PM2_APP_NAME="${PM2_APP_NAME:-Incenva Scraper}"
 
 ENV_FILE="$APP_DIR/.env"
 
@@ -48,7 +47,7 @@ echo ""
 hr
 
 # ─────────────────────────────────────────────────────────────────────────────
-log "1/6  System group and user"
+log "1/4  System group and user"
 
 if getent group "$APP_GROUP" &>/dev/null; then
   skip "Group '$APP_GROUP'"
@@ -69,7 +68,7 @@ mkdir -p "$(dirname "$APP_DIR")"
 chown "$APP_USER:$APP_GROUP" "$(dirname "$APP_DIR")"
 
 # ─────────────────────────────────────────────────────────────────────────────
-log "2/6  Go $GO_VERSION"
+log "2/4  Go $GO_VERSION"
 
 GO_INSTALLED_VER="$(go version 2>/dev/null | awk '{print $3}' | sed 's/^go//' || true)"
 if [[ "$GO_INSTALLED_VER" == "$GO_VERSION" ]]; then
@@ -94,18 +93,7 @@ export PATH="$PATH:/usr/local/go/bin"
 command -v go &>/dev/null || fail "go not found in PATH after install."
 
 # ─────────────────────────────────────────────────────────────────────────────
-log "3/6  PM2"
-
-if command -v pm2 &>/dev/null; then
-  skip "PM2 $(pm2 --version 2>/dev/null || echo 'installed')"
-else
-  command -v npm &>/dev/null || fail "npm not found. Run rebate-finder setup-server.sh first."
-  npm install -g pm2 >/dev/null
-  ok "Installed PM2"
-fi
-
-# ─────────────────────────────────────────────────────────────────────────────
-log "4/6  Repository"
+log "3/4  Repository"
 
 if [[ -d "$APP_DIR/.git" ]]; then
   skip "Repo already at $APP_DIR"
@@ -118,7 +106,7 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-log "5/6  Environment file and binaries"
+log "4/4  Environment file and binaries"
 
 if [[ -f "$ENV_FILE" ]]; then
   skip ".env already exists"
@@ -165,39 +153,16 @@ fi
 
 ok "Binaries built"
 
-# ─────────────────────────────────────────────────────────────────────────────
-log "6/6  PM2 process"
-
-if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
-  sudo -u "$APP_USER" pm2 restart "$PM2_APP_NAME"
-  ok "Restarted '$PM2_APP_NAME'"
-else
-  sudo -u "$APP_USER" bash -c "
-    cd '$APP_DIR'
-    pm2 start bin/scraper \
-      --name '$PM2_APP_NAME' \
-      --interpreter none
-  "
-  ok "Started '$PM2_APP_NAME'"
-fi
-
-sudo -u "$APP_USER" pm2 save >/dev/null
-STARTUP_CMD="$(sudo -u "$APP_USER" pm2 startup systemd \
-  -u "$APP_USER" --hp "/home/$APP_USER" 2>/dev/null | grep '^sudo' | head -1 || true)"
-if [[ -n "$STARTUP_CMD" ]]; then
-  eval "$STARTUP_CMD" >/dev/null 2>&1 || true
-fi
-ok "PM2 startup configured"
-
 hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Setup complete!${NC}"
 echo ""
-echo "  PM2 status: pm2 status"
-echo "  Logs:       pm2 logs '$PM2_APP_NAME'"
+echo "  Binaries: $APP_DIR/bin/"
 echo ""
 echo "  Still to configure in $ENV_FILE:"
 echo "    REWIRING_AMERICA_API_KEY"
-echo "    CONSUMERS_ENERGY_CATALOG_PDF / CONSUMERS_ENERGY_APPLICATION_PDF (PDF scraper)"
+echo ""
+echo "  Run the scraper manually:"
+echo "    sudo -u $APP_USER $APP_DIR/bin/scraper"
 echo ""
 hr
