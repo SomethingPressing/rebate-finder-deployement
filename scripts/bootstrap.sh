@@ -38,7 +38,7 @@ warn()  { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 info()  { echo -e "  ${BLUE}→${NC}  $*"; }
 fail()  { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
 hr()    { echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"; }
-pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done... "; }
+pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done... " < /dev/tty; }
 
 # ── Root guard ────────────────────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
@@ -71,7 +71,7 @@ log "Step 1/10 — System packages"
 
 apt-get update -qq
 PACKAGES=(git curl wget unzip openssh-client ufw ca-certificates gnupg
-          lsb-release software-properties-common nginx certbot python3-certbot-nginx)
+          lsb-release software-properties-common)
 
 MISSING=()
 for pkg in "${PACKAGES[@]}"; do
@@ -279,7 +279,7 @@ APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
 log "Step 10/10 — Seed data"
 
 echo ""
-read -rp "  Load seed data into the database now? [Y/n] " SEED_ANSWER
+read -rp "  Load seed data into the database now? [Y/n] " SEED_ANSWER < /dev/tty
 SEED_ANSWER="${SEED_ANSWER:-Y}"
 
 if [[ "$SEED_ANSWER" =~ ^[Yy]$ ]]; then
@@ -312,13 +312,6 @@ echo -e "    # Required: REWIRING_AMERICA_API_KEY"
 echo ""
 echo -e "  ${BOLD}Rebuild after editing .env:${NC}"
 echo -e "    bash $SCRIPT_DIR/rebate-finder/deploy.sh"
-echo ""
-echo -e "  ${BOLD}Set up Nginx + SSL:${NC}"
-echo -e "    sudo cp $DEPLOY_DIR/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder"
-echo -e "    sudo nano /etc/nginx/sites-available/rebate-finder  # set your domain"
-echo -e "    sudo ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/"
-echo -e "    sudo nginx -t && sudo systemctl reload nginx"
-echo -e "    sudo certbot --nginx -d rebates.yourclient.com"
 echo ""
 echo -e "  ${BOLD}Add an admin user:${NC}"
 echo -e "    bash $SCRIPT_DIR/rebate-finder/create-admin.sh email@example.com Pass123! \"Name\" super_admin"

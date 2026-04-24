@@ -142,27 +142,7 @@ nano /home/rf/apps/incenva-scraper-service/.env
 
 ---
 
-### Step 8 — Nginx + SSL
-
-```bash
-# Copy the Nginx virtual host config
-sudo cp /home/rf/apps/deployment/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder
-
-# Edit the domain name
-sudo nano /etc/nginx/sites-available/rebate-finder
-
-# Enable and reload
-sudo ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-
-# Get a free SSL certificate (Let's Encrypt)
-sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d rebates.yourclient.com
-```
-
----
-
-### Step 9 — Rebuild after editing .env
+### Step 8 — Rebuild after editing .env
 
 Any time you change a `.env` variable, rebuild and restart:
 
