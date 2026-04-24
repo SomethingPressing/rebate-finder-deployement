@@ -12,8 +12,6 @@
 #   7.  Clone this deployment repo
 #   8.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
 #   9.  Run Go scraper setup    (Go, build, PM2)
-#   10. Prompt to load seed data
-#   11. Print Nginx + SSL instructions
 #
 # Usage (run as root on a fresh Ubuntu 22.04 VPS):
 #   curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
@@ -276,26 +274,9 @@ APP_REPO_URL="$APP_REPO" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 9 — Go scraper setup
 # ═════════════════════════════════════════════════════════════════════════════
-log "Step 9/10 — Go scraper service"
+log "Step 9/9 — Go scraper service"
 
 APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
-
-# ═════════════════════════════════════════════════════════════════════════════
-# STEP 10 — Seed data
-# ═════════════════════════════════════════════════════════════════════════════
-log "Step 10/10 — Seed data"
-
-echo ""
-read -rp "  Load seed data into the database now? [Y/n] " SEED_ANSWER < /dev/tty
-SEED_ANSWER="${SEED_ANSWER:-Y}"
-
-if [[ "$SEED_ANSWER" =~ ^[Yy]$ ]]; then
-  bash "$SCRIPT_DIR/rebate-finder/seed.sh"
-  ok "Seed data loaded"
-else
-  warn "Skipped. Run manually when ready:"
-  info "bash $SCRIPT_DIR/rebate-finder/seed.sh"
-fi
 
 # ═════════════════════════════════════════════════════════════════════════════
 # DONE — Print next steps
@@ -306,7 +287,7 @@ echo -e "  ${GREEN}${BOLD}Server setup complete!${NC}"
 echo ""
 echo -e "  ${BOLD}Check app status:${NC}"
 echo -e "    pm2 status"
-echo -e "    pm2 logs 'Rebate Finder'"
+echo -e "    pm2 logs incenva-rebate-finder"
 echo ""
 echo -e "  ${BOLD}Edit .env files (fill in your API keys):${NC}"
 echo -e "    nano $APP_DIR/.env"
@@ -320,10 +301,10 @@ echo ""
 echo -e "  ${BOLD}Rebuild after editing .env:${NC}"
 echo -e "    bash $SCRIPT_DIR/rebate-finder/deploy.sh"
 echo ""
+echo -e "  ${BOLD}Load seed data (run once as sysadmin when ready):${NC}"
+echo -e "    bash $SCRIPT_DIR/rebate-finder/seed.sh"
+echo ""
 echo -e "  ${BOLD}Add an admin user:${NC}"
 echo -e "    bash $SCRIPT_DIR/rebate-finder/create-admin.sh email@example.com Pass123! \"Name\" super_admin"
-echo ""
-echo -e "  ${YELLOW}Default login (after seed): admin@incenva.com / Admin1234!${NC}"
-echo -e "  ${YELLOW}→ Change this immediately after first login.${NC}"
 hr
 echo ""

@@ -143,12 +143,12 @@ else
   warn "Set REWIRING_AMERICA_API_KEY in $ENV_FILE."
 fi
 
-# shellcheck disable=SC2046
-export $(grep -v '^#' "$ENV_FILE" | grep -E '^DATABASE_URL=' | xargs 2>/dev/null || true)
+DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+export DATABASE_URL
 [[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE."
 
-chown -R "$APP_USER:$APP_GROUP" "$APP_DIR"
 mkdir -p "$APP_DIR/bin"
+chown -R "$APP_USER:$APP_GROUP" "$APP_DIR"
 
 ok "Downloading Go modules…"
 sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go mod download"
