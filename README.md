@@ -1,103 +1,74 @@
 # Incenva Deployment
 
-This repo contains everything needed to deploy and update the **Incenva Rebate Finder** stack on a fresh Ubuntu 22.04 LTS VPS.
-
-## What's in here
-
-```
-rebate-finder-deployement/
-├── README.md                          ← You are here
-│
-├── seeds/
-│   └── json/                          ← Seed data (JSON exports, admin-users, brand config)
-│
-├── scripts/
-│   ├── rebate-finder/
-│   │   ├── setup-server.sh            ← Full server setup (run once on fresh VPS)
-│   │   ├── deploy.sh                  ← Pull + build + restart (run on every code update)
-│   │   ├── seed.sh                    ← Load seed data from seeds/json → DB (run separately)
-│   │   └── create-admin.sh            ← Add/update an admin user
-│   │
-│   └── scraper/
-│       ├── setup-server.sh            ← Scraper server setup
-│       └── deploy.sh                  ← Pull + rebuild + restart scraper
-│
-├── nginx/
-│   └── rebate-finder.conf             ← Nginx virtual host config
-│
-└── docs/
-    ├── deployment.md                  ← Full step-by-step deployment guide
-    ├── github-deploy-keys.md          ← SSH deploy key setup (required before first clone)
-    └── local-development.md           ← Local dev setup for both projects
-```
+Scripts and configuration to deploy the **Incenva Rebate Finder** stack on a fresh Ubuntu 22.04 LTS VPS.
 
 ---
 
 ## Repositories
 
-| Repo | SSH URL |
-|------|---------|
-| `rebate-finder` | `git@github.com:SomethingPressing/rebate-finder.git` |
-| `rebate-finder-scrapers` | `git@github.com:SomethingPressing/rebate-finder-scrapers.git` |
-| `rebate-finder-deployement` | `git@github.com:SomethingPressing/rebate-finder-deployement.git` |
+| App | SSH URL |
+|-----|---------|
+| Deployment (this repo) | `git@github.com:SomethingPressing/rebate-finder-deployement.git` |
+| Next.js app | `git@github.com:SomethingPressing/rebate-finder.git` |
+| Go scraper service | `git@github.com:SomethingPressing/rebate-finder-scrapers.git` |
 
 ---
 
-## Quick start (fresh VPS)
+## Full server setup — step by step
 
-### Step 0 — Set up GitHub deploy keys (required first time)
+Run these commands **in order** on a fresh Ubuntu 22.04 server logged in as root.
 
-The server needs SSH keys to pull from private GitHub repos without a password.
-**→ Follow: [docs/github-deploy-keys.md](docs/github-deploy-keys.md)**
+---
 
-Quick version (run as root):
+### Step 1 — Download and run bootstrap
+
+The bootstrap script installs git, creates the `rf` system user, generates SSH deploy keys, and prints the public keys you need to add to GitHub.
 
 ```bash
-# Generate one SSH key per repository
-mkdir -p /home/rf/.ssh && chmod 700 /home/rf/.ssh
-ssh-keygen -t ed25519 -C "rf@server:rebate-finder"             -f /home/rf/.ssh/id_ed25519_rebate_finder             -N ""
-ssh-keygen -t ed25519 -C "rf@server:rebate-finder-scrapers"    -f /home/rf/.ssh/id_ed25519_rebate_finder_scrapers    -N ""
-ssh-keygen -t ed25519 -C "rf@server:rebate-finder-deployement" -f /home/rf/.ssh/id_ed25519_rebate_finder_deployement -N ""
-chown -R rf:rf /home/rf/.ssh && chmod 600 /home/rf/.ssh/id_ed25519_*
-
-# Write SSH config so git knows which key to use for each repo
-cat > /home/rf/.ssh/config << 'EOF'
-Host github-rebate-finder
-    HostName github.com
-    User git
-    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder
-    IdentitiesOnly yes
-Host github-rebate-finder-scrapers
-    HostName github.com
-    User git
-    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder_scrapers
-    IdentitiesOnly yes
-Host github-rebate-finder-deployement
-    HostName github.com
-    User git
-    IdentityFile /home/rf/.ssh/id_ed25519_rebate_finder_deployement
-    IdentitiesOnly yes
-EOF
-chown rf:rf /home/rf/.ssh/config && chmod 600 /home/rf/.ssh/config
-
-# Print the three public keys — paste each into GitHub → Repo → Settings → Deploy keys
-echo "=== rebate-finder ===" && cat /home/rf/.ssh/id_ed25519_rebate_finder.pub
-echo "=== rebate-finder-scrapers ===" && cat /home/rf/.ssh/id_ed25519_rebate_finder_scrapers.pub
-echo "=== rebate-finder-deployement ===" && cat /home/rf/.ssh/id_ed25519_rebate_finder_deployement.pub
+curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh \
+  | sudo bash
 ```
 
-After adding the keys to GitHub, verify each connection:
+> **No git or curl yet?** Run `apt-get update && apt-get install -y git curl` first, then re-run the command above.
+
+The script will print three public keys at the end and the exact GitHub URLs to add them to.
+
+---
+
+### Step 2 — Add deploy keys to GitHub
+
+For **each** of the three repos, the bootstrap output tells you exactly where to go. The short version:
+
+1. Open the GitHub URL printed for each repo  
+   (e.g. `https://github.com/SomethingPressing/rebate-finder/settings/keys`)
+2. Click **Add deploy key**
+3. Title: `rf@<your-server-hostname>`
+4. Paste the public key printed for that repo
+5. Leave **Allow write access** unchecked
+6. Click **Add key**
+
+Repeat for all three repos.
+
+---
+
+### Step 3 — Verify GitHub connections
 
 ```bash
 sudo -u rf ssh -T github-rebate-finder
 sudo -u rf ssh -T github-rebate-finder-scrapers
 sudo -u rf ssh -T github-rebate-finder-deployement
-# Expected each time: "Hi SomethingPressing/...! You've successfully authenticated..."
 ```
+
+Each should respond:
+```
+Hi SomethingPressing/...! You've successfully authenticated...
+```
+
+If any fail, see [docs/github-deploy-keys.md](docs/github-deploy-keys.md#9-troubleshooting).
 
 ---
 
-### Step 1 — Clone this deployment repo
+### Step 4 — Clone this deployment repo
 
 ```bash
 sudo -u rf git clone \
@@ -105,61 +76,145 @@ sudo -u rf git clone \
   /home/rf/apps/deployment
 ```
 
-### Step 2 — Set up the main Next.js app
+All remaining scripts are in `/home/rf/apps/deployment/scripts/`.
+
+---
+
+### Step 5 — Set up the Next.js app
+
+Installs Node.js, pnpm, PM2, PostgreSQL, clones the app, pushes the Prisma schema, builds, and starts the process.
 
 ```bash
 sudo APP_REPO_URL=git@github-rebate-finder:SomethingPressing/rebate-finder.git \
   bash /home/rf/apps/deployment/scripts/rebate-finder/setup-server.sh
 ```
 
-### Step 3 — Load seed data
+When it finishes, **edit the `.env` file** to fill in your real values:
+
+```bash
+nano /home/rf/apps/rebate-finder/.env
+```
+
+Required variables to set:
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_BASE_URL` | Your public domain, e.g. `https://rebates.yourclient.com` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `SUPABASE_SERVICE_KEY` | Supabase service role key |
+| `OPENAI_API_KEY` | For AI content generation |
+
+`DATABASE_URL` and `JWT_SECRET` are auto-generated by the setup script.
+
+---
+
+### Step 6 — Load seed data
 
 ```bash
 bash /home/rf/apps/deployment/scripts/rebate-finder/seed.sh
 ```
 
-### Step 4 — Set up the Go scraper service
+This loads all seed data from `seeds/json/` into the database.  
+Default admin login after seeding: `admin@incenva.com` / `Admin1234!` — **change this immediately**.
+
+---
+
+### Step 7 — Set up the Go scraper service
+
+Installs Go, clones the scraper repo, builds the binaries, and starts the scheduled scraper with PM2.
 
 ```bash
 sudo APP_REPO_URL=git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git \
   bash /home/rf/apps/deployment/scripts/scraper/setup-server.sh
 ```
 
-### Step 5 — Install Nginx config + SSL
+Edit the scraper `.env` to add your API keys:
 
 ```bash
+nano /home/rf/apps/incenva-scraper-service/.env
+```
+
+| Variable | Description |
+|----------|-------------|
+| `REWIRING_AMERICA_API_KEY` | Rewiring America calculator API key |
+| `ENERGY_STAR_ZIP_CODES` | Comma-separated ZIP codes to query |
+
+---
+
+### Step 8 — Nginx + SSL
+
+```bash
+# Copy the Nginx virtual host config
 sudo cp /home/rf/apps/deployment/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder
-# Edit the domain name before enabling:
+
+# Edit the domain name
 sudo nano /etc/nginx/sites-available/rebate-finder
+
+# Enable and reload
 sudo ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
+
+# Get a free SSL certificate (Let's Encrypt)
+sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d rebates.yourclient.com
 ```
 
-See **[docs/deployment.md](docs/deployment.md)** for the complete guide with all options and troubleshooting.
+---
+
+### Step 9 — Rebuild after editing .env
+
+Any time you change a `.env` variable, rebuild and restart:
+
+```bash
+bash /home/rf/apps/deployment/scripts/rebate-finder/deploy.sh
+```
 
 ---
 
 ## Deploying updates
 
+After pushing code changes to GitHub:
+
 ```bash
-# Update the main app (after a git push to the app repo)
+# Update the Next.js app
 bash /home/rf/apps/deployment/scripts/rebate-finder/deploy.sh
 
-# Update the scraper (after a git push to the scraper repo)
+# Update the Go scraper
 bash /home/rf/apps/deployment/scripts/scraper/deploy.sh
 ```
 
 ---
 
-## Adding an admin user
+## Other useful scripts
 
 ```bash
+# Add or update an admin user
 bash /home/rf/apps/deployment/scripts/rebate-finder/create-admin.sh \
-  admin@example.com SecurePass123! "Full Name" super_admin
+  email@example.com SecurePass123! "Full Name" super_admin
+
+# Re-run deploy key generation (e.g. after key rotation)
+sudo bash /home/rf/apps/deployment/scripts/setup-deploy-keys.sh
+
+# Verify GitHub SSH connections
+bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 ```
 
-Safe to run multiple times — updates the existing user if the email already exists.
+---
+
+## All scripts
+
+| Script | When to run |
+|--------|-------------|
+| `scripts/bootstrap.sh` | **First** — fresh server, installs git, creates user, generates keys |
+| `scripts/setup-deploy-keys.sh` | Key rotation or if bootstrap was skipped |
+| `scripts/verify-deploy-keys.sh` | After adding keys to GitHub |
+| `scripts/rebate-finder/setup-server.sh` | First deploy of Next.js app |
+| `scripts/rebate-finder/deploy.sh` | Every code update to the app |
+| `scripts/rebate-finder/seed.sh` | Load/refresh seed data |
+| `scripts/rebate-finder/create-admin.sh` | Add/update admin users |
+| `scripts/scraper/setup-server.sh` | First deploy of Go scraper |
+| `scripts/scraper/deploy.sh` | Every code update to the scraper |
 
 ---
 
@@ -167,6 +222,6 @@ Safe to run multiple times — updates the existing user if the email already ex
 
 | Doc | Description |
 |-----|-------------|
-| [docs/github-deploy-keys.md](docs/github-deploy-keys.md) | SSH deploy key setup — **start here on a fresh server** |
-| [docs/deployment.md](docs/deployment.md) | Full deployment guide (manual + automated) |
+| [docs/deployment.md](docs/deployment.md) | Full deployment guide with manual steps and troubleshooting |
+| [docs/github-deploy-keys.md](docs/github-deploy-keys.md) | Deploy key deep-dive — how they work, rotation, troubleshooting |
 | [docs/local-development.md](docs/local-development.md) | Local dev setup for both projects |
