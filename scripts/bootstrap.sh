@@ -125,6 +125,8 @@ mkdir -p "$SSH_DIR"
 chmod 700 "$SSH_DIR"
 chown "$APP_USER:$APP_USER" "$SSH_DIR"
 
+KEYS_NEW=0   # incremented each time a key is freshly generated
+
 _gen_key() {
   local name="$1" label="$2"
   local key_file="$SSH_DIR/id_ed25519_${name}"
@@ -133,6 +135,7 @@ _gen_key() {
   else
     ssh-keygen -t ed25519 -C "$APP_USER@$(hostname):$label" -f "$key_file" -N "" >/dev/null 2>&1
     ok "Generated: $label"
+    KEYS_NEW=$((KEYS_NEW + 1))
   fi
   chown "$APP_USER:$APP_USER" "$key_file" "${key_file}.pub"
   chmod 600 "$key_file"
@@ -178,34 +181,38 @@ chmod 600 "$SSH_DIR/config"
 ok "Written $SSH_DIR/config"
 
 # ═════════════════════════════════════════════════════════════════════════════
-# STEP 5 — Print public keys and wait for GitHub
+# STEP 5 — Print public keys and wait for GitHub (only if new keys were created)
 # ═════════════════════════════════════════════════════════════════════════════
 log "Step 5/10 — Add public keys to GitHub"
 
 declare -a KEY_NAMES=("rebate_finder" "rebate_finder_scrapers" "rebate_finder_deployement")
 declare -a REPO_SLUGS=("rebate-finder" "rebate-finder-scrapers" "rebate-finder-deployement")
 
-echo ""
-echo -e "  For each repo below:"
-echo -e "  1. Open the GitHub link"
-echo -e "  2. Click  ${BOLD}Add deploy key${NC}"
-echo -e "  3. Title: ${BOLD}rf@$(hostname)${NC}"
-echo -e "  4. Paste the public key"
-echo -e "  5. Leave 'Allow write access' ${BOLD}unchecked${NC}"
-echo -e "  6. Click  ${BOLD}Add key${NC}"
-echo ""
-
-for i in 0 1 2; do
-  slug="${REPO_SLUGS[$i]}"
-  key_file="$SSH_DIR/id_ed25519_${KEY_NAMES[$i]}.pub"
-  echo -e "  ${BOLD}▸ $slug${NC}"
-  echo -e "  ${BLUE}https://github.com/SomethingPressing/$slug/settings/keys${NC}"
+if [[ $KEYS_NEW -eq 0 ]]; then
+  skip "All keys already existed — skipping GitHub upload step"
+else
   echo ""
-  echo "    $(cat "$key_file")"
+  echo -e "  For each repo below:"
+  echo -e "  1. Open the GitHub link"
+  echo -e "  2. Click  ${BOLD}Add deploy key${NC}"
+  echo -e "  3. Title: ${BOLD}rf@$(hostname)${NC}"
+  echo -e "  4. Paste the public key"
+  echo -e "  5. Leave 'Allow write access' ${BOLD}unchecked${NC}"
+  echo -e "  6. Click  ${BOLD}Add key${NC}"
   echo ""
-done
 
-pause "Add all three keys to GitHub, then press Enter to continue."
+  for i in 0 1 2; do
+    slug="${REPO_SLUGS[$i]}"
+    key_file="$SSH_DIR/id_ed25519_${KEY_NAMES[$i]}.pub"
+    echo -e "  ${BOLD}▸ $slug${NC}"
+    echo -e "  ${BLUE}https://github.com/SomethingPressing/$slug/settings/keys${NC}"
+    echo ""
+    echo "    $(cat "$key_file")"
+    echo ""
+  done
+
+  pause "Add all three keys to GitHub, then press Enter to continue."
+fi
 
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 6 — Verify GitHub connections
