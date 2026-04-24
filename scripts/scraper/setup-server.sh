@@ -143,6 +143,9 @@ sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR'
 ok "Building cmd/scraper…"
 sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/scraper ./cmd/scraper"
 
+ok "Building cmd/staging-stats…"
+sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/staging-stats ./cmd/staging-stats"
+
 if [[ -d "$APP_DIR/cmd/pdf-scraper" ]]; then
   ok "Building cmd/pdf-scraper…"
   sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/pdf-scraper ./cmd/pdf-scraper"
@@ -163,5 +166,9 @@ echo "    REWIRING_AMERICA_API_KEY"
 echo ""
 echo "  Run the scraper manually:"
 echo "    sudo -u $APP_USER $APP_DIR/bin/scraper"
+echo ""
+echo "  Check staging table analytics:"
+echo "    sudo -u $APP_USER $APP_DIR/bin/staging-stats"
+echo "    sudo -u $APP_USER $APP_DIR/bin/staging-stats --json"
 echo ""
 hr
