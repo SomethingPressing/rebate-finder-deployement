@@ -25,13 +25,14 @@ hr()   { echo -e "${BLUE}──────────────────�
 
 APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
 ENV_FILE="$APP_DIR/.env"
-PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
+PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
 
 [[ -d "$APP_DIR" ]]  || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
 [[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
 
-# shellcheck disable=SC2046
-export $(grep -v '^#' "$ENV_FILE" | grep -E '^(DATABASE_URL|JWT_SECRET)=' | xargs)
+DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+export DATABASE_URL
+[[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE."
 
 cd "$APP_DIR"
 

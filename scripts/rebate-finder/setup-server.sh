@@ -40,7 +40,7 @@ APP_REPO_URL="${APP_REPO_URL:-}"                  # required if APP_DIR doesn't 
 DB_NAME="${DB_NAME:-rebate_finder}"
 DB_USER="${DB_USER:-rf}"
 NODE_MAJOR="${NODE_MAJOR:-20}"
-PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
+PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
 
 ENV_FILE="$APP_DIR/.env"
 TMP_PASS_FILE="/tmp/.rf_db_pass_setup"
@@ -258,10 +258,9 @@ else
   sudo -u "$APP_USER" bash -c "
     cd '$APP_DIR'
     pm2 start 'pnpm start' \
-      --name '$PM2_APP_NAME' \
-      --env-file '$ENV_FILE'
+      --name '$PM2_APP_NAME'
   "
-  ok "Started '$PM2_APP_NAME'"
+  ok "Started '$PM2_APP_NAME' (pnpm start)"
 fi
 
 sudo -u "$APP_USER" pm2 save >/dev/null
