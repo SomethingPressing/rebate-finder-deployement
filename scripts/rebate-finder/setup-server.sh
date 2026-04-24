@@ -208,10 +208,21 @@ else
     warn "DB role already existed — set DATABASE_URL in $ENV_FILE manually."
   fi
 
+  # Set NEXT_BASE_URL from domain (strip trailing slash)
+  _DOMAIN="${APP_DOMAIN:-_}"
+  if [[ "$_DOMAIN" != "_" && -n "$_DOMAIN" ]]; then
+    _BASE_URL="http://${_DOMAIN%/}"
+    sed -i "s|NEXT_BASE_URL=.*|NEXT_BASE_URL=$_BASE_URL|" "$ENV_FILE"
+    ok "NEXT_BASE_URL set to $_BASE_URL"
+  fi
+
+  # Remove HOSTNAME — Next.js binds to 0.0.0.0 by default; only PORT is needed
+  sed -i '/^HOSTNAME=/d' "$ENV_FILE"
+
   chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
   ok "Created $ENV_FILE (JWT_SECRET auto-generated)"
-  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
+  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*"
 fi
 
 # Load DATABASE_URL for Prisma commands (parse explicitly to avoid IFS/xargs word-split issues)

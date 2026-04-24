@@ -156,8 +156,12 @@ sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR'
 ok "Building cmd/scraper…"
 sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/scraper ./cmd/scraper"
 
-ok "Building cmd/pdf-scraper…"
-sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/pdf-scraper ./cmd/pdf-scraper"
+if [[ -d "$APP_DIR/cmd/pdf-scraper" ]]; then
+  ok "Building cmd/pdf-scraper…"
+  sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/pdf-scraper ./cmd/pdf-scraper"
+else
+  warn "cmd/pdf-scraper not found — skipping (add it to the repo when ready)"
+fi
 
 ok "Binaries built"
 

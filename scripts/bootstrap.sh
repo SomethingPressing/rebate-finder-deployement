@@ -3,7 +3,7 @@
 # bootstrap.sh — Single entry point. Sets up everything on a blank Ubuntu server.
 #
 # What it does (each step is skipped if already complete):
-#   1.  Install system packages (git, curl, ufw, etc.)
+#   1.  Install system packages (git, curl, nginx, ufw, etc.)
 #   2.  Create the rf system user
 #   3.  Generate GitHub SSH deploy keys
 #   4.  Write SSH config
@@ -12,12 +12,13 @@
 #   7.  Clone this deployment repo
 #   8.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
 #   9.  Run Go scraper setup    (Go, build, PM2)
+#   10. Configure nginx reverse proxy (port 80 → localhost:3000)
 #
 # Usage (run as root on a fresh Ubuntu 22.04 VPS):
-#   curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
+#   APP_DOMAIN=dev.incenva.com curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
 #
 #   OR after copying this file manually:
-#   sudo bash bootstrap.sh
+#   sudo bash bootstrap.sh dev.incenva.com
 #
 # Idempotent — safe to re-run. Already-completed steps are skipped.
 # =============================================================================
@@ -41,6 +42,14 @@ pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done
 # ── Root guard ────────────────────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
 
+# ── Domain ────────────────────────────────────────────────────────────────────
+# Accept as: first positional arg, APP_DOMAIN env var, or interactive prompt.
+APP_DOMAIN="${1:-${APP_DOMAIN:-}}"
+if [[ -z "$APP_DOMAIN" ]]; then
+  read -rp "  App domain (e.g. dev.incenva.com) — press Enter to use catch-all: " APP_DOMAIN < /dev/tty
+fi
+APP_DOMAIN="${APP_DOMAIN:-_}"
+
 # ── Config ────────────────────────────────────────────────────────────────────
 APP_USER="${APP_USER:-rf}"
 SSH_DIR="/home/$APP_USER/.ssh"
@@ -57,7 +66,8 @@ hr
 echo ""
 echo -e "  ${BOLD}Incenva — Full Server Setup${NC}"
 echo -e "  Ubuntu $(lsb_release -rs 2>/dev/null || echo '?')  •  $(date '+%Y-%m-%d %H:%M')"
-echo -e "  App user: ${BOLD}$APP_USER${NC}"
+echo -e "  App user:  ${BOLD}$APP_USER${NC}"
+echo -e "  Domain:    ${BOLD}$APP_DOMAIN${NC}"
 echo ""
 echo -e "  This script is idempotent — already-completed steps are skipped."
 hr
@@ -69,7 +79,7 @@ log "Step 1/10 — System packages"
 
 apt-get update -qq
 PACKAGES=(git curl wget unzip openssh-client ufw ca-certificates gnupg
-          lsb-release software-properties-common)
+          lsb-release software-properties-common nginx)
 
 MISSING=()
 for pkg in "${PACKAGES[@]}"; do
@@ -269,14 +279,21 @@ SCRIPT_DIR="$DEPLOY_DIR/scripts"
 # ═════════════════════════════════════════════════════════════════════════════
 log "Step 8/10 — Next.js app (Node, pnpm, PM2, PostgreSQL, build)"
 
-APP_REPO_URL="$APP_REPO" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
+APP_REPO_URL="$APP_REPO" APP_DOMAIN="$APP_DOMAIN" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
 
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 9 — Go scraper setup
 # ═════════════════════════════════════════════════════════════════════════════
-log "Step 9/9 — Go scraper service"
+log "Step 9/10 — Go scraper service"
 
 APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 10 — Nginx reverse proxy
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 10/10 — Nginx reverse proxy (port 80 → localhost:3000)"
+
+APP_DOMAIN="$APP_DOMAIN" bash "$SCRIPT_DIR/setup-nginx.sh"
 
 # ═════════════════════════════════════════════════════════════════════════════
 # DONE — Print next steps
@@ -285,15 +302,20 @@ hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Server setup complete!${NC}"
 echo ""
+if [[ "$APP_DOMAIN" != "_" ]]; then
+  echo -e "  ${BOLD}App URL:${NC}  http://$APP_DOMAIN"
+else
+  echo -e "  ${BOLD}App URL:${NC}  http://<server-ip>  (no domain set — edit nginx config to add one)"
+fi
+echo ""
 echo -e "  ${BOLD}Check app status:${NC}"
 echo -e "    pm2 status"
 echo -e "    pm2 logs incenva-rebate-finder"
 echo ""
-echo -e "  ${BOLD}Edit .env files (fill in your API keys):${NC}"
+echo -e "  ${BOLD}Fill in remaining .env values:${NC}"
 echo -e "    nano $APP_DIR/.env"
-echo -e "    # Required: NEXT_BASE_URL, NEXT_PUBLIC_SUPABASE_URL,"
-echo -e "    #           NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY,"
-echo -e "    #           OPENAI_API_KEY"
+echo -e "    # Required: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,"
+echo -e "    #           SUPABASE_SERVICE_KEY, OPENAI_API_KEY"
 echo ""
 echo -e "    nano $SCRAPER_DIR/.env"
 echo -e "    # Required: REWIRING_AMERICA_API_KEY"
