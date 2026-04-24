@@ -81,10 +81,8 @@ else
   tar -C /usr/local -xzf "/tmp/$GO_TARBALL"
   rm -f "/tmp/$GO_TARBALL"
 
-  GO_LINE='export PATH=$PATH:/usr/local/go/bin'
-  for f in /etc/profile.d/go.sh "/home/$APP_USER/.bashrc"; do
-    grep -qF "$GO_LINE" "$f" 2>/dev/null || echo "$GO_LINE" >> "$f"
-  done
+  ln -sf /usr/local/go/bin/go /usr/local/bin/go
+  ln -sf /usr/local/go/bin/gofmt /usr/local/bin/gofmt
   export PATH="$PATH:/usr/local/go/bin"
   ok "Installed Go $(go version | awk '{print $3}')"
 fi
