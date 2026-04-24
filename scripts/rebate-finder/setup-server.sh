@@ -214,9 +214,9 @@ else
   warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
 fi
 
-# Load DATABASE_URL for Prisma commands
-# shellcheck disable=SC2046
-export $(grep -v '^#' "$ENV_FILE" | grep -E '^(DATABASE_URL|JWT_SECRET)=' | xargs)
+# Load DATABASE_URL for Prisma commands (parse explicitly to avoid IFS/xargs word-split issues)
+DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+export DATABASE_URL
 [[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE. Edit it and re-run."
 
 # ─────────────────────────────────────────────────────────────────────────────
