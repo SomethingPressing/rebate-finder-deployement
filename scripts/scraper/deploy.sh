@@ -39,8 +39,12 @@ ok "Modules up to date"
 log "3/4  Build binaries"
 go build -o bin/scraper ./cmd/scraper
 ok "Built: bin/scraper"
-go build -o bin/pdf-scraper ./cmd/pdf-scraper
-ok "Built: bin/pdf-scraper"
+go build -o bin/promoter ./cmd/promoter
+ok "Built: bin/promoter"
+if [[ -d "cmd/pdf-scraper" ]]; then
+  go build -o bin/pdf-scraper ./cmd/pdf-scraper
+  ok "Built: bin/pdf-scraper"
+fi
 
 log "4/4  PM2 restart"
 if pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then

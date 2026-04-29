@@ -225,9 +225,11 @@ else
   warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*"
 fi
 
-# Load DATABASE_URL for Prisma commands (parse explicitly to avoid IFS/xargs word-split issues)
+# Load env vars needed by Prisma, the promoter, and the Go scraper
 DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
-export DATABASE_URL
+SCRAPER_DB_SCHEMA="$(grep -E '^SCRAPER_DB_SCHEMA=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+PROMOTER_SOURCE_PRIORITY="$(grep -E '^PROMOTER_SOURCE_PRIORITY=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
 [[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE. Edit it and re-run."
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -278,7 +280,8 @@ else
     pm2 start 'node scripts/run-promoter.mjs' \
       --name '$PROMOTER_NAME' \
       --cron '0 * * * *' \
-      --no-autorestart
+      --no-autorestart \
+      --env-file '$ENV_FILE'
   "
   ok "Registered '$PROMOTER_NAME' (runs every hour)"
 fi

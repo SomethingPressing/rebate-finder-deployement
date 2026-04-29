@@ -48,10 +48,15 @@ Internet
     └── Supabase (remote storage / auth)
 
  Go Scraper          ←─── PM2 "Incenva Scraper" (rf user)
-    └── GORM   ──► PostgreSQL :5432 (same DB, rebates_staging table)
+    └── GORM   ──► PostgreSQL :5432 (same DB, scraper.rebates_staging)
+
+ Go Promoter         ←─── PM2 "incenva-promoter" (hourly cron, rf user)
+    └── GORM   ──► PostgreSQL :5432 (reads scraper.*, writes public.rebates)
 ```
 
 Both apps share the same local PostgreSQL database via `DATABASE_URL`.
+The Go scraper owns the `scraper` schema; Prisma (Next.js) owns the `public` schema.
+`prisma db push` never touches `scraper.*` tables — they are invisible to it.
 
 ---
 
@@ -149,8 +154,8 @@ bash scripts/scraper/setup-server.sh
 
 What it does:
 - Installs Go 1.22
-- Builds `bin/scraper` and `bin/pdf-scraper`
-- Creates `.env` inheriting `DATABASE_URL` from the main app
+- Builds `bin/scraper`, `bin/promoter`, `bin/pdf-scraper`, and `bin/staging-stats`
+- Creates `.env` inheriting `DATABASE_URL`, `SCRAPER_DB_SCHEMA`, and `PROMOTER_SOURCE_PRIORITY` from the main app
 - Starts the scheduled scraper with PM2
 
 ---
@@ -341,12 +346,16 @@ DATABASE_URL=postgresql://rf:<password>@localhost:5432/rebate_finder
 JWT_SECRET=<64-char random string>
 JWT_EXPIRES_IN=24h
 PORT=3000
-HOSTNAME=0.0.0.0
 NEXT_BASE_URL=https://rebates.yourclient.com
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 NEXT_PUBLIC_SUPABASE_PROJECT_ID=<project-id>
 SUPABASE_SERVICE_KEY=eyJ...
+
+# Scraper schema separation — Go scraper writes to this PostgreSQL schema,
+# Prisma only manages the public schema and never sees these tables.
+SCRAPER_DB_SCHEMA=scraper
+PROMOTER_SOURCE_PRIORITY=rewiring_america,dsireusa,energy_star
 ```
 
 Generate `JWT_SECRET`:
@@ -367,7 +376,8 @@ cd incenva-scraper-service
 
 go mod download
 mkdir -p bin
-go build -o bin/scraper ./cmd/scraper
+go build -o bin/scraper   ./cmd/scraper
+go build -o bin/promoter  ./cmd/promoter
 go build -o bin/pdf-scraper ./cmd/pdf-scraper
 
 cp .env.example .env
@@ -394,6 +404,10 @@ REWIRING_AMERICA_API_KEY=<your-key>
 RUN_ONCE=false
 SCRAPER_INTERVAL=@every 6h
 LOG_FORMAT=json
+
+# Schema separation — must match the value in the main app .env
+SCRAPER_DB_SCHEMA=scraper
+PROMOTER_SOURCE_PRIORITY=rewiring_america,dsireusa,energy_star
 ```
 
 ---
@@ -484,7 +498,8 @@ Or manually:
 ```bash
 cd /home/rf/apps/incenva-scraper-service
 git pull
-go build -o bin/scraper ./cmd/scraper
+go build -o bin/scraper  ./cmd/scraper
+go build -o bin/promoter ./cmd/promoter
 pm2 restart "Incenva Scraper"
 ```
 
@@ -537,8 +552,8 @@ pm2 delete "Incenva Scraper"           # remove from PM2
 # Connect as rf
 psql "postgresql://rf:<password>@localhost:5432/rebate_finder"
 
--- Staging queue status
-SELECT stg_promotion_status, COUNT(*) FROM rebates_staging GROUP BY 1;
+-- Staging queue status (Go-owned schema)
+SELECT stg_promotion_status, COUNT(*) FROM scraper.rebates_staging GROUP BY 1;
 
 -- Live rebates count
 SELECT status, COUNT(*) FROM rebates GROUP BY 1;
@@ -627,11 +642,13 @@ systemctl status nginx
 certbot renew --dry-run
 ```
 
-### `relation "rebates_staging" does not exist`
+### `relation "scraper.rebates_staging" does not exist`
 
-The scraper creates this table on first startup via GORM AutoMigrate. Verify `DATABASE_URL` is correct and PostgreSQL is reachable:
+The scraper creates the `scraper` schema and its tables on first startup via GORM AutoMigrate. Verify `DATABASE_URL` and `SCRAPER_DB_SCHEMA` are correct and PostgreSQL is reachable:
 ```bash
 psql "$DATABASE_URL" -c "SELECT 1;"
+# Check the schema exists:
+psql "$DATABASE_URL" -c "\dn scraper"
 ```
 
 ---

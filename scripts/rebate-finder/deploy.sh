@@ -31,7 +31,9 @@ PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
 [[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
 
 DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
-export DATABASE_URL
+SCRAPER_DB_SCHEMA="$(grep -E '^SCRAPER_DB_SCHEMA=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+PROMOTER_SOURCE_PRIORITY="$(grep -E '^PROMOTER_SOURCE_PRIORITY=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
+export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
 [[ -n "${DATABASE_URL:-}" ]] || fail "DATABASE_URL not set in $ENV_FILE."
 
 cd "$APP_DIR"

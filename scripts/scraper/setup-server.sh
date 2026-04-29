@@ -116,18 +116,25 @@ else
   warn "Set REWIRING_AMERICA_API_KEY in $ENV_FILE."
 fi
 
-# Always sync DATABASE_URL from the consumer app (covers first run and re-runs)
+# Always sync shared vars from the consumer app (covers first run and re-runs)
 CONSUMER_ENV="$CONSUMER_APP_DIR/.env"
 if [[ -f "$CONSUMER_ENV" ]]; then
-  INHERITED="$(grep -E '^DATABASE_URL=' "$CONSUMER_ENV" | head -1 || true)"
-  if [[ -n "$INHERITED" ]]; then
-    sed -i "s|^DATABASE_URL=.*|$INHERITED|" "$ENV_FILE"
-    ok "DATABASE_URL synced from consumer app"
-  else
-    warn "DATABASE_URL not found in $CONSUMER_ENV — set it manually in $ENV_FILE."
-  fi
+  _sync_var() {
+    local varname="$1"
+    local val
+    val="$(grep -E "^${varname}=" "$CONSUMER_ENV" | head -1 || true)"
+    if [[ -n "$val" ]]; then
+      sed -i "s|^${varname}=.*|$val|" "$ENV_FILE"
+      ok "$varname synced from consumer app"
+    else
+      warn "$varname not found in $CONSUMER_ENV — set it manually in $ENV_FILE."
+    fi
+  }
+  _sync_var DATABASE_URL
+  _sync_var SCRAPER_DB_SCHEMA
+  _sync_var PROMOTER_SOURCE_PRIORITY
 else
-  warn "Consumer app .env not found at $CONSUMER_ENV — set DATABASE_URL in $ENV_FILE manually."
+  warn "Consumer app .env not found at $CONSUMER_ENV — set DATABASE_URL, SCRAPER_DB_SCHEMA, PROMOTER_SOURCE_PRIORITY in $ENV_FILE manually."
 fi
 
 DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
@@ -142,6 +149,9 @@ sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR'
 
 ok "Building cmd/scraper…"
 sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/scraper ./cmd/scraper"
+
+ok "Building cmd/promoter…"
+sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/promoter ./cmd/promoter"
 
 ok "Building cmd/staging-stats…"
 sudo -u "$APP_USER" bash -c "export PATH=\$PATH:/usr/local/go/bin; cd '$APP_DIR' && go build -o bin/staging-stats ./cmd/staging-stats"
