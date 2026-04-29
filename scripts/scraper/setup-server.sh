@@ -165,20 +165,70 @@ fi
 
 ok "Binaries built"
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PM2 — register scraper daemon and promoter cron
+# ─────────────────────────────────────────────────────────────────────────────
+SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
+PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"
+
+# Scraper — long-running daemon (uses RUN_ONCE / SCRAPER_INTERVAL from .env)
+if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
+  sudo -u "$APP_USER" pm2 restart "$SCRAPER_PM2_NAME"
+  ok "Restarted PM2 process '$SCRAPER_PM2_NAME'"
+else
+  sudo -u "$APP_USER" bash -c "
+    cd '$APP_DIR'
+    pm2 start bin/scraper \
+      --name '$SCRAPER_PM2_NAME' \
+      --interpreter none \
+      --env-file '$ENV_FILE'
+  "
+  ok "Started PM2 process '$SCRAPER_PM2_NAME'"
+fi
+
+# Promoter — cron every 2 hours (promotes staged data to public.rebates)
+if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
+  skip "PM2 cron '$PROMOTER_PM2_NAME' already registered"
+else
+  sudo -u "$APP_USER" bash -c "
+    cd '$APP_DIR'
+    pm2 start bin/promoter \
+      --name '$PROMOTER_PM2_NAME' \
+      --interpreter none \
+      --cron '0 */2 * * *' \
+      --no-autorestart \
+      --env-file '$ENV_FILE'
+  "
+  ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
+fi
+
+sudo -u "$APP_USER" pm2 save >/dev/null
+
+STARTUP_CMD="$(sudo -u "$APP_USER" pm2 startup systemd \
+  -u "$APP_USER" --hp "/home/$APP_USER" 2>/dev/null | grep '^sudo' | head -1 || true)"
+if [[ -n "$STARTUP_CMD" ]]; then
+  eval "$STARTUP_CMD" >/dev/null 2>&1 || true
+fi
+ok "PM2 startup configured"
+
 hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Setup complete!${NC}"
 echo ""
 echo "  Binaries: $APP_DIR/bin/"
 echo ""
+echo "  PM2 processes:"
+echo "    $SCRAPER_PM2_NAME  — scraper daemon"
+echo "    $PROMOTER_PM2_NAME — promoter cron (every 2 hours)"
+echo ""
 echo "  Still to configure in $ENV_FILE:"
 echo "    REWIRING_AMERICA_API_KEY"
 echo ""
-echo "  Run the scraper manually:"
-echo "    sudo -u $APP_USER $APP_DIR/bin/scraper"
-echo ""
-echo "  Check staging table analytics:"
+echo "  Useful commands:"
+echo "    pm2 status"
+echo "    pm2 logs '$SCRAPER_PM2_NAME'"
+echo "    pm2 logs '$PROMOTER_PM2_NAME'"
+echo "    sudo -u $APP_USER $APP_DIR/bin/promoter --dry-run"
 echo "    sudo -u $APP_USER $APP_DIR/bin/staging-stats"
-echo "    sudo -u $APP_USER $APP_DIR/bin/staging-stats --json"
 echo ""
 hr

@@ -270,21 +270,8 @@ else
   ok "Started '$PM2_APP_NAME' (pnpm start)"
 fi
 
-# Hourly promoter — promotes staged scraper data to production
-PROMOTER_NAME="incenva-promoter"
-if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PROMOTER_NAME"; then
-  skip "PM2 cron '$PROMOTER_NAME' already registered"
-else
-  sudo -u "$APP_USER" bash -c "
-    cd '$APP_DIR'
-    pm2 start 'node scripts/run-promoter.mjs' \
-      --name '$PROMOTER_NAME' \
-      --cron '0 * * * *' \
-      --no-autorestart \
-      --env-file '$ENV_FILE'
-  "
-  ok "Registered '$PROMOTER_NAME' (runs every hour)"
-fi
+# Note: the promoter PM2 cron is registered by scripts/scraper/setup-server.sh
+# and runs the Go binary directly (every 2 hours). No promoter process here.
 
 sudo -u "$APP_USER" pm2 save >/dev/null
 

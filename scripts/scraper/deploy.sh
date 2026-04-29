@@ -47,12 +47,29 @@ if [[ -d "cmd/pdf-scraper" ]]; then
 fi
 
 log "4/4  PM2 restart"
-if pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
-  pm2 restart "$PM2_APP_NAME"
-  ok "Restarted '$PM2_APP_NAME'"
+
+SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
+PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"
+
+if pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
+  pm2 restart "$SCRAPER_PM2_NAME"
+  ok "Restarted '$SCRAPER_PM2_NAME'"
 else
-  warn "PM2 process '$PM2_APP_NAME' not found — start it with setup-server.sh"
+  warn "PM2 process '$SCRAPER_PM2_NAME' not found — run setup-server.sh first"
 fi
+
+if pm2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
+  ok "Promoter cron '$PROMOTER_PM2_NAME' already registered — no change needed"
+else
+  pm2 start bin/promoter \
+    --name "$PROMOTER_PM2_NAME" \
+    --interpreter none \
+    --cron '0 */2 * * *' \
+    --no-autorestart
+  ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
+fi
+
+pm2 save >/dev/null
 
 echo ""
 echo -e "  ${GREEN}${BOLD}Deploy complete.${NC}"

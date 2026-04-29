@@ -50,7 +50,7 @@ Internet
  Go Scraper          ←─── PM2 "Incenva Scraper" (rf user)
     └── GORM   ──► PostgreSQL :5432 (same DB, scraper.rebates_staging)
 
- Go Promoter         ←─── PM2 "incenva-promoter" (hourly cron, rf user)
+ Go Promoter         ←─── PM2 "incenva-promoter" (every 2h cron, rf user)
     └── GORM   ──► PostgreSQL :5432 (reads scraper.*, writes public.rebates)
 ```
 
@@ -537,13 +537,14 @@ This script is **idempotent** — running it twice with the same email updates t
 
 ```bash
 pm2 status                              # all processes
-pm2 logs "Rebate Finder"               # tail main app logs
-pm2 logs "Incenva Scraper"             # tail scraper logs
-pm2 logs "Rebate Finder" --lines 100   # last 100 lines
-pm2 restart "Rebate Finder"            # restart main app
-pm2 restart "Incenva Scraper"          # restart scraper
-pm2 stop "Incenva Scraper"             # stop scraper (keeps PM2 entry)
-pm2 delete "Incenva Scraper"           # remove from PM2
+pm2 logs "incenva-rebate-finder"        # tail main app logs
+pm2 logs "incenva-scraper"             # tail scraper logs
+pm2 logs "incenva-promoter"            # tail promoter cron logs
+pm2 logs "incenva-rebate-finder" --lines 100
+pm2 restart "incenva-rebate-finder"    # restart main app
+pm2 restart "incenva-scraper"          # restart scraper
+pm2 stop    "incenva-scraper"          # stop scraper (keeps PM2 entry)
+pm2 delete  "incenva-scraper"          # remove from PM2
 ```
 
 ### PostgreSQL
