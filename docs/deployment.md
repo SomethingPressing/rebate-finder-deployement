@@ -430,18 +430,26 @@ nginx -t && systemctl reload nginx
 
 > **Full step-by-step guide with troubleshooting:** → **[docs/ssl-letsencrypt.md](./ssl-letsencrypt.md)**
 
+SSL is **run automatically** by `bootstrap.sh` (step 11) and by `setup-nginx.sh` when a domain is provided. To run it standalone:
+
 ```bash
 # run as root
-apt-get install -y certbot python3-certbot-nginx
-certbot --nginx -d dev.incenva.com
+sudo APP_DOMAIN=dev.incenva.com bash scripts/setup-ssl.sh
 ```
 
-Certbot automatically:
-1. Obtains the certificate from Let's Encrypt
-2. Edits the Nginx config to add SSL lines and HTTP→HTTPS redirect
-3. Sets up auto-renewal via a systemd timer
+The script:
+1. Installs Certbot if not present
+2. Verifies DNS resolves to this server (warns if not, lets you continue)
+3. Runs `certbot --nginx -d dev.incenva.com` (skipped if cert already exists)
+4. Verifies auto-renewal with a dry-run
+5. Updates `NEXT_BASE_URL=https://dev.incenva.com` in the app `.env`
 
-Verify auto-renewal:
+To send a cert expiry email, set `CERTBOT_EMAIL` before running:
+```bash
+sudo CERTBOT_EMAIL=ops@incenva.com APP_DOMAIN=dev.incenva.com bash scripts/setup-ssl.sh
+```
+
+Verify auto-renewal anytime:
 ```bash
 certbot renew --dry-run
 systemctl status certbot.timer

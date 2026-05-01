@@ -104,12 +104,22 @@ if [[ "$APP_DOMAIN" == "_" ]]; then
   warn "server_name is set to _ (catch-all)."
   warn "To set a real domain, edit $NGINX_AVAILABLE and run:"
   echo "    sudo nginx -t && sudo systemctl reload nginx"
+  echo ""
+  echo -e "  ${BOLD}To add SSL once you have a domain:${NC}"
+  echo "    sudo APP_DOMAIN=dev.incenva.com bash $SCRIPT_DIR/setup-ssl.sh"
 else
   ok "Serving: http://$APP_DOMAIN"
+  echo ""
+
+  # Run SSL setup automatically when called standalone (not from bootstrap.sh,
+  # which runs setup-ssl.sh itself as step 11).
+  if [[ "${SKIP_SSL:-false}" != "true" ]]; then
+    echo -e "  ${BOLD}Running SSL setup (Let's Encrypt)...${NC}"
+    APP_DOMAIN="$APP_DOMAIN" APP_USER="${APP_USER:-rf}" bash "$SCRIPT_DIR/setup-ssl.sh" || {
+      warn "SSL setup failed or was skipped. Run manually when DNS is ready:"
+      echo "    sudo APP_DOMAIN=$APP_DOMAIN bash $SCRIPT_DIR/setup-ssl.sh"
+    }
+  fi
 fi
-echo ""
-echo -e "  ${BOLD}To add SSL (Let's Encrypt) later:${NC}"
-echo "    sudo apt-get install -y certbot python3-certbot-nginx"
-echo "    sudo certbot --nginx -d $APP_DOMAIN"
 echo ""
 hr

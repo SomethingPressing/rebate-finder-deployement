@@ -128,8 +128,9 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 
 | Script | When to run |
 |--------|-------------|
-| `scripts/bootstrap.sh` | **First** — complete fresh server setup in one command |
-| `scripts/setup-nginx.sh` | Re-configure nginx (domain change, re-install) |
+| `scripts/bootstrap.sh` | **First** — complete fresh server setup in one command (includes SSL) |
+| `scripts/setup-nginx.sh` | Re-configure nginx (domain change, re-install) — also runs SSL |
+| `scripts/setup-ssl.sh` | SSL only — re-issue cert, fix renewal, or add SSL after the fact |
 | `scripts/setup-deploy-keys.sh` | Key rotation or if bootstrap was skipped |
 | `scripts/verify-deploy-keys.sh` | After adding keys to GitHub |
 | `scripts/rebate-finder/setup-server.sh` | First deploy of Next.js app (called by bootstrap) |
