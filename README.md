@@ -146,4 +146,5 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 | Doc | Description |
 |-----|-------------|
 | [docs/deployment.md](docs/deployment.md) | Full deployment guide with manual steps and troubleshooting |
+| [docs/ssl-letsencrypt.md](docs/ssl-letsencrypt.md) | SSL / Let's Encrypt setup for dev.incenva.com |
 | [docs/github-deploy-keys.md](docs/github-deploy-keys.md) | Deploy key deep-dive — how they work, rotation, troubleshooting |

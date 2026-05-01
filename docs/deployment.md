@@ -418,26 +418,27 @@ PROMOTER_SOURCE_PRIORITY=rewiring_america,dsireusa,energy_star
 
 ```bash
 # run as root
-cp /home/rf/deployment/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder
-# Edit the server_name lines to match your domain
-nano /etc/nginx/sites-available/rebate-finder
+cp /home/rf/apps/deployment/nginx/rebate-finder.conf /etc/nginx/sites-available/rebate-finder
+# Set the real domain
+sed -i 's/server_name _;/server_name dev.incenva.com;/' /etc/nginx/sites-available/rebate-finder
 
 ln -sf /etc/nginx/sites-available/rebate-finder /etc/nginx/sites-enabled/
-nginx -t
-systemctl reload nginx
+nginx -t && systemctl reload nginx
 ```
 
 ### Get an SSL certificate (Let's Encrypt)
 
+> **Full step-by-step guide with troubleshooting:** → **[docs/ssl-letsencrypt.md](./ssl-letsencrypt.md)**
+
 ```bash
 # run as root
 apt-get install -y certbot python3-certbot-nginx
-certbot --nginx -d rebates.yourclient.com
+certbot --nginx -d dev.incenva.com
 ```
 
 Certbot automatically:
-1. Obtains the certificate
-2. Edits your Nginx config to add SSL lines
+1. Obtains the certificate from Let's Encrypt
+2. Edits the Nginx config to add SSL lines and HTTP→HTTPS redirect
 3. Sets up auto-renewal via a systemd timer
 
 Verify auto-renewal:
