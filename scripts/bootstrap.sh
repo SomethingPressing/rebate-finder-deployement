@@ -291,9 +291,21 @@ APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 10 — Nginx reverse proxy
 # ═════════════════════════════════════════════════════════════════════════════
-log "Step 10/10 — Nginx reverse proxy (port 80 → localhost:3000)"
+log "Step 10/11 — Nginx reverse proxy (port 80 → localhost:3000)"
 
 APP_DOMAIN="$APP_DOMAIN" bash "$SCRIPT_DIR/setup-nginx.sh"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 11 — SSL / Let's Encrypt
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 11/11 — SSL / Let's Encrypt"
+
+if [[ "$APP_DOMAIN" == "_" ]]; then
+  warn "No domain set — skipping SSL setup."
+  warn "To add SSL later: sudo APP_DOMAIN=dev.incenva.com bash $SCRIPT_DIR/setup-ssl.sh"
+else
+  APP_DOMAIN="$APP_DOMAIN" APP_USER="$APP_USER" bash "$SCRIPT_DIR/setup-ssl.sh"
+fi
 
 # ═════════════════════════════════════════════════════════════════════════════
 # DONE — Print next steps
@@ -303,9 +315,9 @@ echo ""
 echo -e "  ${GREEN}${BOLD}Server setup complete!${NC}"
 echo ""
 if [[ "$APP_DOMAIN" != "_" ]]; then
-  echo -e "  ${BOLD}App URL:${NC}  http://$APP_DOMAIN"
+  echo -e "  ${BOLD}App URL:${NC}  https://$APP_DOMAIN"
 else
-  echo -e "  ${BOLD}App URL:${NC}  http://<server-ip>  (no domain set — edit nginx config to add one)"
+  echo -e "  ${BOLD}App URL:${NC}  http://<server-ip>  (no domain set)"
 fi
 echo ""
 echo -e "  ${BOLD}Check app status:${NC}"
