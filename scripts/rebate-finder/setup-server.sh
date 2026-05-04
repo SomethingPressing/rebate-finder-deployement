@@ -200,7 +200,7 @@ else
   if [[ -f "$TMP_PASS_FILE" ]]; then
     DB_PASS="$(cat "$TMP_PASS_FILE")"
     sed -i \
-      "s|postgresql://USER:PASSWORD@HOST:5432/DATABASE|postgresql://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME|" \
+      "s|postgresql://USER:PASSWORD@HOST:5432/DATABASE|postgresql://$DB_USER:$DB_PASS@localhost:5432/$DB_NAME?connection_limit=1|" \
       "$ENV_FILE"
     rm -f "$TMP_PASS_FILE"
     ok "DATABASE_URL set in .env"

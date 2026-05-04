@@ -46,15 +46,25 @@ log "2/5  pnpm install"
 pnpm install --frozen-lockfile 2>&1 | tail -3
 ok "Dependencies up to date"
 
-log "3/5  prisma db push (schema sync)"
+log "3/6  prisma db push (schema sync)"
 pnpm prisma db push --skip-generate --accept-data-loss
 ok "Schema synced"
 
-log "4/5  Production build"
+log "4/6  portfolio backfill (idempotent — skips already-set rows)"
+BACKFILL_SQL="$APP_DIR/prisma/scripts/backfill-portfolio.sql"
+if [[ -f "$BACKFILL_SQL" ]]; then
+  psql "$DATABASE_URL" -f "$BACKFILL_SQL" -v ON_ERROR_STOP=1 --quiet \
+    | grep -E "^(UPDATE|portfolio_level)" || true
+  ok "Portfolio backfill done"
+else
+  warn "Backfill script not found at $BACKFILL_SQL — skipping"
+fi
+
+log "5/6  Production build"
 pnpm build
 ok "Build complete"
 
-log "5/5  PM2 restart"
+log "6/6  PM2 restart"
 if pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
   pm2 restart "$PM2_APP_NAME"
   ok "Restarted '$PM2_APP_NAME'"
