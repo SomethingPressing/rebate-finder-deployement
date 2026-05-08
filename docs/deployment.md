@@ -23,6 +23,8 @@ All application processes run under a dedicated `rf` system user. Commands that 
 4. [Database setup](#4-database-setup)
 5. [Deploy the main app](#5-deploy-the-main-app)
 6. [Deploy the scraper service](#6-deploy-the-scraper-service)
+   - 6a. [fly.io (multi-tenant — recommended)](#6a-flyio-multi-tenant--recommended)
+   - 6b. [PM2 on VPS (single-tenant)](#6b-pm2-on-vps-single-tenant)
 7. [Nginx + SSL](#7-nginx--ssl)
 8. [PM2 startup on reboot](#8-pm2-startup-on-reboot)
 9. [Deploying updates](#9-deploying-updates)
@@ -34,6 +36,8 @@ All application processes run under a dedicated `rf` system user. Commands that 
 ---
 
 ## 1. Architecture overview
+
+### Single-tenant (VPS — legacy / simple deployments)
 
 ```
 Internet
@@ -55,6 +59,27 @@ Internet
 ```
 
 Both apps share the same local PostgreSQL database via `DATABASE_URL`.
+
+### Multi-tenant (fly.io scraper — recommended for multiple clients)
+
+```
+                     ┌─────────────────────────────────────┐
+                     │  fly.io — incenva-scraper            │
+                     │  (one app, scheduled machine)        │
+                     │                                      │
+                     │  config/tenants.json                 │
+                     │  ├── tenant: acme  ──► DB acme       │
+                     │  ├── tenant: beta  ──► DB beta       │
+                     │  └── tenant: corp  ──► DB corp       │
+                     └─────────────────────────────────────┘
+
+ Per-tenant VPS:
+   Next.js  :3000   ←─── PM2 "Rebate Finder"  (rf user)
+       └── Prisma ──► PostgreSQL (tenant DB, remote or local)
+```
+
+The Go scraper on fly.io iterates over all active tenants, scrapes data, and writes to each tenant's remote PostgreSQL DB. The Next.js apps on each VPS read from their own DB as usual.
+
 The Go scraper owns the `scraper` schema; Prisma (Next.js) owns the `public` schema.
 `prisma db push` never touches `scraper.*` tables — they are invisible to it.
 
@@ -366,6 +391,75 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ---
 
 ## 6. Deploy the scraper service
+
+### 6a. fly.io (multi-tenant — recommended)
+
+Use this when the scraper needs to serve multiple tenants. One fly.io app handles all clients.
+
+#### First-time setup
+
+```bash
+# From the deployment repo (run as any user with flyctl installed and authenticated)
+bash scripts/scraper/setup-fly.sh
+```
+
+The script:
+1. Creates the `incenva-scraper` fly.io app
+2. Prompts for `REWIRING_AMERICA_API_KEY` and per-tenant `DATABASE_URL` secrets
+3. Runs the first deploy
+
+#### Add a new tenant
+
+1. Add an entry to `config/tenants.json` in the scraper repo:
+   ```json
+   {
+     "id": "newclient",
+     "name": "New Client Corp",
+     "active": true,
+     "sources": ["dsireusa", "rewiring_america", "energy_star"],
+     "db_url_env": "TENANT_NEWCLIENT_DB_URL",
+     "scraper_db_schema": "scraper"
+   }
+   ```
+2. Set the DB URL secret:
+   ```bash
+   fly secrets set TENANT_NEWCLIENT_DB_URL="postgresql://..." --app incenva-scraper
+   ```
+3. Commit and deploy:
+   ```bash
+   bash scripts/scraper/deploy-fly.sh
+   ```
+
+#### Schedule automatic runs (every 6 hours)
+
+```bash
+fly machine run \
+  --app incenva-scraper \
+  --image registry.fly.io/incenva-scraper:latest \
+  --schedule "0 */6 * * *" \
+  --env RUN_ONCE=true \
+  --restart no
+```
+
+#### Deploy updates
+
+```bash
+bash scripts/scraper/deploy-fly.sh
+```
+
+#### Logs and status
+
+```bash
+fly logs --app incenva-scraper
+fly status --app incenva-scraper
+fly secrets list --app incenva-scraper
+```
+
+---
+
+### 6b. PM2 on VPS (single-tenant)
+
+Use this when the scraper runs on the same server as the Next.js app and shares its database.
 
 Run as the **`rf` user**:
 
