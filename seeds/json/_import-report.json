@@ -1,10 +1,10 @@
 [
   {
     "table": "admin-users",
-    "model": "User+UserRole",
+    "model": "User+UserOrgRole",
     "jsonFile": "admin-users.json",
     "rowsInFile": 1,
-    "importedRows": 1,
+    "importedRows": 0,
     "skipped": false
   },
   {
@@ -12,11 +12,9 @@
     "model": "AssetProgramLink",
     "jsonFile": "asset_program_links.json",
     "rowsInFile": 207,
-    "importedRows": 188,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "Parent table skipped: rebates"
   },
   {
     "table": "assets",
@@ -116,14 +114,11 @@
   },
   {
     "table": "homepage_categories",
-    "model": "HomepageCategory",
     "jsonFile": "homepage_categories.json",
     "rowsInFile": 7,
-    "importedRows": 7,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "No matching Prisma model/table mapping"
   },
   {
     "table": "homepage_section_settings",
@@ -176,22 +171,18 @@
     "model": "Portfolio",
     "jsonFile": "portfolios.json",
     "rowsInFile": 3,
-    "importedRows": 3,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "Missing required columns: slug, featured_program_ids"
   },
   {
     "table": "program_enrollments",
     "model": "ProgramEnrollment",
     "jsonFile": "program_enrollments.json",
     "rowsInFile": 324,
-    "importedRows": 324,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "Parent table skipped: programs"
   },
   {
     "table": "program_roi",
@@ -220,11 +211,9 @@
     "model": "Program",
     "jsonFile": "programs.json",
     "rowsInFile": 9,
-    "importedRows": 9,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "Parent table skipped: portfolios"
   },
   {
     "table": "rebate_click_counts",
@@ -264,11 +253,9 @@
     "model": "Rebate",
     "jsonFile": "rebate_source_raw.json→rebates",
     "rowsInFile": 212,
-    "importedRows": 193,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "Missing required columns: sources"
   },
   {
     "table": "tag_link_configs",
@@ -288,20 +275,19 @@
     "rowsInFile": 7,
     "importedRows": 7,
     "skipped": false,
-    "droppedColumns": [],
+    "droppedColumns": [
+      "console_role"
+    ],
     "imageDownloads": 0,
     "imageDownloadFailed": 0
   },
   {
     "table": "user_roles",
-    "model": "UserRole",
     "jsonFile": "user_roles.json",
     "rowsInFile": 8,
-    "importedRows": 8,
-    "skipped": false,
-    "droppedColumns": [],
-    "imageDownloads": 0,
-    "imageDownloadFailed": 0
+    "importedRows": 0,
+    "skipped": true,
+    "reason": "No matching Prisma model/table mapping"
   },
   {
     "table": "users",
