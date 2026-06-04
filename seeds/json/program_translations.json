@@ -1,7 +1,7 @@
 [
   {
     "id": "289f4ebb-37cd-4299-afc3-842f24f8cb0c",
-    "organization_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
+    "client_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
     "program_id": "79465cd1-d722-4a7b-8e77-cf2ae8dbdb92",
     "locale": "es",
     "field_name": "name",
@@ -18,7 +18,7 @@
   },
   {
     "id": "3fe068fd-bb7c-43a3-b700-95f6af75e713",
-    "organization_id": "0ae29ee1-99d9-4b03-980e-4685868465e2",
+    "client_id": "0ae29ee1-99d9-4b03-980e-4685868465e2",
     "program_id": "8710f27f-4041-412c-9638-71df5dc10b24",
     "locale": "es",
     "field_name": "name",
@@ -35,7 +35,7 @@
   },
   {
     "id": "86a8d549-454a-4678-9a74-d0cb52253bdd",
-    "organization_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
+    "client_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
     "program_id": "79465cd1-d722-4a7b-8e77-cf2ae8dbdb92",
     "locale": "zh-cmn",
     "field_name": "name",
@@ -52,7 +52,7 @@
   },
   {
     "id": "c2237f83-740d-4c38-958d-e632ef06a95b",
-    "organization_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
+    "client_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
     "program_id": "79465cd1-d722-4a7b-8e77-cf2ae8dbdb92",
     "locale": "zh-cmn",
     "field_name": "description",
@@ -69,7 +69,7 @@
   },
   {
     "id": "cee0e1ba-18b7-435d-9622-bb4cdf34e6a4",
-    "organization_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
+    "client_id": "d683bf6f-a228-49c5-b7ca-c1bc6a2516c8",
     "program_id": "79465cd1-d722-4a7b-8e77-cf2ae8dbdb92",
     "locale": "es",
     "field_name": "description",
@@ -86,7 +86,7 @@
   },
   {
     "id": "e60a894a-2df1-4eba-878a-a577b2b97814",
-    "organization_id": "0ae29ee1-99d9-4b03-980e-4685868465e2",
+    "client_id": "0ae29ee1-99d9-4b03-980e-4685868465e2",
     "program_id": "8710f27f-4041-412c-9638-71df5dc10b24",
     "locale": "es",
     "field_name": "description",

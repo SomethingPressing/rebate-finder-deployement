@@ -318,7 +318,7 @@
     "rowCount": 6,
     "columns": [
       "id",
-      "organization_id",
+      "client_id",
       "program_id",
       "locale",
       "field_name",
@@ -511,7 +511,7 @@
     "columns": [
       "id",
       "user_id",
-      "organization_id",
+      "client_id",
       "console_role",
       "created_at",
       "created_by"
