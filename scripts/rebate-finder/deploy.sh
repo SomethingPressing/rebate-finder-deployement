@@ -74,7 +74,16 @@ else
   warn "Migration not found at $GEO_MJS — skipping"
 fi
 
-log "4c/6  portfolio backfill (idempotent — skips already-set rows)"
+log "4c/6  assign unscoped rebates to first client (idempotent — only touches NULL rows)"
+ASSIGN_MJS="$APP_DIR/scripts/migrations/004_assign_rebates_to_client.mjs"
+if [[ -f "$ASSIGN_MJS" ]]; then
+  node "$ASSIGN_MJS"
+  ok "Rebate client assignment done"
+else
+  warn "Migration not found at $ASSIGN_MJS — skipping"
+fi
+
+log "4d/6  portfolio backfill (idempotent — skips already-set rows)"
 BACKFILL_SQL="$APP_DIR/prisma/scripts/backfill-portfolio.sql"
 if [[ -f "$BACKFILL_SQL" ]]; then
   psql "$DATABASE_URL" -f "$BACKFILL_SQL" -v ON_ERROR_STOP=1 --quiet \
