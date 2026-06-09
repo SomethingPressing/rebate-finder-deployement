@@ -28,15 +28,20 @@ cd "$PROJECT_DIR"
 export PATH="$PATH:/usr/local/go/bin"
 command -v go &>/dev/null || fail "go not found in PATH. Is Go installed at /usr/local/go?"
 
-log "1/4  git pull"
+log "1/6  git pull"
 git pull
 ok "Code updated"
 
-log "2/4  go mod download"
-go mod download 2>&1 | tail -3
-ok "Modules up to date"
+log "2/6  pnpm install (Node scripts)"
+command -v pnpm &>/dev/null || npm install -g pnpm
+pnpm install --frozen-lockfile 2>&1 | tail -3
+ok "Node dependencies up to date"
 
-log "3/4  Build binaries"
+log "3/6  go mod download"
+go mod download 2>&1 | tail -3
+ok "Go modules up to date"
+
+log "4/6  Build binaries"
 go build -o bin/scraper ./cmd/scraper
 ok "Built: bin/scraper"
 go build -o bin/promoter ./cmd/promoter
@@ -46,7 +51,11 @@ if [[ -d "cmd/pdf-scraper" ]]; then
   ok "Built: bin/pdf-scraper"
 fi
 
-log "4/4  PM2 restart"
+log "5/6  Sync tenants.json → DB"
+pnpm sync:tenants
+ok "Tenant sync done"
+
+log "6/6  PM2 restart"
 
 SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
 PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"

@@ -25,7 +25,7 @@ hr()   { echo -e "${BLUE}──────────────────�
 
 APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
 ENV_FILE="$APP_DIR/.env"
-PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
+PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
 
 [[ -d "$APP_DIR" ]]  || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
 [[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
@@ -65,7 +65,16 @@ else
   warn "Migration not found at $TRIGGER_MJS — skipping"
 fi
 
-log "4b/6  portfolio backfill (idempotent — skips already-set rows)"
+log "4b/6  geo defaults (idempotent — only fills empty rows)"
+GEO_MJS="$APP_DIR/scripts/migrations/003_update_geo_defaults.mjs"
+if [[ -f "$GEO_MJS" ]]; then
+  node "$GEO_MJS"
+  ok "Geo defaults applied"
+else
+  warn "Migration not found at $GEO_MJS — skipping"
+fi
+
+log "4c/6  portfolio backfill (idempotent — skips already-set rows)"
 BACKFILL_SQL="$APP_DIR/prisma/scripts/backfill-portfolio.sql"
 if [[ -f "$BACKFILL_SQL" ]]; then
   psql "$DATABASE_URL" -f "$BACKFILL_SQL" -v ON_ERROR_STOP=1 --quiet \
