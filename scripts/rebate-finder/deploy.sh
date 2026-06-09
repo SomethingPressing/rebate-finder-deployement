@@ -46,11 +46,26 @@ log "2/5  pnpm install"
 pnpm install --frozen-lockfile 2>&1 | tail -3
 ok "Dependencies up to date"
 
-log "3/6  prisma db push (schema sync)"
+log "3/6  db backup + prisma db push (schema sync)"
+BACKUP_DIR="$APP_DIR/backups"
+mkdir -p "$BACKUP_DIR"
+BACKUP_FILE="$BACKUP_DIR/deploy_$(date '+%Y-%m-%d_%H-%M').sql"
+PG_URL="$(echo "$DATABASE_URL" | sed 's/?.*$//')"
+pg_dump --no-owner --no-acl --clean --if-exists "$PG_URL" > "$BACKUP_FILE"
+ok "DB backed up → $BACKUP_FILE"
 pnpm prisma db push --skip-generate --accept-data-loss
 ok "Schema synced"
 
-log "4/6  portfolio backfill (idempotent — skips already-set rows)"
+log "4a/6  scraper config trigger (idempotent)"
+TRIGGER_MJS="$APP_DIR/scripts/migrations/002_scraper_config_trigger.mjs"
+if [[ -f "$TRIGGER_MJS" ]]; then
+  node "$TRIGGER_MJS"
+  ok "Scraper config trigger installed + backfill done"
+else
+  warn "Migration not found at $TRIGGER_MJS — skipping"
+fi
+
+log "4b/6  portfolio backfill (idempotent — skips already-set rows)"
 BACKFILL_SQL="$APP_DIR/prisma/scripts/backfill-portfolio.sql"
 if [[ -f "$BACKFILL_SQL" ]]; then
   psql "$DATABASE_URL" -f "$BACKFILL_SQL" -v ON_ERROR_STOP=1 --quiet \
