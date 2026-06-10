@@ -59,23 +59,27 @@ log "6/6  PM2 restart"
 SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
 PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"
 
+# All PM2 operations run as the app user (rf) so processes join the correct
+# PM2 daemon — not the root daemon.
+PM2="sudo -u rf pm2"
+
 # Scraper — long-running daemon; manages its own per-source schedule internally.
 # SCRAPER_INTERVAL in .env controls the tick frequency (default: @every 1h).
-if pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
-  pm2 restart "$SCRAPER_PM2_NAME"
+if $PM2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
+  $PM2 restart "$SCRAPER_PM2_NAME"
   ok "Restarted '$SCRAPER_PM2_NAME'"
 else
-  pm2 start bin/scraper \
+  $PM2 start "$APP_DIR/bin/scraper" \
     --name "$SCRAPER_PM2_NAME" \
     --interpreter none
   ok "Started '$SCRAPER_PM2_NAME' (ticks per SCRAPER_INTERVAL; per-source schedule from DB)"
 fi
 
 # Promoter — cron every 2 hours (promotes staged data to public.rebates)
-if pm2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
+if $PM2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
   ok "Promoter cron '$PROMOTER_PM2_NAME' already registered — no change needed"
 else
-  pm2 start bin/promoter \
+  $PM2 start "$APP_DIR/bin/promoter" \
     --name "$PROMOTER_PM2_NAME" \
     --interpreter none \
     --cron '0 */2 * * *' \
@@ -83,7 +87,7 @@ else
   ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
 fi
 
-pm2 save >/dev/null
+$PM2 save >/dev/null
 
 echo ""
 echo -e "  ${GREEN}${BOLD}Deploy complete.${NC}"
