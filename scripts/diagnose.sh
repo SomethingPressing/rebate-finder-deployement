@@ -15,10 +15,18 @@ warn()    { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 fail()    { echo -e "  ${RED}✖${NC}  $*"; }
 info()    { echo -e "     $*"; }
 
-PM2="sudo -u rf pm2"
 SCRAPER_DIR="${SCRAPER_DIR:-/home/rf/apps/incenva-scraper-service}"
 APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
 ENV_FILE="$SCRAPER_DIR/.env"
+
+# Use plain pm2 if already running as rf, otherwise sudo -u rf pm2
+if [[ "$(whoami)" == "rf" ]]; then
+  PM2="pm2"
+  GIT="git"
+else
+  PM2="sudo -u rf pm2"
+  GIT="$GIT"
+fi
 
 # ── 1. PM2 process status ────────────────────────────────────────────────────
 section "PM2 processes (rf daemon)"
@@ -40,18 +48,18 @@ fi
 section "Git state (scraper repo)"
 if [[ -d "$SCRAPER_DIR/.git" ]]; then
   cd "$SCRAPER_DIR"
-  info "Branch  : $(sudo -u rf git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-  info "Commit  : $(sudo -u rf git log -1 --format='%h %s' 2>/dev/null)"
-  info "Date    : $(sudo -u rf git log -1 --format='%ci' 2>/dev/null)"
-  DIRTY=$(sudo -u rf git status --porcelain 2>/dev/null | wc -l)
+  info "Branch  : $($GIT rev-parse --abbrev-ref HEAD 2>/dev/null)"
+  info "Commit  : $($GIT log -1 --format='%h %s' 2>/dev/null)"
+  info "Date    : $($GIT log -1 --format='%ci' 2>/dev/null)"
+  DIRTY=$($GIT status --porcelain 2>/dev/null | wc -l)
   if [[ "$DIRTY" -gt 0 ]]; then
     warn "$DIRTY uncommitted change(s)"
   else
     ok "Working tree clean"
   fi
   # Check if local is behind remote
-  sudo -u rf git fetch origin main --quiet 2>/dev/null || true
-  BEHIND=$(sudo -u rf git rev-list HEAD..origin/main --count 2>/dev/null || echo "?")
+  $GIT fetch origin main --quiet 2>/dev/null || true
+  BEHIND=$($GIT rev-list HEAD..origin/main --count 2>/dev/null || echo "?")
   if [[ "$BEHIND" == "0" ]]; then
     ok "Up to date with origin/main"
   else
