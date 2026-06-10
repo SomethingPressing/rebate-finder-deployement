@@ -84,7 +84,8 @@ if command -v apt-get &>/dev/null; then
     libxrender1 \
     libxss1 \
     libxtst6 \
-    xdg-utils 2>&1 | tail -5
+    xdg-utils \
+    libasound2t64 2>&1 | tail -5
   ok "Chromium system dependencies installed"
 else
   warn "apt-get not found — skipping Chromium system deps. Install them manually if go-rod/chromium fails to launch."
