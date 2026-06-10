@@ -16,16 +16,15 @@ ok()   { echo -e "  ${GREEN}✔${NC}  $*"; }
 warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-ENV_FILE="$PROJECT_DIR/.env"
-PM2_APP_NAME="${PM2_APP_NAME:-Incenva Scraper}"
+APP_DIR="${APP_DIR:-/home/rf/apps/incenva-scraper-service}"
+ENV_FILE="$APP_DIR/.env"
 
-cd "$PROJECT_DIR"
+[[ -d "$APP_DIR" ]] || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
+[[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
 
-[[ -f "$ENV_FILE" ]] || fail ".env not found. Run setup-server.sh first."
+cd "$APP_DIR"
 
-export PATH="$PATH:/usr/local/go/bin"
+export PATH="/usr/local/go/bin:$PATH"
 command -v go &>/dev/null || fail "go not found in PATH. Is Go installed at /usr/local/go?"
 
 log "1/6  git pull"
