@@ -58,6 +58,7 @@ log "6/6  PM2 restart"
 
 SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
 PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"
+REFRESH_PM2_NAME="${REFRESH_PM2_NAME:-incenva-refresh}"
 
 # All PM2 operations run as the app user (rf) so processes join the correct
 # PM2 daemon — not the root daemon.
@@ -85,6 +86,31 @@ else
     --cron '0 */2 * * *' \
     --no-autorestart
   ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
+fi
+
+# Daily refresh — re-scrapes programs not updated in the last 7 days and
+# resets their promotion status so the promoter pushes fresh data to live.
+# Runs at 03:00 UTC daily via a wrapper script that sets RUN_ONCE=true.
+REFRESH_WRAPPER="$APP_DIR/bin/run-refresh.sh"
+cat > "$REFRESH_WRAPPER" << 'WRAPPER'
+#!/usr/bin/env bash
+# Wrapper for PM2 cron — sets RUN_ONCE so the binary exits after one pass.
+cd "$(dirname "$0")/.."
+source .env 2>/dev/null || true
+RUN_ONCE=true ./bin/scraper --force-refresh
+WRAPPER
+chmod +x "$REFRESH_WRAPPER"
+sudo chown rf:rf "$REFRESH_WRAPPER"
+
+if $PM2 list 2>/dev/null | grep -q "$REFRESH_PM2_NAME"; then
+  ok "Refresh cron '$REFRESH_PM2_NAME' already registered — no change needed"
+else
+  $PM2 start "$REFRESH_WRAPPER" \
+    --name "$REFRESH_PM2_NAME" \
+    --interpreter bash \
+    --cron '0 3 * * *' \
+    --no-autorestart
+  ok "Registered '$REFRESH_PM2_NAME' (daily at 03:00 UTC, refreshes programs >7 days old)"
 fi
 
 $PM2 save >/dev/null
