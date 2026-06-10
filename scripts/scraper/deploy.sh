@@ -67,8 +67,7 @@ if pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
 else
   pm2 start bin/scraper \
     --name "$SCRAPER_PM2_NAME" \
-    --interpreter none \
-    --env-file "$ENV_FILE"
+    --interpreter none
   ok "Started '$SCRAPER_PM2_NAME' (ticks per SCRAPER_INTERVAL; per-source schedule from DB)"
 fi
 
@@ -80,8 +79,7 @@ else
     --name "$PROMOTER_PM2_NAME" \
     --interpreter none \
     --cron '0 */2 * * *' \
-    --no-autorestart \
-    --env-file "$ENV_FILE"
+    --no-autorestart
   ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
 fi
 
