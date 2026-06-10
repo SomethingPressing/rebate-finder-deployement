@@ -129,6 +129,18 @@ else
   ok "No stuck runs"
 fi
 
+# ── 7b. Next.js app restart count warning ───────────────────────────────────
+section "Next.js app health"
+RESTARTS=$($PM2 describe "incenva-rebate-finder" 2>/dev/null \
+  | grep -E 'restart time' | awk '{print $NF}' | head -1)
+if [[ -n "$RESTARTS" && "$RESTARTS" -gt 10 ]]; then
+  warn "incenva-rebate-finder has restarted ${RESTARTS} times — likely crash-looping"
+  info "Last 30 lines of Next.js error log:"
+  $PM2 logs "incenva-rebate-finder" --lines 30 --err --nostream 2>/dev/null || true
+else
+  ok "incenva-rebate-finder restart count: ${RESTARTS:-unknown}"
+fi
+
 # ── 8. Last 60 lines of scraper PM2 logs ────────────────────────────────────
 section "Recent scraper logs (last 60 lines)"
 LOG_PATH=$($PM2 describe incenva-scraper 2>/dev/null \
