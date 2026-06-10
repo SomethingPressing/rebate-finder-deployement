@@ -39,7 +39,7 @@ export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
 cd "$APP_DIR"
 
 log "1/5  git pull"
-git pull
+sudo -u rf git pull origin main
 ok "Code updated"
 
 log "2/5  pnpm install"

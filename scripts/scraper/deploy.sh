@@ -28,7 +28,7 @@ export PATH="/usr/local/go/bin:$PATH"
 command -v go &>/dev/null || fail "go not found in PATH. Is Go installed at /usr/local/go?"
 
 log "1/6  git pull"
-git pull
+sudo -u rf git pull origin main
 ok "Code updated"
 
 log "2/6  pnpm install (Node scripts)"
