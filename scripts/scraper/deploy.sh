@@ -60,13 +60,20 @@ log "6/6  PM2 restart"
 SCRAPER_PM2_NAME="${SCRAPER_PM2_NAME:-incenva-scraper}"
 PROMOTER_PM2_NAME="${PROMOTER_PM2_NAME:-incenva-promoter}"
 
+# Scraper — long-running daemon; manages its own per-source schedule internally.
+# SCRAPER_INTERVAL in .env controls the tick frequency (default: @every 1h).
 if pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
   pm2 restart "$SCRAPER_PM2_NAME"
   ok "Restarted '$SCRAPER_PM2_NAME'"
 else
-  warn "PM2 process '$SCRAPER_PM2_NAME' not found — run setup-server.sh first"
+  pm2 start bin/scraper \
+    --name "$SCRAPER_PM2_NAME" \
+    --interpreter none \
+    --env-file "$ENV_FILE"
+  ok "Started '$SCRAPER_PM2_NAME' (ticks per SCRAPER_INTERVAL; per-source schedule from DB)"
 fi
 
+# Promoter — cron every 2 hours (promotes staged data to public.rebates)
 if pm2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
   ok "Promoter cron '$PROMOTER_PM2_NAME' already registered — no change needed"
 else
@@ -74,7 +81,8 @@ else
     --name "$PROMOTER_PM2_NAME" \
     --interpreter none \
     --cron '0 */2 * * *' \
-    --no-autorestart
+    --no-autorestart \
+    --env-file "$ENV_FILE"
   ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
 fi
 
