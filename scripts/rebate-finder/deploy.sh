@@ -98,8 +98,9 @@ pnpm build
 ok "Build complete"
 
 log "6/6  PM2 restart"
-if pm2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
-  pm2 restart "$PM2_APP_NAME"
+PM2="sudo -u rf pm2"
+if $PM2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
+  $PM2 restart "$PM2_APP_NAME"
   ok "Restarted '$PM2_APP_NAME'"
 else
   warn "PM2 process '$PM2_APP_NAME' not found — run setup-server.sh first"
@@ -108,7 +109,7 @@ fi
 # Note: the promoter PM2 cron is owned by the scraper service (scripts/scraper/deploy.sh).
 # It runs the Go binary directly every 2 hours — nothing to do here.
 
-pm2 save >/dev/null
+$PM2 save >/dev/null
 
 hr
 echo ""
