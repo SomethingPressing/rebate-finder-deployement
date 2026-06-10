@@ -47,6 +47,50 @@ echo ""
 hr
 
 # ─────────────────────────────────────────────────────────────────────────────
+log "0/4  System packages (Chromium headless dependencies)"
+
+if command -v apt-get &>/dev/null; then
+  apt-get update -qq
+  apt-get install -y --no-install-recommends \
+    ca-certificates \
+    fonts-liberation \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libatspi2.0-0 \
+    libcairo2 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libexpat1 \
+    libfontconfig1 \
+    libgbm1 \
+    libglib2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxext6 \
+    libxfixes3 \
+    libxi6 \
+    libxkbcommon0 \
+    libxrandr2 \
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils 2>&1 | tail -5
+  ok "Chromium system dependencies installed"
+else
+  warn "apt-get not found — skipping Chromium system deps. Install them manually if go-rod/chromium fails to launch."
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 log "1/4  System group and user"
 
 if getent group "$APP_GROUP" &>/dev/null; then
