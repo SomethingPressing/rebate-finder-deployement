@@ -225,6 +225,26 @@ else
   warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*"
 fi
 
+# ── Inject Typesense vars if not already present ──────────────────────────────
+if ! grep -q '^TYPESENSE_API_KEY=' "$ENV_FILE" 2>/dev/null; then
+  _TS_KEY="${TYPESENSE_API_KEY:-your-typesense-api-key}"
+  cat >> "$ENV_FILE" << EOF
+
+# ── Search — Typesense ────────────────────────────────────────────────────────
+TYPESENSE_HOST=localhost
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http
+TYPESENSE_API_KEY=$_TS_KEY
+EOF
+  chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
+  ok "Typesense vars appended to $ENV_FILE"
+  if [[ "$_TS_KEY" == "your-typesense-api-key" ]]; then
+    warn "TYPESENSE_API_KEY not set — placeholder written. Update $ENV_FILE after running scripts/typesense/setup-server.sh"
+  fi
+else
+  skip "Typesense vars already in $ENV_FILE"
+fi
+
 # Load env vars needed by Prisma, the promoter, and the Go scraper
 DATABASE_URL="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
 SCRAPER_DB_SCHEMA="$(grep -E '^SCRAPER_DB_SCHEMA=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)"
