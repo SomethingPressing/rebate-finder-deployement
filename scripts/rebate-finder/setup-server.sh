@@ -227,7 +227,14 @@ fi
 
 # ── Inject Typesense vars if not already present ──────────────────────────────
 if ! grep -q '^TYPESENSE_API_KEY=' "$ENV_FILE" 2>/dev/null; then
-  _TS_KEY="${TYPESENSE_API_KEY:-your-typesense-api-key}"
+  # Priority: explicit env var → key from installed Typesense config → placeholder
+  _TS_KEY="${TYPESENSE_API_KEY:-}"
+  if [[ -z "$_TS_KEY" && -f "/etc/typesense/typesense-server.ini" ]]; then
+    _TS_KEY="$(grep -E '^api-key\s*=' /etc/typesense/typesense-server.ini 2>/dev/null \
+               | head -1 | awk -F'=' '{print $2}' | tr -d ' \t')"
+  fi
+  _TS_KEY="${_TS_KEY:-your-typesense-api-key}"
+
   cat >> "$ENV_FILE" << EOF
 
 # ── Search — Typesense ────────────────────────────────────────────────────────

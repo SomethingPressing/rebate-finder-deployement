@@ -10,9 +10,9 @@
 #   5.  Print public keys — PAUSE for you to add them to GitHub
 #   6.  Verify all three GitHub connections
 #   7.  Clone this deployment repo
-#   8.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
-#   9.  Run Go scraper setup    (Go, build binaries)
-#   10. Install Typesense search engine (port 8108)
+#   8.  Install Typesense search engine (port 8108)
+#   9.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
+#   10. Run Go scraper setup    (Go, build binaries)
 #   11. Configure nginx reverse proxy (port 80 → localhost:3000)
 #   12. Obtain SSL certificate via Let's Encrypt (Certbot) — skipped if no domain
 #
@@ -277,25 +277,26 @@ fi
 SCRIPT_DIR="$DEPLOY_DIR/scripts"
 
 # ═════════════════════════════════════════════════════════════════════════════
-# STEP 8 — Next.js app setup
+# STEP 8 — Typesense search engine
+# Runs before the app so the API key is available when setup-server.sh writes .env
 # ═════════════════════════════════════════════════════════════════════════════
-log "Step 8/12 — Next.js app (Node, pnpm, PM2, PostgreSQL, build)"
+log "Step 8/12 — Typesense search engine"
+
+bash "$SCRIPT_DIR/typesense/setup-server.sh"
+
+# ═════════════════════════════════════════════════════════════════════════════
+# STEP 9 — Next.js app setup
+# ═════════════════════════════════════════════════════════════════════════════
+log "Step 9/12 — Next.js app (Node, pnpm, PM2, PostgreSQL, build)"
 
 APP_REPO_URL="$APP_REPO" APP_DOMAIN="$APP_DOMAIN" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
 
 # ═════════════════════════════════════════════════════════════════════════════
-# STEP 9 — Go scraper setup
+# STEP 10 — Go scraper setup
 # ═════════════════════════════════════════════════════════════════════════════
-log "Step 9/12 — Go scraper service"
+log "Step 10/12 — Go scraper service"
 
 APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
-
-# ═════════════════════════════════════════════════════════════════════════════
-# STEP 10 — Typesense
-# ═════════════════════════════════════════════════════════════════════════════
-log "Step 10/12 — Typesense search engine"
-
-bash "$SCRIPT_DIR/typesense/setup-server.sh"
 
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 11 — Nginx reverse proxy
