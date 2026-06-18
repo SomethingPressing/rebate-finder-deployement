@@ -62,8 +62,8 @@ hr
 log "1/4  APT prerequisites"
 
 MISSING_PKGS=()
-for pkg in apt-transport-https gnupg ca-certificates curl; do
-  dpkg -s "$pkg" &>/dev/null || MISSING_PKGS+=("$pkg")
+for pkg in curl dpkg; do
+  command -v "$pkg" &>/dev/null || MISSING_PKGS+=("$pkg")
 done
 
 if [[ ${#MISSING_PKGS[@]} -eq 0 ]]; then
@@ -75,7 +75,8 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# STEP 2 — Install Typesense
+# STEP 2 — Install Typesense via direct .deb download
+# The APT repo key endpoint is unreliable; the release .deb is stable.
 # ─────────────────────────────────────────────────────────────────────────────
 log "2/4  Typesense $TYPESENSE_VERSION"
 
@@ -83,27 +84,12 @@ if dpkg -s typesense &>/dev/null; then
   INSTALLED_VER="$(dpkg-query -W -f='${Version}' typesense 2>/dev/null || echo 'unknown')"
   skip "Typesense $INSTALLED_VER already installed"
 else
-  KEYRING_PATH="/usr/share/keyrings/typesense-archive-keyring.gpg"
+  DEB_URL="https://dl.typesense.org/releases/${TYPESENSE_VERSION}/typesense-server-${TYPESENSE_VERSION}-amd64.deb"
+  DEB_FILE="/tmp/typesense-server-${TYPESENSE_VERSION}-amd64.deb"
 
-  if [[ ! -f "$KEYRING_PATH" ]]; then
-    curl -fsSL "https://dl.typesense.org/deb/pubkey.gpg" \
-      | gpg --dearmor -o "$KEYRING_PATH"
-    ok "Added Typesense APT signing key"
-  else
-    skip "APT signing key"
-  fi
-
-  APT_SOURCE="/etc/apt/sources.list.d/typesense.list"
-  if [[ ! -f "$APT_SOURCE" ]]; then
-    echo "deb [signed-by=$KEYRING_PATH] https://dl.typesense.org/deb stable main" \
-      > "$APT_SOURCE"
-    ok "Added Typesense APT source"
-  else
-    skip "APT source list"
-  fi
-
-  apt-get update -qq
-  apt-get install -y "typesense=$TYPESENSE_VERSION" >/dev/null
+  curl -fsSL "$DEB_URL" -o "$DEB_FILE"
+  apt-get install -y "$DEB_FILE" >/dev/null
+  rm -f "$DEB_FILE"
   ok "Installed Typesense $TYPESENSE_VERSION"
 fi
 
