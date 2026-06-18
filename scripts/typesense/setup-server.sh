@@ -98,7 +98,15 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 log "3/4  Data directory and configuration"
 
-# Data directory — owned by the 'typesense' user created by the APT package
+# Ensure the typesense system user exists (the .deb normally creates it)
+if ! id typesense &>/dev/null; then
+  useradd --system --no-create-home --shell /usr/sbin/nologin typesense
+  ok "Created system user 'typesense'"
+else
+  skip "System user 'typesense' already exists"
+fi
+
+# Data directory
 if [[ -d "$TYPESENSE_DATA_DIR" ]]; then
   skip "Data directory $TYPESENSE_DATA_DIR"
 else
