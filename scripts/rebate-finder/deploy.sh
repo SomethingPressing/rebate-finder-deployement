@@ -26,6 +26,7 @@ hr()   { echo -e "${BLUE}──────────────────�
 APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
 ENV_FILE="$APP_DIR/.env"
 PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
+MAINTENANCE_FILE="$APP_DIR/.maintenance"
 
 [[ -d "$APP_DIR" ]]  || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
 [[ -f "$ENV_FILE" ]] || fail ".env not found at $ENV_FILE. Run setup-server.sh first."
@@ -38,15 +39,24 @@ export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
 
 cd "$APP_DIR"
 
-log "1/5  git pull"
+# ── Maintenance mode ON ───────────────────────────────────────────────────────
+# The banner is shown to all visitors until the file is removed at the end.
+# If this script exits non-zero (any step fails), the file remains intentionally
+# so the site stays in maintenance mode. Remove it manually once the issue is
+# resolved, or re-run deploy.sh to complete the deploy.
+log "0/6  Enabling maintenance mode"
+echo "Deployment in progress — back shortly" > "$MAINTENANCE_FILE"
+ok "Maintenance mode ON (.maintenance created)"
+
+log "1/6  git pull"
 sudo -u rf git pull origin main
 ok "Code updated"
 
-log "2/5  pnpm install"
+log "2/6  pnpm install"
 pnpm install --frozen-lockfile 2>&1 | tail -3
 ok "Dependencies up to date"
 
-log "3/6  db backup + prisma db push (schema sync)"
+log "3/6  DB backup + prisma db push (schema sync)"
 BACKUP_DIR="$APP_DIR/backups"
 mkdir -p "$BACKUP_DIR"
 BACKUP_FILE="$BACKUP_DIR/deploy_$(date '+%Y-%m-%d_%H-%M').sql"
@@ -111,11 +121,18 @@ fi
 
 $PM2 save >/dev/null
 
+# ── Maintenance mode OFF ──────────────────────────────────────────────────────
+rm -f "$MAINTENANCE_FILE"
+ok "Maintenance mode OFF (.maintenance removed)"
+
 hr
 echo ""
 echo -e "  ${GREEN}${BOLD}Deploy complete.${NC}"
 echo ""
 echo "  Note: seed data was NOT touched. To update seed data separately:"
 echo "    bash scripts/rebate-finder/seed.sh"
+echo ""
+echo "  If something went wrong and .maintenance still exists, remove it with:"
+echo "    rm -f $MAINTENANCE_FILE"
 echo ""
 hr
