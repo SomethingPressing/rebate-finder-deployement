@@ -222,7 +222,7 @@ else
   chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
   ok "Created $ENV_FILE (JWT_SECRET auto-generated)"
-  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*"
+  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY (required). Optional: BREVO_API_KEY + BREVO_SENDER_EMAIL for email notifications."
 fi
 
 # ── Inject Typesense vars if not already present ──────────────────────────────
@@ -320,7 +320,7 @@ echo "  Logs:       pm2 logs '$PM2_APP_NAME'"
 echo ""
 echo -e "  ${YELLOW}Next steps:${NC}"
 echo "  1. Edit $ENV_FILE"
-echo "     → OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
+echo "     → OPENAI_API_KEY, NEXT_BASE_URL (required). Optional: BREVO_API_KEY + BREVO_SENDER_EMAIL"
 echo "  2. Rebuild after editing .env:"
 echo "     bash scripts/rebate-finder/deploy.sh"
 echo ""
