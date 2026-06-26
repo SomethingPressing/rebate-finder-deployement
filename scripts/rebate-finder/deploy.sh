@@ -117,7 +117,9 @@ else
 fi
 
 # Note: the promoter PM2 cron is owned by the scraper service (scripts/scraper/deploy.sh).
-# It runs the Go binary directly every 2 hours — nothing to do here.
+# It runs via a wrapper that calls the Go binary + tsx scripts/check-program-links.ts
+# after each promotion run. The nightly link health check scheduler starts automatically
+# with the app (wired in server.ts). No additional PM2 setup needed here.
 
 $PM2 save >/dev/null
 
