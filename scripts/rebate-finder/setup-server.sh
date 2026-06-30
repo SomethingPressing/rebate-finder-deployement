@@ -222,7 +222,34 @@ else
   chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
   ok "Created $ENV_FILE (JWT_SECRET auto-generated)"
-  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*"
+  warn "Review $ENV_FILE and fill in: OPENAI_API_KEY (required). Optional: BREVO_API_KEY + BREVO_SENDER_EMAIL for email notifications."
+fi
+
+# ── Inject Typesense vars if not already present ──────────────────────────────
+if ! grep -q '^TYPESENSE_API_KEY=' "$ENV_FILE" 2>/dev/null; then
+  # Priority: explicit env var → key from installed Typesense config → placeholder
+  _TS_KEY="${TYPESENSE_API_KEY:-}"
+  if [[ -z "$_TS_KEY" && -f "/etc/typesense/typesense-server.ini" ]]; then
+    _TS_KEY="$(grep -E '^api-key\s*=' /etc/typesense/typesense-server.ini 2>/dev/null \
+               | head -1 | awk -F'=' '{print $2}' | tr -d ' \t')"
+  fi
+  _TS_KEY="${_TS_KEY:-your-typesense-api-key}"
+
+  cat >> "$ENV_FILE" << EOF
+
+# ── Search — Typesense ────────────────────────────────────────────────────────
+TYPESENSE_HOST=localhost
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http
+TYPESENSE_API_KEY=$_TS_KEY
+EOF
+  chown "$APP_USER:$APP_GROUP" "$ENV_FILE"
+  ok "Typesense vars appended to $ENV_FILE"
+  if [[ "$_TS_KEY" == "your-typesense-api-key" ]]; then
+    warn "TYPESENSE_API_KEY not set — placeholder written. Update $ENV_FILE after running scripts/typesense/setup-server.sh"
+  fi
+else
+  skip "Typesense vars already in $ENV_FILE"
 fi
 
 # Load env vars needed by Prisma, the promoter, and the Go scraper
@@ -293,7 +320,7 @@ echo "  Logs:       pm2 logs '$PM2_APP_NAME'"
 echo ""
 echo -e "  ${YELLOW}Next steps:${NC}"
 echo "  1. Edit $ENV_FILE"
-echo "     → OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL"
+echo "     → OPENAI_API_KEY, NEXT_BASE_URL (required). Optional: BREVO_API_KEY + BREVO_SENDER_EMAIL"
 echo "  2. Rebuild after editing .env:"
 echo "     bash scripts/rebate-finder/deploy.sh"
 echo ""

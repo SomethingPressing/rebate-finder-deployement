@@ -17,6 +17,7 @@ warn() { echo -e "  ${YELLOW}⚠${NC}  $*"; }
 fail() { echo -e "\n${RED}[error]${NC} $*\n"; exit 1; }
 
 APP_DIR="${APP_DIR:-/home/rf/apps/incenva-scraper-service}"
+CONSUMER_APP_DIR="${CONSUMER_APP_DIR:-/home/rf/apps/rebate-finder}"
 ENV_FILE="$APP_DIR/.env"
 
 [[ -d "$APP_DIR" ]] || fail "App directory not found at $APP_DIR. Run setup-server.sh first."
@@ -77,15 +78,48 @@ else
 fi
 
 # Promoter — cron every 2 hours (promotes staged data to public.rebates)
+# Uses a wrapper script so that after each promotion run, the rebate-finder
+# link health check fires immediately for any published rebate whose
+# program_url was just updated by the promoter.
+PROMOTER_WRAPPER="$APP_DIR/bin/run-promoter.sh"
+cat > "$PROMOTER_WRAPPER" << WRAPPER
+#!/usr/bin/env bash
+# Wrapper for PM2 cron — runs the Go promoter then triggers a link health check.
+set -euo pipefail
+SCRAPER_DIR="\$(cd "\$(dirname "\$0")/.." && pwd)"
+CONSUMER_DIR="${CONSUMER_APP_DIR}"
+STARTED_AT="\$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+source "\$SCRAPER_DIR/.env" 2>/dev/null || true
+export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
+
+"\$SCRAPER_DIR/bin/promoter"
+PROMOTER_EXIT=\$?
+
+# Only run the link check if the promoter succeeded and the consumer app exists.
+if [[ \$PROMOTER_EXIT -eq 0 && -d "\$CONSUMER_DIR" ]]; then
+  echo "[promoter-wrapper] running link health check (updatedSince=\$STARTED_AT)..."
+  source "\$CONSUMER_DIR/.env" 2>/dev/null || true
+  cd "\$CONSUMER_DIR"
+  npx --yes tsx scripts/check-program-links.ts --since="\$STARTED_AT" || \
+    echo "[promoter-wrapper] link check failed (non-fatal)"
+fi
+
+exit \$PROMOTER_EXIT
+WRAPPER
+chmod +x "$PROMOTER_WRAPPER"
+sudo chown rf:rf "$PROMOTER_WRAPPER"
+
 if $PM2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
-  ok "Promoter cron '$PROMOTER_PM2_NAME' already registered — no change needed"
+  $PM2 restart "$PROMOTER_PM2_NAME" 2>/dev/null || true
+  ok "Restarted '$PROMOTER_PM2_NAME' (wrapper updated)"
 else
-  $PM2 start "$APP_DIR/bin/promoter" \
+  $PM2 start "$PROMOTER_WRAPPER" \
     --name "$PROMOTER_PM2_NAME" \
-    --interpreter none \
+    --interpreter bash \
     --cron '0 */2 * * *' \
     --no-autorestart
-  ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
+  ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours, with post-promotion link check)"
 fi
 
 # Daily refresh — re-scrapes programs not updated in the last 7 days and
