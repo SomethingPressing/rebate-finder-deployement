@@ -39,7 +39,7 @@ APP_DIR="${APP_DIR:-/home/rf/apps/rebate-finder}"
 APP_REPO_URL="${APP_REPO_URL:-}"                  # required if APP_DIR doesn't exist yet
 DB_NAME="${DB_NAME:-rebate_finder}"
 DB_USER="${DB_USER:-rf}"
-NODE_MAJOR="${NODE_MAJOR:-20}"
+NODE_MAJOR="${NODE_MAJOR:-24}"
 PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
 
 ENV_FILE="$APP_DIR/.env"

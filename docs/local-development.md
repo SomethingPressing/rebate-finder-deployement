@@ -8,7 +8,7 @@ Setup guide for running both the **Incenva Rebate Finder** (Next.js) and the **I
 
 | Tool | Version | Install |
 |------|---------|---------|
-| Node.js | 20 LTS | https://nodejs.org or `brew install node@20` |
+| Node.js | 24 LTS | https://nodejs.org or `brew install node@24` |
 | pnpm | 9.x | `npm install -g pnpm` |
 | Go | 1.24+ | https://go.dev/dl/ or `brew install go` |
 | PostgreSQL | 14+ | Local install or Supabase cloud |

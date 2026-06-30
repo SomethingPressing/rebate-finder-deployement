@@ -12,7 +12,7 @@ All application processes run under a dedicated `rf` system user. Commands that 
 2. [Automated setup (recommended)](#2-automated-setup-recommended)
 3. [Manual setup](#3-manual-setup)
    - 3.1 [System user](#31-system-user)
-   - 3.2 [Node.js 20 LTS](#32-nodejs-20-lts)
+   - 3.2 [Node.js 24 LTS](#32-nodejs-24-lts)
    - 3.3 [pnpm](#33-pnpm)
    - 3.4 [Go 1.24](#34-go-124)
    - 3.5 [PostgreSQL 16](#35-postgresql-16)
@@ -153,7 +153,7 @@ bash scripts/rebate-finder/setup-server.sh
 
 What it does:
 - Creates Linux `rf` user + group
-- Installs Node.js 20, pnpm, PM2
+- Installs Node.js 24 LTS, pnpm, PM2
 - Installs PostgreSQL, creates `rf` DB role + `rebate_finder` database
 - Generates `.env` with a random `JWT_SECRET` and `DATABASE_URL`
 - Clones / installs the app, pushes Prisma schema, seeds the DB
@@ -213,13 +213,13 @@ id rf   # uid=1001(rf) gid=1001(rf) groups=1001(rf),27(sudo)
 
 ---
 
-### 3.2 Node.js 20 LTS
+### 3.2 Node.js 24 LTS
 
 ```bash
 # run as root
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
 apt-get install -y nodejs
-node -v   # v20.x.x
+node -v   # v24.x.x
 ```
 
 ---
