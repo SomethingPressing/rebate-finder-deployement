@@ -96,11 +96,16 @@ export DATABASE_URL SCRAPER_DB_SCHEMA PROMOTER_SOURCE_PRIORITY
 "\$SCRAPER_DIR/bin/promoter"
 PROMOTER_EXIT=\$?
 
-# Only run the link check if the promoter succeeded and the consumer app exists.
+# Only run post-promotion jobs if the promoter succeeded and the consumer app exists.
 if [[ \$PROMOTER_EXIT -eq 0 && -d "\$CONSUMER_DIR" ]]; then
-  echo "[promoter-wrapper] running link health check (updatedSince=\$STARTED_AT)..."
   source "\$CONSUMER_DIR/.env" 2>/dev/null || true
   cd "\$CONSUMER_DIR"
+
+  echo "[promoter-wrapper] parsing application steps (updatedSince=\$STARTED_AT)..."
+  npx --yes tsx scripts/parse-application-steps.ts --since="\$STARTED_AT" || \
+    echo "[promoter-wrapper] step parse failed (non-fatal)"
+
+  echo "[promoter-wrapper] running link health check (updatedSince=\$STARTED_AT)..."
   npx --yes tsx scripts/check-program-links.ts --since="\$STARTED_AT" || \
     echo "[promoter-wrapper] link check failed (non-fatal)"
 fi
