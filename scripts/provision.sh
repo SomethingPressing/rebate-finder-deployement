@@ -361,8 +361,63 @@ ssh_run "$DROPLET_IP" \
     '${ADMIN_EMAIL}' '${ADMIN_PASSWORD}' '${ADMIN_NAME}' super_admin"
 ok "Admin user created"
 
-# ── Step 9: Health check ──────────────────────────────────────────────────────
-log "Step 9 — Health check"
+# ── Step 9: CI deploy key ────────────────────────────────────────────────────
+log "Step 9 — Set up GitHub Actions CI deploy key"
+
+CI_KEY_FILE="$(mktemp /tmp/incenva_ci_deploy_XXXXXX)"
+chmod 600 "$CI_KEY_FILE"
+ssh-keygen -t ed25519 -f "$CI_KEY_FILE" -N "" -C "ci-deploy@incenva" >/dev/null 2>&1
+CI_PUB_KEY="$(cat "${CI_KEY_FILE}.pub")"
+CI_PRIV_KEY="$(cat "$CI_KEY_FILE")"
+
+# Add CI public key to rf user's authorized_keys on the server
+ssh_run_heredoc "$DROPLET_IP" << CISSH
+set -euo pipefail
+mkdir -p /home/rf/.ssh
+echo "${CI_PUB_KEY}" >> /home/rf/.ssh/authorized_keys
+sort -u /home/rf/.ssh/authorized_keys -o /home/rf/.ssh/authorized_keys
+chown -R rf:rf /home/rf/.ssh
+chmod 600 /home/rf/.ssh/authorized_keys
+echo "  ✔  CI public key added to authorized_keys"
+CISSH
+
+ok "CI public key added to server"
+
+# Try to set GitHub Actions secrets via gh CLI or GitHub API
+CI_SECRETS_SET=false
+GITHUB_REPO="$GITHUB_ORG/rebate-finder"
+
+if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
+  info "gh CLI found — setting GitHub Actions secrets automatically..."
+  gh secret set DEPLOY_HOST            --body "$DROPLET_IP"   --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh secret set DEPLOY_SSH_USER        --body "rf"             --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh secret set DEPLOY_SSH_PRIVATE_KEY --body "$CI_PRIV_KEY"  --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh secret set DEPLOY_SSH_PORT        --body "22"             --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh variable set DEPLOY_PATH          --body "/home/rf/apps/rebate-finder" --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh variable set DEPLOY_BRANCH        --body "main"           --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh variable set PM2_PROCESS          --body "Rebate Finder"  --repo "$GITHUB_REPO" 2>/dev/null && \
+  gh variable set PRISMA_DEPLOY        --body "db-push"        --repo "$GITHUB_REPO" 2>/dev/null && \
+  CI_SECRETS_SET=true
+  if [[ "$CI_SECRETS_SET" == "true" ]]; then
+    ok "GitHub Actions secrets and variables set via gh CLI"
+  else
+    warn "gh CLI available but secret set failed — will print manual instructions"
+    CI_SECRETS_SET=false
+  fi
+else
+  info "gh CLI not found — will print CI key for manual GitHub setup"
+fi
+
+# Save CI private key to a local file regardless, so it's not lost
+CI_KEY_SAVE="$HOME/.ssh/incenva_ci_deploy_${CLIENT_NAME}"
+cp "$CI_KEY_FILE" "$CI_KEY_SAVE"
+cp "${CI_KEY_FILE}.pub" "${CI_KEY_SAVE}.pub"
+chmod 600 "$CI_KEY_SAVE"
+rm -f "$CI_KEY_FILE" "${CI_KEY_FILE}.pub"
+ok "CI private key saved to $CI_KEY_SAVE"
+
+# ── Step 10: Health check ─────────────────────────────────────────────────────
+log "Step 10 — Health check"
 
 # Give PM2 a moment to finish starting
 sleep 5
@@ -399,12 +454,32 @@ echo ""
 echo -e "  ${BOLD}SSH access:${NC}"
 echo -e "    ssh root@$DROPLET_IP"
 echo ""
+echo -e "  ${BOLD}CI deploy key:${NC}  $CI_KEY_SAVE"
+echo ""
+if [[ "$CI_SECRETS_SET" == "true" ]]; then
+  echo -e "  ${GREEN}✔${NC}  GitHub Actions secrets set automatically — CI/CD is ready."
+  echo -e "      Push to main to trigger your first deploy."
+else
+  echo -e "  ${YELLOW}⚠${NC}  GitHub Actions secrets need to be added manually."
+  echo -e "      Go to: https://github.com/$GITHUB_ORG/rebate-finder/settings/secrets/actions"
+  echo ""
+  echo -e "      Add these ${BOLD}Secrets${NC}:"
+  echo -e "        DEPLOY_HOST             = $DROPLET_IP"
+  echo -e "        DEPLOY_SSH_USER         = rf"
+  echo -e "        DEPLOY_SSH_PORT         = 22"
+  echo -e "        DEPLOY_SSH_PRIVATE_KEY  = (contents of $CI_KEY_SAVE)"
+  echo ""
+  echo -e "      Add these ${BOLD}Variables${NC}:"
+  echo -e "        DEPLOY_PATH    = /home/rf/apps/rebate-finder"
+  echo -e "        DEPLOY_BRANCH  = main"
+  echo -e "        PM2_PROCESS    = Rebate Finder"
+  echo -e "        PRISMA_DEPLOY  = db-push"
+fi
+echo ""
 echo -e "  ${BOLD}Next steps:${NC}"
 echo -e "    1. Point DNS for $APP_DOMAIN → $DROPLET_IP (if not done)"
 echo -e "    2. Log in to the admin at ${APP_URL}/admin/login"
-echo -e "    3. Configure branding: Admin → Brand Settings"
+echo -e "    3. Configure branding: Admin → Brand"
 echo -e "    4. Configure filters: Admin → Filters → Translate All to Spanish"
-echo -e "    5. Set up GitHub Actions deploy secrets (DEPLOY_HOST=$DROPLET_IP)"
-echo -e "       See: https://github.com/$GITHUB_ORG/rebate-finder/blob/main/docs/deployment-guide.md#3-deploy-the-code"
 hr
 echo ""
