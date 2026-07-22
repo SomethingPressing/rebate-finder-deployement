@@ -64,6 +64,13 @@ DEPLOY_REPO="git@github-rebate-finder-deployement:SomethingPressing/rebate-finde
 APP_REPO="git@github-rebate-finder:SomethingPressing/rebate-finder.git"
 SCRAPER_REPO="git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git"
 
+# ── Non-interactive / automated mode ─────────────────────────────────────────
+# Set GITHUB_PAT to auto-register deploy keys via GitHub API (no human pause).
+# provision.sh sets this automatically; you can also set it manually.
+GITHUB_PAT="${GITHUB_PAT:-}"
+GITHUB_ORG="${GITHUB_ORG:-SomethingPressing}"
+[[ -n "$GITHUB_PAT" ]] && NON_INTERACTIVE=true || NON_INTERACTIVE="${NON_INTERACTIVE:-false}"
+
 hr
 echo ""
 echo -e "  ${BOLD}Incenva — Full Server Setup${NC}"
@@ -200,7 +207,37 @@ declare -a REPO_SLUGS=("rebate-finder" "rebate-finder-scrapers" "rebate-finder-d
 
 if [[ $KEYS_NEW -eq 0 ]]; then
   skip "All keys already existed — skipping GitHub upload step"
+elif [[ -n "$GITHUB_PAT" ]]; then
+  # ── Automated: register keys via GitHub API ──────────────────────────────
+  info "GITHUB_PAT set — auto-registering deploy keys via GitHub API"
+
+  _register_deploy_key() {
+    local repo="$1" key_file="$2"
+    local title="rf@$(hostname)"
+    local pub_key http_code body response
+    pub_key="$(cat "$key_file")"
+    response=$(curl -s -w "\n%{http_code}" -X POST \
+      -H "Authorization: token $GITHUB_PAT" \
+      -H "Accept: application/vnd.github.v3+json" \
+      -H "Content-Type: application/json" \
+      "https://api.github.com/repos/$GITHUB_ORG/$repo/keys" \
+      -d "{\"title\":\"$title\",\"key\":\"$pub_key\",\"read_only\":true}")
+    http_code=$(echo "$response" | tail -1)
+    body=$(echo "$response" | head -n -1)
+    if [[ "$http_code" == "201" ]]; then
+      ok "Registered deploy key: $GITHUB_ORG/$repo"
+    elif echo "$body" | grep -qi "already in use\|key is already"; then
+      skip "Deploy key already registered: $GITHUB_ORG/$repo"
+    else
+      fail "Failed to register deploy key for $repo (HTTP $http_code)\n$body"
+    fi
+  }
+
+  for i in 0 1 2; do
+    _register_deploy_key "${REPO_SLUGS[$i]}" "$SSH_DIR/id_ed25519_${KEY_NAMES[$i]}.pub"
+  done
 else
+  # ── Manual: print keys and wait ──────────────────────────────────────────
   echo ""
   echo -e "  For each repo below:"
   echo -e "  1. Open the GitHub link"
@@ -215,7 +252,7 @@ else
     slug="${REPO_SLUGS[$i]}"
     key_file="$SSH_DIR/id_ed25519_${KEY_NAMES[$i]}.pub"
     echo -e "  ${BOLD}▸ $slug${NC}"
-    echo -e "  ${BLUE}https://github.com/SomethingPressing/$slug/settings/keys${NC}"
+    echo -e "  ${BLUE}https://github.com/$GITHUB_ORG/$slug/settings/keys${NC}"
     echo ""
     echo "    $(cat "$key_file")"
     echo ""
@@ -254,7 +291,12 @@ for attempt in $(seq 1 $RETRIES); do
 
   if [[ $attempt -lt $RETRIES ]]; then
     warn "$FAILED connection(s) failed. Make sure all keys are added on GitHub."
-    pause "Fix the keys on GitHub, then press Enter to try again."
+    if [[ "$NON_INTERACTIVE" == "true" ]]; then
+      info "Non-interactive mode — retrying in 10s..."
+      sleep 10
+    else
+      pause "Fix the keys on GitHub, then press Enter to try again."
+    fi
   else
     fail "$FAILED GitHub connection(s) still failing after $RETRIES attempts.\nSee docs/github-deploy-keys.md for troubleshooting."
   fi
@@ -337,11 +379,8 @@ echo -e "    pm2 logs incenva-rebate-finder"
 echo ""
 echo -e "  ${BOLD}Fill in remaining .env values:${NC}"
 echo -e "    nano $APP_DIR/.env"
-echo -e "    # Required: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,"
-echo -e "    #           SUPABASE_SERVICE_KEY, OPENAI_API_KEY"
-echo ""
-echo -e "    nano $SCRAPER_DIR/.env"
-echo -e "    # Required: REWIRING_AMERICA_API_KEY"
+echo -e "    # Required: OPENAI_API_KEY"
+echo -e "    # Optional: BREVO_API_KEY, BREVO_SENDER_EMAIL, NEXT_PUBLIC_GTM_ID"
 echo ""
 echo -e "  ${BOLD}Rebuild after editing .env:${NC}"
 echo -e "    bash $SCRIPT_DIR/rebate-finder/deploy.sh"

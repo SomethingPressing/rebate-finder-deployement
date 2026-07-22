@@ -14,17 +14,38 @@ Scripts and configuration to deploy the **Incenva Rebate Finder** stack on a fre
 
 ---
 
-## Full server setup — one command
+## Fully automated provisioning (recommended)
 
-Run this on a **fresh Ubuntu 22.04 server** as root, replacing the domain with your real one:
+**One command creates the Droplet, installs everything, seeds the DB, and creates the first admin user — no SSH or GitHub interaction required.**
 
 ```bash
-APP_DOMAIN=dev.incenva.com curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh | sudo bash
+export DO_API_TOKEN=dop_v1_...      # DigitalOcean API token
+export GITHUB_PAT=ghp_...           # GitHub PAT (repo scope) — auto-registers deploy keys
+export OPENAI_API_KEY=sk-...        # OpenAI key
+export APP_DOMAIN=client.incenva.com
+export DO_SSH_KEY_IDS=12345678      # your personal DO SSH key ID (optional, for direct access)
+
+bash scripts/provision.sh
 ```
 
-> **No curl yet?** Run `apt-get update && apt-get install -y curl` first.
+At the end it prints the server IP, admin login URL, and admin credentials. See [`scripts/provision.sh`](scripts/provision.sh) for the full list of options.
 
-The script will pause once to let you add SSH deploy keys to GitHub, then complete the rest automatically.
+---
+
+## Manual setup — one command on the server
+
+Run this on an **existing fresh Ubuntu 22.04 server** as root. With `GITHUB_PAT` set, deploy keys register automatically:
+
+```bash
+export GITHUB_PAT=ghp_...
+APP_DOMAIN=dev.incenva.com \
+  curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh \
+  | sudo bash
+```
+
+Without `GITHUB_PAT`, the script pauses once to let you add SSH deploy keys to GitHub manually.
+
+> **No curl yet?** Run `apt-get update && apt-get install -y curl` first.
 
 ### What bootstrap does (10 steps, all idempotent)
 
@@ -122,7 +143,8 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 
 | Script | When to run |
 |--------|-------------|
-| `scripts/bootstrap.sh` | **First** — complete fresh server setup in one command (includes SSL) |
+| `scripts/provision.sh` | **Zero-to-live** — creates the Droplet, runs bootstrap, seeds DB, creates admin user |
+| `scripts/bootstrap.sh` | **Server setup** — complete fresh server setup in one command (includes SSL) |
 | `scripts/setup-nginx.sh` | Re-configure nginx (domain change, re-install) — also runs SSL |
 | `scripts/setup-ssl.sh` | SSL only — re-issue cert, fix renewal, or add SSL after the fact |
 | `scripts/setup-deploy-keys.sh` | Key rotation or if bootstrap was skipped |
