@@ -53,22 +53,16 @@ Safe to re-run — every step checks if work is already done and skips it.
 nano /home/rf/apps/rebate-finder/.env
 ```
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
-| `SUPABASE_SERVICE_KEY` | Supabase service role key |
-| `OPENAI_API_KEY` | For AI content generation |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `OPENAI_API_KEY` | **Yes** | AI content rewrite, translation, Incenva IQ chat |
+| `BREVO_API_KEY` | No | Transactional email (notification emails) |
+| `BREVO_SENDER_EMAIL` | No | From address for notification emails |
+| `NEXT_PUBLIC_GTM_ID` | No | Google Tag Manager ID (e.g. `GTM-XXXXXXX`) |
+| `TYPESENSE_API_KEY` | No | Fast keyword search — falls back to Postgres if absent |
+| `PROMOTER_SYNC_SECRET` | No | Shared secret used by scraper to trigger Typesense re-index |
 
 Auto-set by bootstrap: `DATABASE_URL`, `JWT_SECRET`, `PORT`, `NEXT_BASE_URL`.
-
-```bash
-nano /home/rf/apps/incenva-scraper-service/.env
-```
-
-| Variable | Description |
-|----------|-------------|
-| `REWIRING_AMERICA_API_KEY` | Rewiring America calculator API key |
 
 ### 2 — Rebuild after editing `.env`
 

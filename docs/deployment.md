@@ -48,8 +48,7 @@ Internet
     ▼
  Next.js  :3000     ←─── PM2 "Rebate Finder"   (rf user)
     │
-    ├── Prisma ──► PostgreSQL :5432 (local)
-    └── Supabase (remote storage / auth)
+    └── Prisma ──► PostgreSQL :5432 (local)
 
  Go Scraper          ←─── PM2 "Incenva Scraper" (rf user)
     └── GORM   ──► PostgreSQL :5432 (same DB, scraper.rebates_staging)
@@ -159,10 +158,11 @@ What it does:
 - Clones / installs the app, pushes Prisma schema, seeds the DB
 - Builds the Next.js app and starts it with PM2
 
-After it finishes, edit `.env` in the app directory:
+After it finishes, fill in the remaining `.env` values:
 ```bash
 nano /home/rf/apps/rebate-finder/.env
-# → set OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_*, NEXT_BASE_URL
+# → set OPENAI_API_KEY (required), BREVO_API_KEY, TYPESENSE_API_KEY (optional)
+# NEXT_BASE_URL, DATABASE_URL, JWT_SECRET are auto-set by bootstrap
 ```
 
 Then rebuild:
@@ -367,15 +367,22 @@ curl http://localhost:3000   # should return HTML
 ### Required `.env` values
 
 ```env
+# Auto-set by bootstrap — verify these are correct
 DATABASE_URL=postgresql://rf:<password>@localhost:5432/rebate_finder
 JWT_SECRET=<64-char random string>
 JWT_EXPIRES_IN=24h
 PORT=3000
 NEXT_BASE_URL=https://rebates.yourclient.com
-NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-NEXT_PUBLIC_SUPABASE_PROJECT_ID=<project-id>
-SUPABASE_SERVICE_KEY=eyJ...
+
+# Required — fill in after bootstrap
+OPENAI_API_KEY=sk-...
+
+# Optional
+BREVO_API_KEY=xkeysib-...
+BREVO_SENDER_EMAIL=noreply@yourclient.com
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+TYPESENSE_API_KEY=<key>
+PROMOTER_SYNC_SECRET=<shared-secret>
 
 # Scraper schema separation — Go scraper writes to this PostgreSQL schema,
 # Prisma only manages the public schema and never sees these tables.
@@ -639,15 +646,12 @@ This script is **idempotent** — running it twice with the same email updates t
 ### PM2
 
 ```bash
-pm2 status                              # all processes
-pm2 logs "incenva-rebate-finder"        # tail main app logs
-pm2 logs "incenva-scraper"             # tail scraper logs
-pm2 logs "incenva-promoter"            # tail promoter cron logs
-pm2 logs "incenva-rebate-finder" --lines 100
-pm2 restart "incenva-rebate-finder"    # restart main app
-pm2 restart "incenva-scraper"          # restart scraper
-pm2 stop    "incenva-scraper"          # stop scraper (keeps PM2 entry)
-pm2 delete  "incenva-scraper"          # remove from PM2
+pm2 status                           # all processes
+pm2 logs "Rebate Finder"             # tail main app logs
+pm2 logs "Rebate Finder" --lines 100
+pm2 restart "Rebate Finder"          # restart main app
+pm2 stop    "Rebate Finder"          # stop (keeps PM2 entry)
+pm2 delete  "Rebate Finder"          # remove from PM2
 ```
 
 ### PostgreSQL
