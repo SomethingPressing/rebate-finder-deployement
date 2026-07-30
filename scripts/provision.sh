@@ -33,12 +33,21 @@
 #   SKIP_SEED         Set to "true" to skip seeding the database
 #   BOOTSTRAP_URL     Override the bootstrap script URL (for testing)
 #
+# ── Fly.io scraper (Step 11 — all optional) ───────────────────────────────────
+#   FLY_API_TOKEN     Fly.io API token — enables automated scraper deployment
+#                     → https://fly.io/user/personal_access_tokens
+#   FLY_APP           Fly.io app name (default: incenva-scraper)
+#   FLY_REGION        Fly.io region (default: iad)
+#   REWIRING_AMERICA_API_KEY  Optional — Rewiring America scraper API key
+#   SCRAPER_REPO_DIR  Path to local rebate-finder-scrapers clone.
+#                     If not set, the repo is auto-cloned via GITHUB_PAT.
+#
 # ── Usage ─────────────────────────────────────────────────────────────────────
 #   export DO_API_TOKEN=dop_v1_...
 #   export GITHUB_PAT=ghp_...
 #   export OPENAI_API_KEY=sk-...
 #   export APP_DOMAIN=acme.incenva.com
-#   export DO_SSH_KEY_IDS=12345678   # optional — your own DO SSH key ID
+#   export FLY_API_TOKEN=fo1_...        # optional — enables Step 11
 #   bash scripts/provision.sh
 #
 # ── Notes ─────────────────────────────────────────────────────────────────────
@@ -82,6 +91,13 @@ ADMIN_NAME="${ADMIN_NAME:-Admin User}"
 SKIP_SEED="${SKIP_SEED:-false}"
 DROPLET_IP="${DROPLET_IP:-}"  # skip creation if already have a server
 
+# Fly.io scraper (all optional — Step 11 is skipped if FLY_API_TOKEN is not set)
+FLY_API_TOKEN="${FLY_API_TOKEN:-}"
+FLY_APP="${FLY_APP:-incenva-scraper}"
+FLY_REGION="${FLY_REGION:-iad}"
+REWIRING_AMERICA_API_KEY="${REWIRING_AMERICA_API_KEY:-}"
+SCRAPER_REPO_DIR="${SCRAPER_REPO_DIR:-}"  # path to local clone; auto-cloned if empty
+
 BOOTSTRAP_URL="${BOOTSTRAP_URL:-https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/bootstrap.sh}"
 
 GITHUB_ORG="${GITHUB_ORG:-SomethingPressing}"
@@ -89,9 +105,10 @@ DO_API="https://api.digitalocean.com/v2"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # State tracking
-TEMP_KEY_ID=""    # DO SSH key ID for the temp key (cleaned up on exit)
-TEMP_KEY_FILE=""  # path to the temp private key file
-DROPLET_ID=""     # created Droplet ID
+TEMP_KEY_ID=""       # DO SSH key ID for the temp key (cleaned up on exit)
+TEMP_KEY_FILE=""     # path to the temp private key file
+DROPLET_ID=""        # created Droplet ID
+SCRAPER_CLONE_DIR="" # auto-cloned scrapers repo (cleaned up on exit)
 
 # ── Cleanup trap ──────────────────────────────────────────────────────────────
 cleanup() {
@@ -105,6 +122,9 @@ cleanup() {
   fi
   if [[ -n "$TEMP_KEY_FILE" ]]; then
     rm -f "$TEMP_KEY_FILE" "${TEMP_KEY_FILE}.pub"
+  fi
+  if [[ -n "$SCRAPER_CLONE_DIR" ]]; then
+    rm -rf "$SCRAPER_CLONE_DIR"
   fi
   if [[ $exit_code -ne 0 ]]; then
     echo ""
@@ -469,6 +489,178 @@ else
   warn "App returned HTTP $HTTP_CODE — check logs: ssh root@$DROPLET_IP pm2 logs \"Rebate Finder\""
 fi
 
+# ── Step 11: Fly.io scraper setup ────────────────────────────────────────────
+FLY_SETUP=false
+
+if [[ -z "$FLY_API_TOKEN" ]]; then
+  log "Step 11 — Fly.io scraper (skipped — set FLY_API_TOKEN to enable)"
+  info "To automate scraper setup in future runs, add: export FLY_API_TOKEN=fo1_..."
+else
+  log "Step 11 — Fly.io scraper setup"
+
+  # 11a — Install flyctl if not present
+  if ! command -v fly &>/dev/null; then
+    info "flyctl not found — installing..."
+    curl -L https://fly.io/install.sh | sh >/dev/null 2>&1
+    export PATH="$HOME/.fly/bin:$PATH"
+    command -v fly &>/dev/null || fail "flyctl install failed. Install manually: https://fly.io/docs/hands-on/install-flyctl/"
+    ok "flyctl installed"
+  else
+    ok "flyctl $(fly version 2>/dev/null | awk '{print $2}' | head -1)"
+  fi
+
+  # 11b — Locate or auto-clone the scrapers repo
+  if [[ -n "$SCRAPER_REPO_DIR" ]]; then
+    [[ -f "$SCRAPER_REPO_DIR/fly.toml" ]] || \
+      fail "SCRAPER_REPO_DIR '$SCRAPER_REPO_DIR' has no fly.toml — is it the scrapers repo?"
+    info "Using scrapers repo at $SCRAPER_REPO_DIR"
+  else
+    info "SCRAPER_REPO_DIR not set — cloning scrapers repo via GITHUB_PAT..."
+    SCRAPER_CLONE_DIR="$(mktemp -d /tmp/incenva_scrapers_XXXXXX)"
+    git clone --depth 1 \
+      "https://$GITHUB_PAT@github.com/$GITHUB_ORG/rebate-finder-scrapers.git" \
+      "$SCRAPER_CLONE_DIR" 2>/dev/null
+    SCRAPER_REPO_DIR="$SCRAPER_CLONE_DIR"
+    ok "Cloned scrapers repo"
+  fi
+
+  # 11c — Read DB credentials and sync secret from the server .env
+  info "Reading .env from server..."
+  RAW_DB_URL=$(ssh_run "$DROPLET_IP" \
+    "grep '^DATABASE_URL=' /home/rf/apps/rebate-finder/.env | head -1 | cut -d= -f2-")
+  SYNC_SECRET=$(ssh_run "$DROPLET_IP" \
+    "grep '^PROMOTER_SYNC_SECRET=' /home/rf/apps/rebate-finder/.env | head -1 | cut -d= -f2-" 2>/dev/null || echo "")
+
+  # Build the external DB URL: replace localhost with the Droplet's public IP
+  # and strip query params (connection_limit etc. — not needed for the scraper)
+  EXT_DB_URL="${RAW_DB_URL/localhost/$DROPLET_IP}"
+  EXT_DB_URL="${EXT_DB_URL/127.0.0.1/$DROPLET_IP}"
+  EXT_DB_URL="${EXT_DB_URL%%\?*}"
+  ok "External DB URL: ${EXT_DB_URL//:*@/:***@}"
+
+  # 11d — Open PostgreSQL on the VPS to external connections
+  info "Configuring PostgreSQL for external access..."
+  ssh_run_heredoc "$DROPLET_IP" << 'PGSSH'
+set -euo pipefail
+PG_CONF="$(sudo -u postgres psql -tAc 'SHOW config_file' 2>/dev/null)"
+PG_HBA="$(sudo -u postgres psql -tAc 'SHOW hba_file' 2>/dev/null)"
+
+# listen_addresses = '*'
+if grep -qE "^listen_addresses\s*=\s*'\*'" "$PG_CONF" 2>/dev/null; then
+  echo "  ─  listen_addresses already '*'"
+else
+  sed -i "s|^#\?listen_addresses\s*=.*|listen_addresses = '*'|" "$PG_CONF"
+  echo "  ✔  listen_addresses = '*'"
+fi
+
+# pg_hba: allow rf user on rebate_finder from anywhere with password
+if grep -qE "^host\s+rebate_finder\s+rf\s+0\.0\.0\.0/0" "$PG_HBA" 2>/dev/null; then
+  echo "  ─  pg_hba rule already present"
+else
+  echo "host    rebate_finder   rf    0.0.0.0/0    md5" >> "$PG_HBA"
+  echo "  ✔  Added pg_hba external rule"
+fi
+
+# UFW: allow 5432
+ufw allow 5432/tcp >/dev/null 2>&1 && echo "  ✔  UFW: port 5432 open" || true
+
+# Reload PostgreSQL config
+systemctl reload postgresql 2>/dev/null || systemctl restart postgresql 2>/dev/null || true
+echo "  ✔  PostgreSQL config reloaded"
+PGSSH
+  ok "PostgreSQL accepting external connections"
+
+  # 11e — Derive tenant ID and secret name from CLIENT_NAME
+  TENANT_ID="${CLIENT_NAME#incenva-}"               # strip "incenva-" prefix → bare slug
+  TENANT_SLUG="${TENANT_ID^^}"                       # uppercase for secret name
+  TENANT_SLUG="${TENANT_SLUG//-/_}"                  # hyphens → underscores
+  TENANT_SECRET="TENANT_${TENANT_SLUG}_DB_URL"
+  APP_URL_TENANT="http://$DROPLET_IP"
+  [[ -n "$APP_DOMAIN" ]] && APP_URL_TENANT="https://$APP_DOMAIN"
+  ok "Tenant: $TENANT_ID  →  secret: $TENANT_SECRET"
+
+  # 11f — Add tenant to tenants.json (idempotent)
+  TENANTS_JSON="$SCRAPER_REPO_DIR/config/tenants.json"
+  [[ -f "$TENANTS_JSON" ]] || fail "tenants.json not found at $TENANTS_JSON"
+
+  if jq -e --arg id "$TENANT_ID" '.[] | select(.id == $id)' "$TENANTS_JSON" &>/dev/null; then
+    info "Tenant '$TENANT_ID' already in tenants.json — skipping"
+  else
+    NEW_ENTRY=$(jq -n \
+      --arg id           "$TENANT_ID" \
+      --arg name         "${APP_DOMAIN:-$CLIENT_NAME}" \
+      --arg db_url_env   "$TENANT_SECRET" \
+      --arg app_url      "$APP_URL_TENANT" \
+      --arg sync_secret  "${SYNC_SECRET:-}" \
+      '{
+        id: $id,
+        name: $name,
+        active: true,
+        sources: ["dsireusa","rewiring_america","energy_star"],
+        db_url_env: $db_url_env,
+        location_filter: {states:[],utilities:[],service_areas:[],zip_codes:[]},
+        max_incentives_per_source: 0,
+        app_url: $app_url,
+        sync_secret: $sync_secret
+      }')
+    jq --argjson e "$NEW_ENTRY" '. + [$e]' "$TENANTS_JSON" > "${TENANTS_JSON}.tmp"
+    mv "${TENANTS_JSON}.tmp" "$TENANTS_JSON"
+    ok "Added tenant '$TENANT_ID' to tenants.json"
+
+    # Push the updated tenants.json so the Docker build picks it up
+    cd "$SCRAPER_REPO_DIR"
+    git config user.email "provision@incenva" 2>/dev/null || true
+    git config user.name  "provision.sh"      2>/dev/null || true
+    git add config/tenants.json
+    git commit -m "chore: add tenant $TENANT_ID" 2>/dev/null
+    git push "https://$GITHUB_PAT@github.com/$GITHUB_ORG/rebate-finder-scrapers.git" HEAD:main \
+      2>/dev/null
+    ok "Pushed tenants.json to GitHub"
+    cd - >/dev/null
+  fi
+
+  # 11g — Create Fly.io app (idempotent)
+  if FLY_API_TOKEN="$FLY_API_TOKEN" fly status --app "$FLY_APP" &>/dev/null; then
+    info "Fly.io app '$FLY_APP' already exists"
+  else
+    FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP" \
+      --org personal --region "$FLY_REGION"
+    ok "Fly.io app '$FLY_APP' created"
+  fi
+
+  # 11h — Stage secrets (picked up by the deploy in 11i)
+  FLY_API_TOKEN="$FLY_API_TOKEN" fly secrets set \
+    "${TENANT_SECRET}=${EXT_DB_URL}" \
+    --app "$FLY_APP" --stage
+  ok "Secret $TENANT_SECRET staged"
+
+  if [[ -n "$REWIRING_AMERICA_API_KEY" ]]; then
+    FLY_API_TOKEN="$FLY_API_TOKEN" fly secrets set \
+      "REWIRING_AMERICA_API_KEY=$REWIRING_AMERICA_API_KEY" \
+      --app "$FLY_APP" --stage
+    ok "REWIRING_AMERICA_API_KEY staged"
+  fi
+
+  # 11i — Deploy (builds Docker image remotely on Fly.io infra)
+  info "Deploying scraper (builds Docker image on Fly.io — ~2 min)..."
+  cd "$SCRAPER_REPO_DIR"
+  FLY_API_TOKEN="$FLY_API_TOKEN" fly deploy \
+    --app "$FLY_APP" --remote-only
+  ok "Scraper deployed to Fly.io"
+
+  # 11j — Trigger a one-off scrape run to verify
+  FLY_API_TOKEN="$FLY_API_TOKEN" fly machine run \
+    --app "$FLY_APP" \
+    --image "registry.fly.io/${FLY_APP}:latest" \
+    --env RUN_ONCE=true \
+    --restart no 2>/dev/null \
+    && ok "One-off scrape run triggered — check: fly logs --app $FLY_APP" \
+    || warn "Could not trigger one-off run — deploy still succeeded"
+
+  cd - >/dev/null
+  FLY_SETUP=true
+fi
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 hr
 echo ""
@@ -510,8 +702,17 @@ else
   echo -e "        PRISMA_DEPLOY  = db-push"
 fi
 echo ""
+echo -e "  ${BOLD}Scraper (Fly.io):${NC}"
+if [[ "$FLY_SETUP" == "true" ]]; then
+  echo -e "    ${GREEN}✔${NC}  Deployed — fly logs --app $FLY_APP"
+  echo -e "         fly status --app $FLY_APP"
+else
+  echo -e "    ${YELLOW}→${NC}  Not deployed (set FLY_API_TOKEN to automate)"
+  echo -e "         bash scripts/scraper/setup-fly.sh"
+fi
+echo ""
 echo -e "  ${BOLD}Next steps:${NC}"
-echo -e "    1. Point DNS for $APP_DOMAIN → $DROPLET_IP (if not done)"
+echo -e "    1. Point DNS for ${APP_DOMAIN:-<your-domain>} → $DROPLET_IP (if not done)"
 echo -e "    2. Log in to the admin at ${APP_URL}/admin/login"
 echo -e "    3. Configure branding: Admin → Brand"
 echo -e "    4. Configure filters: Admin → Filters → Translate All to Spanish"
