@@ -345,6 +345,10 @@ ENVSSH
 
 ok "Environment variables injected"
 
+# Restart PM2 so the app picks up the new env vars (OPENAI_API_KEY etc.)
+ssh_run "$DROPLET_IP" 'pm2 restart "Rebate Finder" --update-env && pm2 save' || \
+  warn "PM2 restart after env inject failed — app may not have OPENAI_API_KEY until next deploy"
+
 # ── Step 7: Seed the database ─────────────────────────────────────────────────
 if [[ "$SKIP_SEED" != "true" ]]; then
   log "Step 7 — Seed the database"
@@ -383,29 +387,56 @@ CISSH
 
 ok "CI public key added to server"
 
-# Try to set GitHub Actions secrets via gh CLI or GitHub API
+# Set GitHub Actions secrets and variables.
+# gh CLI is used for secrets (they require libsodium encryption).
+# Variables are plain-text and can be set via the REST API with just GITHUB_PAT.
+# We authenticate gh via GH_TOKEN — no `gh auth login` needed.
 CI_SECRETS_SET=false
 GITHUB_REPO="$GITHUB_ORG/rebate-finder"
 
-if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
-  info "gh CLI found — setting GitHub Actions secrets automatically..."
-  gh secret set DEPLOY_HOST            --body "$DROPLET_IP"   --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh secret set DEPLOY_SSH_USER        --body "rf"             --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh secret set DEPLOY_SSH_PRIVATE_KEY --body "$CI_PRIV_KEY"  --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh secret set DEPLOY_SSH_PORT        --body "22"             --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh variable set DEPLOY_PATH          --body "/home/rf/apps/rebate-finder" --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh variable set DEPLOY_BRANCH        --body "main"           --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh variable set PM2_PROCESS          --body "Rebate Finder"  --repo "$GITHUB_REPO" 2>/dev/null && \
-  gh variable set PRISMA_DEPLOY        --body "db-push"        --repo "$GITHUB_REPO" 2>/dev/null && \
+# Always set variables via GitHub REST API (no encryption needed)
+_gh_var() {
+  local name="$1" val="$2"
+  local http_code
+  http_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+    -H "Authorization: token $GITHUB_PAT" \
+    -H "Accept: application/vnd.github.v3+json" \
+    "https://api.github.com/repos/$GITHUB_REPO/actions/variables" \
+    -d "{\"name\":\"$name\",\"value\":\"$val\"}" 2>/dev/null || echo "000")
+  if [[ "$http_code" == "422" ]]; then
+    # Variable already exists — PATCH to update
+    http_code=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH \
+      -H "Authorization: token $GITHUB_PAT" \
+      -H "Accept: application/vnd.github.v3+json" \
+      "https://api.github.com/repos/$GITHUB_REPO/actions/variables/$name" \
+      -d "{\"name\":\"$name\",\"value\":\"$val\"}" 2>/dev/null || echo "000")
+  fi
+  [[ "$http_code" == "201" || "$http_code" == "204" ]] && ok "Variable $name set" || warn "Variable $name: HTTP $http_code"
+}
+
+_gh_var "DEPLOY_PATH"   "/home/rf/apps/rebate-finder"
+_gh_var "DEPLOY_BRANCH" "main"
+_gh_var "PM2_PROCESS"   "Rebate Finder"
+_gh_var "PRISMA_DEPLOY" "db-push"
+
+# Secrets require encryption — use gh CLI with GH_TOKEN (no auth login needed)
+if command -v gh &>/dev/null; then
+  info "gh CLI found — setting GitHub Actions secrets via GH_TOKEN..."
+  GH_TOKEN="$GITHUB_PAT" gh secret set DEPLOY_HOST            --body "$DROPLET_IP"  --repo "$GITHUB_REPO" 2>/dev/null && \
+  GH_TOKEN="$GITHUB_PAT" gh secret set DEPLOY_SSH_USER        --body "rf"            --repo "$GITHUB_REPO" 2>/dev/null && \
+  GH_TOKEN="$GITHUB_PAT" gh secret set DEPLOY_SSH_PRIVATE_KEY --body "$CI_PRIV_KEY" --repo "$GITHUB_REPO" 2>/dev/null && \
+  GH_TOKEN="$GITHUB_PAT" gh secret set DEPLOY_SSH_PORT        --body "22"            --repo "$GITHUB_REPO" 2>/dev/null && \
   CI_SECRETS_SET=true
   if [[ "$CI_SECRETS_SET" == "true" ]]; then
-    ok "GitHub Actions secrets and variables set via gh CLI"
+    ok "GitHub Actions secrets set via gh CLI"
   else
-    warn "gh CLI available but secret set failed — will print manual instructions"
+    warn "gh CLI ran but secret set failed — will print manual instructions"
     CI_SECRETS_SET=false
   fi
 else
-  info "gh CLI not found — will print CI key for manual GitHub setup"
+  info "gh CLI not installed — will print secrets for manual entry"
+  info "Install with: brew install gh  (macOS) or https://cli.github.com/manual/installation (Linux)"
+  info "No login needed — provision.sh will use your GITHUB_PAT automatically"
 fi
 
 # Save CI private key to a local file regardless, so it's not lost

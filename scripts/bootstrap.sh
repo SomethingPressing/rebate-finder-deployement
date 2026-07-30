@@ -375,7 +375,7 @@ fi
 echo ""
 echo -e "  ${BOLD}Check app status:${NC}"
 echo -e "    pm2 status"
-echo -e "    pm2 logs incenva-rebate-finder"
+echo -e "    pm2 logs \"Rebate Finder\""
 echo ""
 echo -e "  ${BOLD}Fill in remaining .env values:${NC}"
 echo -e "    nano $APP_DIR/.env"

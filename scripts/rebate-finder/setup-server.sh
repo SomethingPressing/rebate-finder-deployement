@@ -40,7 +40,7 @@ APP_REPO_URL="${APP_REPO_URL:-}"                  # required if APP_DIR doesn't 
 DB_NAME="${DB_NAME:-rebate_finder}"
 DB_USER="${DB_USER:-rf}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
-PM2_APP_NAME="${PM2_APP_NAME:-incenva-rebate-finder}"
+PM2_APP_NAME="${PM2_APP_NAME:-Rebate Finder}"
 
 ENV_FILE="$APP_DIR/.env"
 TMP_PASS_FILE="/tmp/.rf_db_pass_setup"
@@ -208,10 +208,11 @@ else
     warn "DB role already existed — set DATABASE_URL in $ENV_FILE manually."
   fi
 
-  # Set NEXT_BASE_URL from domain (strip trailing slash)
+  # Set NEXT_BASE_URL from domain (strip trailing slash). Use https:// because
+  # bootstrap always runs Let's Encrypt (step 12) when a domain is provided.
   _DOMAIN="${APP_DOMAIN:-_}"
   if [[ "$_DOMAIN" != "_" && -n "$_DOMAIN" ]]; then
-    _BASE_URL="http://${_DOMAIN%/}"
+    _BASE_URL="https://${_DOMAIN%/}"
     sed -i "s|NEXT_BASE_URL=.*|NEXT_BASE_URL=$_BASE_URL|" "$ENV_FILE"
     ok "NEXT_BASE_URL set to $_BASE_URL"
   fi
