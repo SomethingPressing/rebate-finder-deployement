@@ -340,6 +340,9 @@ _set_env "OPENAI_API_KEY" "${OPENAI_API_KEY}"
 $([ -n "$BREVO_API_KEY" ]      && echo "_set_env \"BREVO_API_KEY\" \"${BREVO_API_KEY}\"")
 $([ -n "$BREVO_SENDER_EMAIL" ] && echo "_set_env \"BREVO_SENDER_EMAIL\" \"${BREVO_SENDER_EMAIL}\"")
 $([ -n "$GTM_ID" ]             && echo "_set_env \"NEXT_PUBLIC_GTM_ID\" \"${GTM_ID}\"")
+# Set NEXT_BASE_URL to the raw IP when no domain was provided (setup-server.sh
+# only sets it when APP_DOMAIN is non-empty, so it stays as the placeholder).
+$([ -z "$APP_DOMAIN" ] && echo "_set_env \"NEXT_BASE_URL\" \"http://${DROPLET_IP}\"")
 echo "  ✔  .env updated"
 ENVSSH
 
