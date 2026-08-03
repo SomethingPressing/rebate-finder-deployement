@@ -53,6 +53,23 @@ echo ""
 hr
 
 # ─────────────────────────────────────────────────────────────────────────────
+# SWAP — 2 GB swap file (prevents OOM during Next.js build on small servers)
+# ─────────────────────────────────────────────────────────────────────────────
+if swapon --show | grep -q /swapfile; then
+  skip "Swap file (active)"
+elif [[ -f /swapfile ]]; then
+  swapon /swapfile
+  skip "Swap file (existed, activated)"
+else
+  fallocate -l 4G /swapfile
+  chmod 600 /swapfile
+  mkswap /swapfile >/dev/null
+  swapon /swapfile
+  grep -qxF '/swapfile none swap sw 0 0' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  ok "Created and activated 4G swap file"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # STEP 1 — System group & user
 # ─────────────────────────────────────────────────────────────────────────────
 log "1/10  System group and user"
