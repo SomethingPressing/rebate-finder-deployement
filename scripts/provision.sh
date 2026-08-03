@@ -248,7 +248,7 @@ log "Step 1 — Create temporary SSH key for this provisioning session"
 
 if [[ -z "$DROPLET_IP" ]]; then
   TEMP_KEY_FILE="$(mktemp /tmp/incenva_provision_XXXXXX)"
-  chmod 600 "$TEMP_KEY_FILE"
+  rm -f "$TEMP_KEY_FILE"  # mktemp creates an empty file; ssh-keygen refuses to overwrite it
   ssh-keygen -t ed25519 -f "$TEMP_KEY_FILE" -N "" -C "incenva-provision-tmp" >/dev/null 2>&1
   ok "Generated temporary key: $TEMP_KEY_FILE"
 
@@ -396,7 +396,7 @@ ok "Admin user created"
 log "Step 9 — Set up GitHub Actions CI deploy key"
 
 CI_KEY_FILE="$(mktemp /tmp/incenva_ci_deploy_XXXXXX)"
-chmod 600 "$CI_KEY_FILE"
+rm -f "$CI_KEY_FILE"  # mktemp creates an empty file; ssh-keygen refuses to overwrite it
 ssh-keygen -t ed25519 -f "$CI_KEY_FILE" -N "" -C "ci-deploy@incenva" >/dev/null 2>&1
 CI_PUB_KEY="$(cat "${CI_KEY_FILE}.pub")"
 CI_PRIV_KEY="$(cat "$CI_KEY_FILE")"
