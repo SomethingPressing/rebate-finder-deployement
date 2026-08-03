@@ -150,11 +150,15 @@ echo ""
 echo -e "  ${BOLD}Ready to provision.${NC}"
 echo -e "  This will create a live DigitalOcean server and may incur costs."
 echo ""
-echo -n "  Continue? [y/N] "
-read -r CONFIRM < /dev/tty
-if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-  echo "  Aborted."
-  exit 0
+if [[ "${AUTO_CONFIRM:-false}" == "true" ]]; then
+  echo -e "  ${YELLOW}AUTO_CONFIRM=true — skipping confirmation prompt${NC}"
+else
+  echo -n "  Continue? [y/N] "
+  read -r CONFIRM < /dev/tty
+  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    echo "  Aborted."
+    exit 0
+  fi
 fi
 
 # ── Hand off to provision.sh ──────────────────────────────────────────────────
