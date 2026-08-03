@@ -69,14 +69,30 @@ const APP_DIR   = process.env._ADMIN_APP_DIR;
 const script = `
 import bcrypt from "bcryptjs";
 import { ConsoleRole, PrismaClient } from "@prisma/client";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
 async function run() {
+  const roleEnumKey = ${JSON.stringify(ROLE)} as ConsoleRole;
+
+  // Find or create the Role record (seeds may not have run yet)
+  let role = await prisma.role.findUnique({ where: { enum_key: roleEnumKey } });
+  if (!role) {
+    role = await prisma.role.create({
+      data: {
+        id: randomUUID(),
+        enum_key: roleEnumKey,
+        display_name: roleEnumKey.replace(/_/g, " ").replace(/\\b\\w/g, c => c.toUpperCase()),
+      },
+    });
+  }
+
   const password_hash = await bcrypt.hash(${JSON.stringify(PASSWORD)}, 12);
   const user = await prisma.user.upsert({
     where: { email: ${JSON.stringify(EMAIL)} },
     create: {
+      id: randomUUID(),
       email: ${JSON.stringify(EMAIL)},
       full_name: ${JSON.stringify(FULL_NAME)},
       password_hash,
@@ -87,11 +103,15 @@ async function run() {
     },
   });
 
-  await prisma.userRole.upsert({
-    where: { user_id: user.id },
-    create: { user_id: user.id, console_role: ${JSON.stringify(ROLE)} as ConsoleRole },
-    update: { console_role: ${JSON.stringify(ROLE)} as ConsoleRole },
-  });
+  // Create or update the UserOrgRole
+  const existing = await prisma.userOrgRole.findFirst({ where: { user_id: user.id } });
+  if (existing) {
+    await prisma.userOrgRole.update({ where: { id: existing.id }, data: { role_id: role.id } });
+  } else {
+    await prisma.userOrgRole.create({
+      data: { id: randomUUID(), user_id: user.id, role_id: role.id },
+    });
+  }
 
   console.log("ok:" + user.id);
   await prisma.$disconnect();
