@@ -88,14 +88,15 @@ hr
 log "Step 1/12 — System packages"
 
 # Ubuntu 24.04 cloud-init holds the apt lock for 1-2 min on first boot.
-# Retry until apt-get update succeeds (timeout 3 min).
+# Wait for both update and install to succeed, retrying on lock contention.
+export DEBIAN_FRONTEND=noninteractive
+
 _apt_wait=0
 until apt-get update -qq 2>/dev/null; do
-  [[ $_apt_wait -ge 180 ]] && fail "apt-get update failed after 3 min — apt lock stuck?"
-  _apt_wait=$((_apt_wait + 10))
-  sleep 10
-  printf "."
+  [[ $_apt_wait -ge 300 ]] && fail "apt-get update failed after 5 min — apt lock stuck?"
+  _apt_wait=$((_apt_wait + 10)); sleep 10; printf "."
 done
+
 PACKAGES=(git curl wget unzip openssh-client ufw ca-certificates gnupg
           lsb-release software-properties-common nginx)
 
@@ -108,7 +109,11 @@ if [[ ${#MISSING[@]} -eq 0 ]]; then
   skip "All packages already installed"
 else
   info "Installing: ${MISSING[*]}"
-  apt-get install -y "${MISSING[@]}" >/dev/null
+  _apt_wait=0
+  until apt-get install -y "${MISSING[@]}" >/dev/null 2>&1; do
+    [[ $_apt_wait -ge 300 ]] && fail "apt-get install failed after 5 min — apt lock stuck?"
+    _apt_wait=$((_apt_wait + 10)); sleep 10; printf "."
+  done
   ok "Packages installed"
 fi
 
