@@ -180,16 +180,30 @@ ssh_run_heredoc() {
 
 wait_for_ssh() {
   local ip="$1"
-  local elapsed=0 timeout=300
+  local elapsed=0 port_open=0 timeout=900
   info "Waiting for SSH on $ip..."
-  while ! ssh $SSH_OPTS -i "$TEMP_KEY_FILE" root@"$ip" true 2>/dev/null; do
+  while [[ $elapsed -lt $timeout ]]; do
+    # Phase 1: wait for port 22 to accept TCP connections
+    if [[ $port_open -eq 0 ]]; then
+      if nc -z -w3 "$ip" 22 2>/dev/null; then
+        port_open=1
+        echo ""
+        info "Port 22 open — waiting for key auth (cloud-init may still be running)..."
+      fi
+    fi
+    # Phase 2: once port is open, try full SSH auth
+    if [[ $port_open -eq 1 ]]; then
+      if ssh $SSH_OPTS -i "$TEMP_KEY_FILE" root@"$ip" true 2>/dev/null; then
+        echo ""
+        ok "SSH ready"
+        return 0
+      fi
+    fi
     sleep 5
     elapsed=$((elapsed + 5))
-    [[ $elapsed -lt $timeout ]] || fail "SSH not reachable after ${timeout}s. Server may still be booting."
     printf "."
   done
-  echo ""
-  ok "SSH ready"
+  fail "SSH not reachable after ${timeout}s. Server may still be booting."
 }
 
 # ── Main ──────────────────────────────────────────────────────────────────────
