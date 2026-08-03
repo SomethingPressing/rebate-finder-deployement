@@ -107,6 +107,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # State tracking
 TEMP_KEY_ID=""       # DO SSH key ID for the temp key (cleaned up on exit)
 TEMP_KEY_FILE=""     # path to the temp private key file
+TEMP_KEY_GENERATED=0 # 1 = script generated this key and should delete it on exit
 DROPLET_ID=""        # created Droplet ID
 SCRAPER_CLONE_DIR="" # auto-cloned scrapers repo (cleaned up on exit)
 
@@ -120,7 +121,8 @@ cleanup() {
       "$DO_API/account/keys/$TEMP_KEY_ID" >/dev/null || true
     ok "Temporary SSH key removed"
   fi
-  if [[ -n "$TEMP_KEY_FILE" ]]; then
+  # Only delete the key file if this script generated it (never delete user-provided keys)
+  if [[ -n "$TEMP_KEY_FILE" && "$TEMP_KEY_GENERATED" -eq 1 ]]; then
     rm -f "$TEMP_KEY_FILE" "${TEMP_KEY_FILE}.pub"
   fi
   if [[ -n "$SCRAPER_CLONE_DIR" ]]; then
@@ -166,7 +168,7 @@ do_check() {
 }
 
 # ── SSH helpers ───────────────────────────────────────────────────────────────
-SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes"
+SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes -o ServerAliveInterval=5 -o ServerAliveCountMax=2"
 
 ssh_run() {
   local ip="$1"; shift
@@ -264,6 +266,7 @@ if [[ -z "$DROPLET_IP" ]]; then
   TEMP_KEY_FILE="$(mktemp /tmp/incenva_provision_XXXXXX)"
   rm -f "$TEMP_KEY_FILE"  # mktemp creates an empty file; ssh-keygen refuses to overwrite it
   ssh-keygen -t ed25519 -f "$TEMP_KEY_FILE" -N "" -C "incenva-provision-tmp" >/dev/null 2>&1
+  TEMP_KEY_GENERATED=1   # script generated this key — cleanup may delete it
   ok "Generated temporary key: $TEMP_KEY_FILE"
 
   KEY_NAME="incenva-provision-tmp-$(date +%s)"
@@ -274,9 +277,14 @@ if [[ -z "$DROPLET_IP" ]]; then
   ok "Registered temp key with DigitalOcean (id: $TEMP_KEY_ID)"
 else
   # Connecting to an existing server — need to use caller's existing key
-  # Detect the default SSH key from ssh-agent or ~/.ssh/id_*
-  TEMP_KEY_FILE="$(ls ~/.ssh/id_ed25519 ~/.ssh/id_rsa 2>/dev/null | head -1 || echo '')"
-  [[ -n "$TEMP_KEY_FILE" ]] || fail "No SSH key found. Set DROPLET_IP only when you have a key that can reach root@$DROPLET_IP."
+  # Accept explicit override first, then fall back to common default key names
+  if [[ -n "${SSH_KEY_FILE:-}" ]]; then
+    TEMP_KEY_FILE="$SSH_KEY_FILE"
+  else
+    _ssh_home="${HOME:-/root}/.ssh"
+    TEMP_KEY_FILE="$(ls "$_ssh_home/id_ed25519" "$_ssh_home/id_rsa" "$_ssh_home/id_ecdsa" 2>/dev/null | head -1 || true)"
+  fi
+  [[ -n "$TEMP_KEY_FILE" ]] || fail "No SSH key found. Pass SSH_KEY_FILE=/path/to/key or ensure ~/.ssh/id_rsa exists and can reach root@$DROPLET_IP."
   warn "Reusing existing server at $DROPLET_IP — skipping Droplet creation."
 fi
 
