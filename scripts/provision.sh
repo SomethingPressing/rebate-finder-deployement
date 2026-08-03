@@ -679,12 +679,30 @@ PGSSH
   if FLY_API_TOKEN="$FLY_API_TOKEN" fly status --app "$FLY_APP" &>/dev/null; then
     info "Fly.io app '$FLY_APP' already exists"
   else
-    # Resolve the personal org slug (required in non-interactive mode)
-    _FLY_PERSONAL_ORG="$(FLY_API_TOKEN="$FLY_API_TOKEN" fly orgs list --json 2>/dev/null \
-      | python3 -c "import sys,json; orgs=json.load(sys.stdin); \
-        personal=[o for o in orgs if o.get('type','').lower()=='personal']; \
-        print(personal[0]['slug'] if personal else '')" 2>/dev/null || true)"
+    # Resolve the personal org slug (required in non-interactive mode).
+    # flyctl v0.4 orgs list --json uses capitalized keys: "Type", "Slug", "Name".
+    _FLY_ORG_JSON="$(FLY_API_TOKEN="$FLY_API_TOKEN" fly orgs list --json 2>/dev/null || true)"
+    _FLY_PERSONAL_ORG="$(echo "$_FLY_ORG_JSON" \
+      | python3 -c "
+import sys, json
+try:
+    orgs = json.load(sys.stdin)
+    # Try both capitalized and lowercase key names
+    for o in orgs:
+        t = (o.get('Type') or o.get('type') or '').upper()
+        s = o.get('Slug') or o.get('slug') or ''
+        if t == 'PERSONAL' and s:
+            print(s); sys.exit(0)
+    # Fallback: first org slug
+    for o in orgs:
+        s = o.get('Slug') or o.get('slug') or ''
+        if s:
+            print(s); sys.exit(0)
+except Exception:
+    pass
+" 2>/dev/null || true)"
     if [[ -z "$_FLY_PERSONAL_ORG" ]]; then
+      warn "fly orgs list output: $_FLY_ORG_JSON"
       fail "Could not resolve Fly.io personal org slug. Check FLY_API_TOKEN."
     fi
     FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP" --org "$_FLY_PERSONAL_ORG"
