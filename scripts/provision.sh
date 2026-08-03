@@ -680,7 +680,7 @@ PGSSH
     info "Fly.io app '$FLY_APP' already exists"
   else
     FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP" \
-      --org personal --region "$FLY_REGION"
+      --org personal
     ok "Fly.io app '$FLY_APP' created"
   fi
 
