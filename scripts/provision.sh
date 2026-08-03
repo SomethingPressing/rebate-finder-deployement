@@ -231,12 +231,16 @@ ACCOUNT=$(do_get "account")
 do_check "$ACCOUNT" "account lookup"
 ok "DigitalOcean account: $(echo "$ACCOUNT" | jq -r '.account.email')"
 
-# Verify GitHub PAT
+# Verify GitHub PAT — try both classic ("token") and fine-grained ("Bearer") auth
 GH_USER=$(curl -s -H "Authorization: token $GITHUB_PAT" https://api.github.com/user)
+if ! echo "$GH_USER" | jq -e '.login' &>/dev/null; then
+  # Retry with Bearer (fine-grained PAT)
+  GH_USER=$(curl -s -H "Authorization: Bearer $GITHUB_PAT" https://api.github.com/user)
+fi
 if echo "$GH_USER" | jq -e '.login' &>/dev/null; then
   ok "GitHub token valid: $(echo "$GH_USER" | jq -r '.login')"
 else
-  fail "GITHUB_PAT is invalid or lacks required scope.\nNeeded: repo scope (classic PAT)."
+  fail "GITHUB_PAT is invalid or lacks required scope.\nNeeded: repo scope (classic PAT) or a fine-grained PAT with Contents + Secrets write access.\nGet one at: https://github.com/settings/tokens"
 fi
 
 # ── Step 1: Temporary SSH key ─────────────────────────────────────────────────

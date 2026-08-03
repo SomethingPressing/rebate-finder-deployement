@@ -40,12 +40,21 @@ fi
 
 # Load secrets safely — parse KEY=VALUE line by line without shell interpretation.
 # This handles tokens containing special characters (commas, slashes, base64 =).
+# Strips trailing inline comments (anything after whitespace + #) and whitespace.
 while IFS= read -r line || [[ -n "$line" ]]; do
   [[ -z "${line// }" ]] && continue           # skip blank lines
-  [[ "$line" =~ ^[[:space:]]*# ]] && continue # skip comments
-  # Split on the FIRST = only (values may contain = themselves)
+  [[ "$line" =~ ^[[:space:]]*# ]] && continue # skip full-line comments
   if [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
-    export "${BASH_REMATCH[1]}"="${BASH_REMATCH[2]}"
+    key="${BASH_REMATCH[1]}"
+    val="${BASH_REMATCH[2]}"
+    # Strip trailing inline comment: remove everything after the first ' #' or '\t#'
+    val="${val%%[[:space:]]#*}"
+    # Strip surrounding whitespace and quotes
+    val="${val#"${val%%[! ]*}"}"   # ltrim
+    val="${val%"${val##*[! ]}"}"   # rtrim
+    val="${val%\"}" ; val="${val#\"}"  # strip surrounding double quotes
+    val="${val%\'}" ; val="${val#\'}"  # strip surrounding single quotes
+    export "$key"="$val"
   fi
 done < "$SECRETS_FILE"
 
