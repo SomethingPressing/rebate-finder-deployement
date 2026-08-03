@@ -667,7 +667,7 @@ PGSSH
     cd "$SCRAPER_REPO_DIR"
     git config user.email "provision@incenva" 2>/dev/null || true
     git config user.name  "provision.sh"      2>/dev/null || true
-    git add config/tenants.json
+    git add -f config/tenants.json
     git commit -m "chore: add tenant $TENANT_ID" 2>/dev/null
     git push "https://$GITHUB_PAT@github.com/$GITHUB_ORG/rebate-finder-scrapers.git" HEAD:main \
       2>/dev/null
