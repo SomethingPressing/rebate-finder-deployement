@@ -44,10 +44,18 @@ pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done
 # ── Root guard ────────────────────────────────────────────────────────────────
 [[ $EUID -eq 0 ]] || fail "Run as root: sudo bash $0"
 
+# ── Non-interactive / automated mode ─────────────────────────────────────────
+# Must be determined FIRST so the APP_DOMAIN prompt can skip when automated.
+# Set GITHUB_PAT to auto-register deploy keys via GitHub API (no human pause).
+# provision.sh sets this automatically; you can also set it manually.
+GITHUB_PAT="${GITHUB_PAT:-}"
+GITHUB_ORG="${GITHUB_ORG:-SomethingPressing}"
+[[ -n "$GITHUB_PAT" ]] && NON_INTERACTIVE=true || NON_INTERACTIVE="${NON_INTERACTIVE:-false}"
+
 # ── Domain ────────────────────────────────────────────────────────────────────
 # Accept as: first positional arg, APP_DOMAIN env var, or interactive prompt.
 APP_DOMAIN="${1:-${APP_DOMAIN:-}}"
-if [[ -z "$APP_DOMAIN" ]] && [[ -t 0 ]]; then
+if [[ -z "$APP_DOMAIN" ]] && [[ "$NON_INTERACTIVE" != "true" ]] && [[ -t 0 ]]; then
   read -rp "  App domain (e.g. dev.incenva.com) — press Enter to use IP-only: " APP_DOMAIN < /dev/tty
 fi
 APP_DOMAIN="${APP_DOMAIN:-_}"
@@ -63,13 +71,6 @@ SCRAPER_DIR="$APPS_DIR/incenva-scraper-service"
 DEPLOY_REPO="git@github-rebate-finder-deployement:SomethingPressing/rebate-finder-deployement.git"
 APP_REPO="git@github-rebate-finder:SomethingPressing/rebate-finder.git"
 SCRAPER_REPO="git@github-rebate-finder-scrapers:SomethingPressing/rebate-finder-scrapers.git"
-
-# ── Non-interactive / automated mode ─────────────────────────────────────────
-# Set GITHUB_PAT to auto-register deploy keys via GitHub API (no human pause).
-# provision.sh sets this automatically; you can also set it manually.
-GITHUB_PAT="${GITHUB_PAT:-}"
-GITHUB_ORG="${GITHUB_ORG:-SomethingPressing}"
-[[ -n "$GITHUB_PAT" ]] && NON_INTERACTIVE=true || NON_INTERACTIVE="${NON_INTERACTIVE:-false}"
 
 hr
 echo ""
