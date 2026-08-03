@@ -20,7 +20,7 @@
 #                     If omitted, app starts on HTTP at the raw IP.
 #   CLIENT_NAME       Short slug for the Droplet name (default: derived from APP_DOMAIN)
 #   DO_REGION         DigitalOcean region slug (default: nyc1)
-#   DO_SIZE           Droplet size slug (default: s-2vcpu-4gb)
+#   DO_SIZE           Droplet size slug (default: s-1vcpu-2gb-70gb-intel)
 #   DO_SSH_KEY_IDS    Comma-separated DO SSH key IDs to add to the Droplet
 #                     so you can SSH in directly after provisioning.
 #                     Find yours: doctl compute ssh-key list
@@ -79,7 +79,7 @@ OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 APP_DOMAIN="${APP_DOMAIN:-}"
 CLIENT_NAME="${CLIENT_NAME:-}"
 DO_REGION="${DO_REGION:-nyc1}"
-DO_SIZE="${DO_SIZE:-s-2vcpu-4gb}"
+DO_SIZE="${DO_SIZE:-s-1vcpu-2gb-70gb-intel}"
 DO_IMAGE="${DO_IMAGE:-ubuntu-22-04-x64}"
 DO_SSH_KEY_IDS="${DO_SSH_KEY_IDS:-}"
 BREVO_API_KEY="${BREVO_API_KEY:-}"

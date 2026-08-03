@@ -140,7 +140,7 @@ echo ""
 
 echo -e "  ${BOLD}Server config${NC}"
 label "DO_REGION";  echo -e "${BLUE}→${NC}  ${DO_REGION:-nyc1}  (default)"
-label "DO_SIZE";    echo -e "${BLUE}→${NC}  ${DO_SIZE:-s-2vcpu-4gb}  (default)"
+label "DO_SIZE";    echo -e "${BLUE}→${NC}  ${DO_SIZE:-s-1vcpu-2gb-70gb-intel}  (default)"
 if [[ -n "${DO_SSH_KEY_IDS:-}" ]]; then
   _check_plain "DO_SSH_KEY_IDS" "for direct SSH access after provisioning"
 else
