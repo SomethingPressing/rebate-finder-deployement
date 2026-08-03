@@ -222,11 +222,11 @@ if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$SCRAPER_PM2_NAME"; then
   ok "Restarted PM2 process '$SCRAPER_PM2_NAME'"
 else
   sudo -u "$APP_USER" bash -c "
+    set -a; source '$ENV_FILE'; set +a
     cd '$APP_DIR'
     pm2 start bin/scraper \
       --name '$SCRAPER_PM2_NAME' \
-      --interpreter none \
-      --env-file '$ENV_FILE'
+      --interpreter none
   "
   ok "Started PM2 process '$SCRAPER_PM2_NAME'"
 fi
@@ -236,13 +236,13 @@ if sudo -u "$APP_USER" pm2 list 2>/dev/null | grep -q "$PROMOTER_PM2_NAME"; then
   skip "PM2 cron '$PROMOTER_PM2_NAME' already registered"
 else
   sudo -u "$APP_USER" bash -c "
+    set -a; source '$ENV_FILE'; set +a
     cd '$APP_DIR'
     pm2 start bin/promoter \
       --name '$PROMOTER_PM2_NAME' \
       --interpreter none \
       --cron '0 */2 * * *' \
-      --no-autorestart \
-      --env-file '$ENV_FILE'
+      --no-autorestart
   "
   ok "Registered '$PROMOTER_PM2_NAME' (runs every 2 hours)"
 fi
