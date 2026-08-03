@@ -12,7 +12,7 @@
 #   7.  Clone this deployment repo
 #   8.  Install Typesense search engine (port 8108)
 #   9.  Run Next.js app setup   (Node, pnpm, PM2, Postgres, build, start)
-#   10. Run Go scraper setup    (Go, build binaries)
+#   10. Go scraper setup        (skipped — scraper runs on Fly.io via provision.sh Step 11)
 #   11. Configure nginx reverse proxy (port 80 → localhost:3000)
 #   12. Obtain SSL certificate via Let's Encrypt (Certbot) — skipped if no domain
 #
@@ -348,11 +348,10 @@ log "Step 9/12 — Next.js app (Node, pnpm, PM2, PostgreSQL, build)"
 APP_REPO_URL="$APP_REPO" APP_DOMAIN="$APP_DOMAIN" bash "$SCRIPT_DIR/rebate-finder/setup-server.sh"
 
 # ═════════════════════════════════════════════════════════════════════════════
-# STEP 10 — Go scraper setup
+# STEP 10 — Go scraper setup (skipped — scraper runs on Fly.io, not on this server)
 # ═════════════════════════════════════════════════════════════════════════════
 log "Step 10/12 — Go scraper service"
-
-APP_REPO_URL="$SCRAPER_REPO" bash "$SCRIPT_DIR/scraper/setup-server.sh"
+skip "Scraper runs on Fly.io — not installed on this server (Step 11 handles Fly.io deploy)"
 
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 11 — Nginx reverse proxy
