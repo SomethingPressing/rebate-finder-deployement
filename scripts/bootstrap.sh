@@ -87,7 +87,15 @@ hr
 # ═════════════════════════════════════════════════════════════════════════════
 log "Step 1/12 — System packages"
 
-apt-get update -qq
+# Ubuntu 24.04 cloud-init holds the apt lock for 1-2 min on first boot.
+# Retry until apt-get update succeeds (timeout 3 min).
+_apt_wait=0
+until apt-get update -qq 2>/dev/null; do
+  [[ $_apt_wait -ge 180 ]] && fail "apt-get update failed after 3 min — apt lock stuck?"
+  _apt_wait=$((_apt_wait + 10))
+  sleep 10
+  printf "."
+done
 PACKAGES=(git curl wget unzip openssh-client ufw ca-certificates gnupg
           lsb-release software-properties-common nginx)
 

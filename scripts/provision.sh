@@ -358,6 +358,19 @@ else
   ok "Skipped — existing server assumed reachable"
 fi
 
+# ── Step 4b: Add persistent SSH public key immediately after SSH is ready ──────
+# Done BEFORE bootstrap so the operator retains access even if bootstrap fails.
+if [[ -n "${SSH_KEY_FILE:-}" && -f "${SSH_KEY_FILE}.pub" ]]; then
+  _PERSISTENT_PUBKEY="$(cat "${SSH_KEY_FILE}.pub")"
+  ssh_run "$DROPLET_IP" "
+    mkdir -p /root/.ssh && chmod 700 /root/.ssh
+    grep -qxF '${_PERSISTENT_PUBKEY}' /root/.ssh/authorized_keys 2>/dev/null || \
+      echo '${_PERSISTENT_PUBKEY}' >> /root/.ssh/authorized_keys
+    chmod 600 /root/.ssh/authorized_keys
+  " && ok "Added ${SSH_KEY_FILE}.pub to root authorized_keys (persistent access)" \
+    || warn "Could not add persistent SSH key"
+fi
+
 # ── Step 5: Run bootstrap ─────────────────────────────────────────────────────
 log "Step 5 — Run bootstrap (fully automated)"
 
@@ -378,20 +391,6 @@ curl -fsSL '${BOOTSTRAP_URL}' | bash
 ENDSSH
 
 ok "Bootstrap complete"
-
-# ── Step 5b: Add persistent SSH public key to authorized_keys ─────────────────
-# If the operator passed SSH_KEY_FILE, add its public key so the server stays
-# accessible after the temp provisioning key is removed.
-if [[ -n "${SSH_KEY_FILE:-}" && -f "${SSH_KEY_FILE}.pub" ]]; then
-  _PERSISTENT_PUBKEY="$(cat "${SSH_KEY_FILE}.pub")"
-  ssh_run "$DROPLET_IP" "
-    mkdir -p /root/.ssh && chmod 700 /root/.ssh
-    grep -qxF '${_PERSISTENT_PUBKEY}' /root/.ssh/authorized_keys 2>/dev/null || \
-      echo '${_PERSISTENT_PUBKEY}' >> /root/.ssh/authorized_keys
-    chmod 600 /root/.ssh/authorized_keys
-  " && ok "Added ${SSH_KEY_FILE}.pub to root authorized_keys" \
-    || warn "Could not add persistent SSH key — server may be inaccessible after temp key removal"
-fi
 
 # ── Step 6: Inject additional .env values ─────────────────────────────────────
 log "Step 6 — Inject environment variables"
