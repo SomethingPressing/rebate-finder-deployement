@@ -166,7 +166,7 @@ do_check() {
 }
 
 # ── SSH helpers ───────────────────────────────────────────────────────────────
-SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes"
+SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes"
 
 ssh_run() {
   local ip="$1"; shift
