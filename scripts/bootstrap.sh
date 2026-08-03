@@ -47,8 +47,8 @@ pause() { echo -e "\n${YELLOW}${BOLD}$*${NC}"; read -rp "  Press Enter when done
 # ── Domain ────────────────────────────────────────────────────────────────────
 # Accept as: first positional arg, APP_DOMAIN env var, or interactive prompt.
 APP_DOMAIN="${1:-${APP_DOMAIN:-}}"
-if [[ -z "$APP_DOMAIN" ]]; then
-  read -rp "  App domain (e.g. dev.incenva.com) — press Enter to use catch-all: " APP_DOMAIN < /dev/tty
+if [[ -z "$APP_DOMAIN" ]] && [[ -t 0 ]]; then
+  read -rp "  App domain (e.g. dev.incenva.com) — press Enter to use IP-only: " APP_DOMAIN < /dev/tty
 fi
 APP_DOMAIN="${APP_DOMAIN:-_}"
 

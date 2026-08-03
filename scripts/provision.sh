@@ -168,16 +168,24 @@ do_check() {
 }
 
 # ── SSH helpers ───────────────────────────────────────────────────────────────
-SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes -o ServerAliveInterval=5 -o ServerAliveCountMax=2"
+# Store SSH options as an array to guarantee correct word-splitting in all contexts
+SSH_OPTS=(
+  -o StrictHostKeyChecking=accept-new
+  -o ConnectTimeout=10
+  -o BatchMode=yes
+  -o IdentitiesOnly=yes
+  -o ServerAliveInterval=5
+  -o ServerAliveCountMax=2
+)
 
 ssh_run() {
   local ip="$1"; shift
-  ssh $SSH_OPTS -i "$TEMP_KEY_FILE" root@"$ip" "$@"
+  ssh "${SSH_OPTS[@]}" -i "$TEMP_KEY_FILE" root@"$ip" "$@"
 }
 
 ssh_run_heredoc() {
   local ip="$1"; shift
-  ssh $SSH_OPTS -i "$TEMP_KEY_FILE" root@"$ip" bash -s
+  ssh "${SSH_OPTS[@]}" -i "$TEMP_KEY_FILE" root@"$ip" bash -s
 }
 
 wait_for_ssh() {
@@ -195,7 +203,7 @@ wait_for_ssh() {
     fi
     # Phase 2: once port is open, try full SSH auth
     if [[ $port_open -eq 1 ]]; then
-      if ssh $SSH_OPTS -i "$TEMP_KEY_FILE" root@"$ip" true 2>/dev/null; then
+      if ssh "${SSH_OPTS[@]}" -i "$TEMP_KEY_FILE" root@"$ip" true 2>/dev/null; then
         echo ""
         ok "SSH ready"
         return 0
@@ -285,6 +293,7 @@ else
     TEMP_KEY_FILE="$(ls "$_ssh_home/id_ed25519" "$_ssh_home/id_rsa" "$_ssh_home/id_ecdsa" 2>/dev/null | head -1 || true)"
   fi
   [[ -n "$TEMP_KEY_FILE" ]] || fail "No SSH key found. Pass SSH_KEY_FILE=/path/to/key or ensure ~/.ssh/id_rsa exists and can reach root@$DROPLET_IP."
+  EXISTING_DROPLET=1
   warn "Reusing existing server at $DROPLET_IP — skipping Droplet creation."
 fi
 
@@ -341,9 +350,13 @@ fi
 
 # ── Step 4: Wait for SSH ──────────────────────────────────────────────────────
 log "Step 4 — Wait for SSH"
-# DigitalOcean marks Droplets active before sshd starts — give it a moment
-sleep 15
-wait_for_ssh "$DROPLET_IP"
+if [[ -z "${EXISTING_DROPLET:-}" ]]; then
+  # DigitalOcean marks Droplets active before sshd starts — give it a moment
+  sleep 15
+  wait_for_ssh "$DROPLET_IP"
+else
+  ok "Skipped — existing server assumed reachable"
+fi
 
 # ── Step 5: Run bootstrap ─────────────────────────────────────────────────────
 log "Step 5 — Run bootstrap (fully automated)"
