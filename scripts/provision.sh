@@ -682,22 +682,23 @@ PGSSH
     # Resolve the personal org slug (required in non-interactive mode).
     # flyctl v0.4 orgs list --json uses capitalized keys: "Type", "Slug", "Name".
     _FLY_ORG_JSON="$(FLY_API_TOKEN="$FLY_API_TOKEN" fly orgs list --json 2>/dev/null || true)"
+    # flyctl v0.4 returns {"slug": "Name", ...} — first key is the personal org slug
     _FLY_PERSONAL_ORG="$(echo "$_FLY_ORG_JSON" \
       | python3 -c "
 import sys, json
 try:
-    orgs = json.load(sys.stdin)
-    # Try both capitalized and lowercase key names
-    for o in orgs:
-        t = (o.get('Type') or o.get('type') or '').upper()
-        s = o.get('Slug') or o.get('slug') or ''
-        if t == 'PERSONAL' and s:
-            print(s); sys.exit(0)
-    # Fallback: first org slug
-    for o in orgs:
-        s = o.get('Slug') or o.get('slug') or ''
-        if s:
-            print(s); sys.exit(0)
+    data = json.load(sys.stdin)
+    if isinstance(data, dict) and data:
+        # Format: {\"slug\": \"Org Name\", ...} — first key is the personal org
+        print(list(data.keys())[0])
+    elif isinstance(data, list):
+        for o in data:
+            t = (o.get('Type') or o.get('type') or '').upper()
+            s = o.get('Slug') or o.get('slug') or ''
+            if t == 'PERSONAL' and s:
+                print(s); sys.exit(0)
+        if data:
+            print(data[0].get('Slug') or data[0].get('slug') or '')
 except Exception:
     pass
 " 2>/dev/null || true)"
