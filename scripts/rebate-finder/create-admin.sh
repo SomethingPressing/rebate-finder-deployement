@@ -49,15 +49,24 @@ echo "  Role:     $ROLE"
 echo "  Name:     $FULL_NAME"
 echo ""
 
-# Use tsx to run a quick Prisma upsert
-node - <<EOF
+# Use tsx to run a quick Prisma upsert.
+# Pass shell vars as env vars so the heredoc can be fully quoted (no shell
+# expansion of JS template literals like ${JSON.stringify(...)}).
+_ADMIN_EMAIL="$EMAIL" _ADMIN_PASSWORD="$PASSWORD" _ADMIN_FULLNAME="$FULL_NAME" \
+  _ADMIN_ROLE="$ROLE" _ADMIN_APP_DIR="$APP_DIR" \
+  node - <<'EOF'
 const { execSync } = require("child_process");
-// Write a temp script and run it with tsx
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const script = \`
+const EMAIL     = process.env._ADMIN_EMAIL;
+const PASSWORD  = process.env._ADMIN_PASSWORD;
+const FULL_NAME = process.env._ADMIN_FULLNAME;
+const ROLE      = process.env._ADMIN_ROLE;
+const APP_DIR   = process.env._ADMIN_APP_DIR;
+
+const script = `
 import bcrypt from "bcryptjs";
 import { ConsoleRole, PrismaClient } from "@prisma/client";
 
@@ -85,18 +94,18 @@ async function run() {
   });
 
   console.log("ok:" + user.id);
-  await prisma.\$disconnect();
+  await prisma.$disconnect();
 }
 
 run().catch((e) => { console.error(e.message); process.exit(1); });
-\`;
+`;
 
 const tmpFile = path.join(os.tmpdir(), "create-admin-" + Date.now() + ".ts");
 fs.writeFileSync(tmpFile, script);
 
 try {
-  const result = execSync(\`pnpm exec tsx "\${tmpFile}"\`, {
-    cwd: ${JSON.stringify(APP_DIR)},
+  const result = execSync(`pnpm exec tsx "${tmpFile}"`, {
+    cwd: APP_DIR,
     env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
     encoding: "utf8",
   });
