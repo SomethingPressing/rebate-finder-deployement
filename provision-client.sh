@@ -38,10 +38,16 @@ if [[ ! -f "$SECRETS_FILE" ]]; then
   fail "secrets.local not found.\n\n  Create it:\n    cp secrets.local.example secrets.local\n\n  Then fill in your values and run again."
 fi
 
-set -a
-# shellcheck disable=SC1090
-source "$SECRETS_FILE"
-set +a
+# Load secrets safely — parse KEY=VALUE line by line without shell interpretation.
+# This handles tokens containing special characters (commas, slashes, base64 =).
+while IFS= read -r line || [[ -n "$line" ]]; do
+  [[ -z "${line// }" ]] && continue           # skip blank lines
+  [[ "$line" =~ ^[[:space:]]*# ]] && continue # skip comments
+  # Split on the FIRST = only (values may contain = themselves)
+  if [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+    export "${BASH_REMATCH[1]}"="${BASH_REMATCH[2]}"
+  fi
+done < "$SECRETS_FILE"
 
 # ── Pre-flight: validate and display configuration ────────────────────────────
 hr
