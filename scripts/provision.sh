@@ -633,7 +633,11 @@ PGSSH
 
   # 11f — Add tenant to tenants.json (idempotent)
   TENANTS_JSON="$SCRAPER_REPO_DIR/config/tenants.json"
-  [[ -f "$TENANTS_JSON" ]] || fail "tenants.json not found at $TENANTS_JSON"
+  if [[ ! -f "$TENANTS_JSON" ]]; then
+    mkdir -p "$(dirname "$TENANTS_JSON")"
+    echo "[]" > "$TENANTS_JSON"
+    info "Created empty tenants.json"
+  fi
 
   if jq -e --arg id "$TENANT_ID" '.[] | select(.id == $id)' "$TENANTS_JSON" &>/dev/null; then
     info "Tenant '$TENANT_ID' already in tenants.json — skipping"
