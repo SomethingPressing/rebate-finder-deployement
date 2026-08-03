@@ -679,8 +679,7 @@ PGSSH
   if FLY_API_TOKEN="$FLY_API_TOKEN" fly status --app "$FLY_APP" &>/dev/null; then
     info "Fly.io app '$FLY_APP' already exists"
   else
-    FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP" \
-      --org personal
+    FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP"
     ok "Fly.io app '$FLY_APP' created"
   fi
 
