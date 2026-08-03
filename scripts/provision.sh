@@ -679,8 +679,16 @@ PGSSH
   if FLY_API_TOKEN="$FLY_API_TOKEN" fly status --app "$FLY_APP" &>/dev/null; then
     info "Fly.io app '$FLY_APP' already exists"
   else
-    FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP"
-    ok "Fly.io app '$FLY_APP' created"
+    # Resolve the personal org slug (required in non-interactive mode)
+    _FLY_PERSONAL_ORG="$(FLY_API_TOKEN="$FLY_API_TOKEN" fly orgs list --json 2>/dev/null \
+      | python3 -c "import sys,json; orgs=json.load(sys.stdin); \
+        personal=[o for o in orgs if o.get('type','').lower()=='personal']; \
+        print(personal[0]['slug'] if personal else '')" 2>/dev/null || true)"
+    if [[ -z "$_FLY_PERSONAL_ORG" ]]; then
+      fail "Could not resolve Fly.io personal org slug. Check FLY_API_TOKEN."
+    fi
+    FLY_API_TOKEN="$FLY_API_TOKEN" fly apps create "$FLY_APP" --org "$_FLY_PERSONAL_ORG"
+    ok "Fly.io app '$FLY_APP' created (org: $_FLY_PERSONAL_ORG)"
   fi
 
   # 11h — Stage secrets (picked up by the deploy in 11i)
