@@ -100,7 +100,7 @@ async function run() {
 run().catch((e) => { console.error(e.message); process.exit(1); });
 `;
 
-const tmpFile = path.join(os.tmpdir(), "create-admin-" + Date.now() + ".ts");
+const tmpFile = path.join(APP_DIR, ".tmp-create-admin-" + Date.now() + ".ts");
 fs.writeFileSync(tmpFile, script);
 
 try {
