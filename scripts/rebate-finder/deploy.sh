@@ -109,11 +109,20 @@ ok "Build complete"
 
 log "6/6  PM2 restart"
 PM2="sudo -u rf pm2"
-if $PM2 list 2>/dev/null | grep -q "$PM2_APP_NAME"; then
-  $PM2 restart "$PM2_APP_NAME"
-  ok "Restarted '$PM2_APP_NAME'"
+# Servers registered the app under different names over time — restart
+# whichever actually exists here instead of trusting the configured name alone.
+PM2_TARGET=""
+for candidate in "$PM2_APP_NAME" "Rebate Finder" "incenva-rebate-finder"; do
+  if $PM2 describe "$candidate" >/dev/null 2>&1; then
+    PM2_TARGET="$candidate"
+    break
+  fi
+done
+if [[ -n "$PM2_TARGET" ]]; then
+  $PM2 restart "$PM2_TARGET"
+  ok "Restarted '$PM2_TARGET'"
 else
-  warn "PM2 process '$PM2_APP_NAME' not found — run setup-server.sh first"
+  warn "No PM2 process found (tried '$PM2_APP_NAME', 'Rebate Finder', 'incenva-rebate-finder') — run setup-server.sh first"
 fi
 
 # Note: the promoter PM2 cron is owned by the scraper service (scripts/scraper/deploy.sh).
