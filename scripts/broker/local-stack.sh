@@ -68,11 +68,22 @@ up() {
   ok "incenva-broker + incenva-broker-promoter"
 
   if [[ -f "$TENANT_DIR/.env" ]]; then
-    log "Starting the customer site"
-    (cd "$TENANT_DIR" && pm2 delete incenva-rebate-finder >/dev/null 2>&1; \
-      PORT="$TENANT_PORT" pm2 start "pnpm start" --name incenva-rebate-finder --update-env >/dev/null) \
-      && ok "incenva-rebate-finder on :$TENANT_PORT" \
-      || warn "could not start the customer site — start it by hand if you need it"
+    # This machine may already run the customer site under another PM2 name —
+    # "Rebate Finder" is the long-standing one here. Starting a second copy
+    # would fight it for the port and silently serve from whichever won.
+    EXISTING=""
+    for candidate in "Rebate Finder" "incenva-rebate-finder"; do
+      if pm2 describe "$candidate" >/dev/null 2>&1; then EXISTING="$candidate"; break; fi
+    done
+    if [[ -n "$EXISTING" ]]; then
+      ok "customer site already running as \"$EXISTING\" — left alone"
+      note "restart it yourself if you want it picking up new env: pm2 restart \"$EXISTING\" --update-env"
+    else
+      log "Starting the customer site"
+      (cd "$TENANT_DIR" && PORT="$TENANT_PORT" pm2 start "pnpm start" --name incenva-rebate-finder --update-env >/dev/null) \
+        && ok "incenva-rebate-finder on :$TENANT_PORT" \
+        || warn "could not start the customer site — start it by hand if you need it"
+    fi
   else
     note "no $TENANT_DIR/.env — skipping the customer site"
   fi
@@ -84,7 +95,7 @@ up() {
 
 status() {
   log "Status"
-  pm2 list 2>/dev/null | grep -E "incenva|name" || note "nothing running under pm2"
+  pm2 list 2>/dev/null | grep -iE "incenva|rebate finder|name" || note "nothing running under pm2"
 
   echo ""
   if curl -fsS "http://localhost:${BROKER_PORT}/healthz" 2>/dev/null | grep -q '"ok":true'; then
@@ -114,9 +125,13 @@ status() {
 down() {
   need_pm2
   log "Stopping"
-  pm2 delete incenva-broker incenva-broker-promoter incenva-rebate-finder >/dev/null 2>&1
+  pm2 delete incenva-broker incenva-broker-promoter >/dev/null 2>&1
+  # Only remove the customer site if this script started it. A pre-existing
+  # process (commonly "Rebate Finder" here) is somebody else's to manage.
+  pm2 delete incenva-rebate-finder >/dev/null 2>&1
   pm2 save >/dev/null 2>&1
-  ok "stopped and removed"
+  ok "broker stopped and removed"
+  pm2 describe "Rebate Finder" >/dev/null 2>&1 && note "left \"Rebate Finder\" running — this script did not start it"
 }
 
 case "${1:-status}" in
