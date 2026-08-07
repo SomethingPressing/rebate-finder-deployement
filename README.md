@@ -168,6 +168,8 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 | `scripts/scraper/setup-fly.sh` | First-time Fly.io app setup for the scraper (called by provision Step 11) |
 | `scripts/scraper/deploy-fly.sh` | Every code update to the scraper (deploys to Fly.io) |
 | `scripts/scraper/setup-server.sh` | **Not used in production** (scraper is Fly-only) — installs Go + builds binaries on a server; the v0.8 all-in-one test box will reuse it |
+| `scripts/broker/setup-staging-host.sh` | Provision the **shared staging host** (v0.8): Postgres + Redis + the broker under PM2 as two processes. Run on the target machine. |
+| `scripts/broker/deploy.sh` | Pull, rebuild and restart the broker on the staging host. Code only — never touches `.env` or the write mode. |
 | `scripts/scraper/deploy.sh` | On-server scraper update — only relevant where `setup-server.sh` was used |
 
 ---
