@@ -169,10 +169,85 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 | `scripts/scraper/deploy-fly.sh` | Every code update to the scraper (deploys to Fly.io) |
 | `scripts/scraper/setup-server.sh` | **Not used in production** (scraper is Fly-only) — installs Go + builds binaries on a server; the v0.8 all-in-one test box will reuse it |
 | `scripts/broker/setup-staging-host.sh` | Provision the **shared staging host** (v0.8): Postgres + Redis + the broker under PM2 as two processes. Run on the target machine. |
-| `scripts/broker/deploy.sh` | Pull, rebuild and restart the broker on the staging host. Code only — never touches `.env` or the write mode. |
+| `scripts/broker/deploy.sh` | Pull, push the `broker.*` schema, rebuild and restart. Never touches `.env` or the write mode — going live stays a deliberate decision, not a side effect of a deploy. |
+| `scripts/broker/connect-tenant.sh` | Point one customer site at the broker: register it, issue its key, print the `.env` lines. Warns if the id is one the old path does not know, because that silently breaks the shadow comparison. |
 | `scripts/broker/smoke-end-to-end.sh` | Prove the whole path on one box: stage → promote → queue → drain → import. Read-mostly; never turns the importer live. |
 | `scripts/broker/local-stack.sh` | Bring the whole system up locally under PM2 (`up` / `down` / `status` / `logs`). Leaves an already-running customer site alone rather than fighting it for the port. |
 | `scripts/scraper/deploy.sh` | On-server scraper update — only relevant where `setup-server.sh` was used |
+
+---
+
+## Standing up v0.8, end to end
+
+The order matters in two places, and both are called out below.
+
+### 1. The staging host
+
+```bash
+STAGING_DB_PASSWORD=…  BROKER_ADMIN_PASSWORD=…  bash scripts/broker/setup-staging-host.sh
+```
+
+Installs Postgres, Redis and the broker as two PM2 processes, creates the
+`broker.*` schema, seeds a super-admin, and **generates `BROKER_SECRETS_KEY`
+and `BROKER_SESSION_SECRET`** for you.
+
+> **Back up `/opt/rebate-finder-broker/.env` before going further.**
+> `BROKER_SECRETS_KEY` encrypts everything in Managed config. If it is lost or
+> changed, stored credentials cannot be decrypted — and nothing breaks loudly:
+> every site quietly falls back to its own `.env`. That is the safe outcome and
+> a very hard one to notice.
+
+### 2. TLS — before any tenant, not after
+
+```bash
+bash scripts/setup-nginx.sh && bash scripts/setup-ssl.sh
+```
+
+This is a blocker rather than a recommendation now: a tenant site **refuses**
+plain HTTP to a public host unless `BROKER_ALLOW_INSECURE=true`. Bearer keys
+and managed credentials both travel this path.
+
+### 3. Point the collectors at it
+
+Set `DATABASE_URL` on the Fly.io collector app to the staging database (the
+setup script prints the exact string). Nothing else changes: collectors read
+what to collect from the demand envelope in that database, and hold no tenant
+credential at all.
+
+### 4. Connect each tenant
+
+```bash
+bash scripts/broker/connect-tenant.sh
+```
+
+Use the customer's **own client id** — the one in its `scraper_source_configs`.
+A different id does not produce a wrong comparison, it produces *no*
+comparison: the shadow check lines the two paths up by tenant id, and a
+mismatch reads as "not comparable" forever with nothing explaining why.
+
+### 5. Watch it, then decide
+
+- **Tenants** — the site shows `online` once it starts beating (every 5 min).
+- **Tenants → Pipeline** — collected → staged → routed → queued → drained →
+  imported, with the stage that is holding things up called out.
+- **Comparison** — the old path against the new one.
+
+`PROMOTER_WRITE_MODE` stays `shadow` until Comparison is clean run after run.
+Switching it is a one-line change in `.env` plus a restart, deliberately
+separate from deploying.
+
+### Creating the first admin on a customer site
+
+The broker holds no credential for a tenant database, so it cannot create the
+user. Instead: **Tenants → *tenant* → Admins → Invite an admin**. The site mints
+an invitation with its own code and the link comes back to that page, usually
+within a minute. **No email is sent** — you pass the link on yourself, and the
+person sets their own password.
+
+On a tenant that already existed, press **Ask the site** first: it lists the
+administrators already there, which is the thing worth knowing before adding
+another owner to a console that has one.
+
 
 ---
 

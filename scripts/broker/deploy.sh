@@ -43,6 +43,16 @@ fi
 log "Installing dependencies"
 pnpm install --frozen-lockfile --silent
 
+# Schema first, build second. The console reads tables the running build does
+# not know about yet, so pushing after a restart means a window where pages
+# fail; pushing before means the new build finds everything it expects.
+#
+# Scoped to broker.* by the datasource, so a deploy can never alter the
+# collectors' scraper.* or a tenant's public.*.
+log "Applying schema changes"
+pnpm db:push
+ok "broker.* in sync"
+
 log "Building"
 pnpm build
 
@@ -66,6 +76,12 @@ if curl -fsS "http://localhost:${PORT}/healthz" | grep -q '"ok":true'; then
   ok "/healthz reports healthy"
 else
   warn "/healthz is not healthy — check: pm2 logs incenva-broker --lines 50"
+fi
+
+# Managed configuration is silently inert without its key, and the failure has
+# no error: sites just keep using their own .env. Worth one line at deploy time.
+if ! grep -qE '^BROKER_SECRETS_KEY=.+' .env 2>/dev/null; then
+  warn "BROKER_SECRETS_KEY is not set — Managed config is switched off and sites will use their own .env"
 fi
 
 MODE=$(grep -E '^PROMOTER_WRITE_MODE=' .env 2>/dev/null | cut -d= -f2 || echo shadow)

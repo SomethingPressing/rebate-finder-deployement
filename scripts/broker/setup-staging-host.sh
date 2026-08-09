@@ -110,6 +110,13 @@ else
   git clone --quiet --branch "$BROKER_BRANCH" "$BROKER_REPO" "$APP_DIR"
 fi
 
+# Secrets the operator should never have to invent. Generated once, here, and
+# then left alone: BROKER_SECRETS_KEY in particular must survive, because
+# changing it makes every stored credential undecryptable and every site
+# silently falls back to its own .env — a failure with no error message.
+BROKER_SECRETS_KEY="${BROKER_SECRETS_KEY:-$(openssl rand -base64 48 | tr -d '\n/+=' | head -c 48)}"
+BROKER_SESSION_SECRET="${BROKER_SESSION_SECRET:-$(openssl rand -base64 48 | tr -d '\n/+=' | head -c 48)}"
+
 cat > "$APP_DIR/.env" <<ENV
 DATABASE_URL=postgresql://${STAGING_DB_USER}:${STAGING_DB_PASSWORD}@localhost:5432/${STAGING_DB_NAME}
 REDIS_URL=redis://localhost:6379
@@ -119,6 +126,10 @@ LOG_FORMAT=json
 PROMOTER_INTERVAL_MS=60000
 PROMOTER_WRITE_MODE=${PROMOTER_WRITE_MODE}
 BROKER_ADMIN_PASSWORD=${BROKER_ADMIN_PASSWORD}
+# Signs console sessions. Rotating it logs everybody out without changing a password.
+BROKER_SESSION_SECRET=${BROKER_SESSION_SECRET}
+# Encrypts everything in Managed config. KEEP IT — see the note above.
+BROKER_SECRETS_KEY=${BROKER_SECRETS_KEY}
 QUEUE_RATE_LIMIT_PER_MINUTE=120
 QUEUE_REMOVAL_RETENTION_DAYS=7
 ENV
@@ -126,7 +137,21 @@ chmod 600 "$APP_DIR/.env"
 
 cd "$APP_DIR"
 pnpm install --frozen-lockfile --silent
+
+# The broker owns broker.* through Prisma and nothing else — the datasource is
+# scoped to that schema, so this can never touch the collectors' scraper.* or a
+# tenant's public.*. Without it the console's newer tables do not exist and
+# pages fail one by one rather than all at once, which is harder to diagnose.
+log "Creating the broker schema"
+pnpm db:push
+ok "broker.* is in sync with the schema"
+
 pnpm build
+
+# A console nobody can sign into is not much use. Idempotent, and also the
+# recovery path if everyone is locked out later.
+log "Seeding the super-admin account"
+pnpm seed:admins || warn "could not seed an admin — run 'pnpm seed:admins' by hand"
 
 log "Starting the broker under PM2"
 pm2 delete incenva-broker incenva-broker-promoter >/dev/null 2>&1 || true
@@ -158,11 +183,20 @@ $(printf '\033[1;32m─── staging host ready ───\033[0m')
 
 $(printf '\033[1;33m  Store that password now — it is not recoverable.\033[0m')
 
-  Next:
-    1. Put the broker behind TLS before any tenant uses it (scripts/setup-nginx.sh
-       and scripts/setup-ssl.sh do the same job they do for a customer box).
-    2. Create tenants in the console; hand each site its key once.
-    3. Leave PROMOTER_WRITE_MODE=shadow until the comparison is clean run
-       after run (console → Comparison, or \`pnpm compare\`).
+  Next, in this order:
+    1. TLS, before any tenant uses it. scripts/setup-nginx.sh and
+       scripts/setup-ssl.sh do the same job they do for a customer box.
+       Until then every bearer key and managed credential crosses the network
+       in cleartext — and tenant sites now REFUSE plain HTTP to a public host
+       unless BROKER_ALLOW_INSECURE is set, so this is a real blocker, not
+       advice.
+    2. Connect each tenant:  bash scripts/broker/connect-tenant.sh
+    3. Leave PROMOTER_WRITE_MODE=shadow until the comparison is clean run after
+       run (console → Comparison, or \`pnpm compare\`).
+
+  Secrets written to $APP_DIR/.env — back it up:
+    BROKER_SECRETS_KEY      lose it and stored credentials become unreadable
+    BROKER_SESSION_SECRET   rotate to log everyone out
+    BROKER_ADMIN_PASSWORD   the one you supplied
 
 SUMMARY
