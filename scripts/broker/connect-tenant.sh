@@ -67,6 +67,14 @@ fi
 [[ -n "$TENANT_ID" ]] || fail "a tenant id is required"
 TENANT_NAME="${TENANT_NAME:-$TENANT_ID}"
 
+# The hostname this customer serves. Optional, but a console listing tenants by
+# id alone is unreadable, so it is asked for rather than left to be filled in
+# later — which in practice means never.
+if [[ -z "${TENANT_DOMAINS:-}" ]]; then
+  read -rp "Site hostname (e.g. pulse.incenva.com, blank to skip): " TENANT_DOMAINS
+fi
+export TENANT_DOMAINS
+
 # ── Is this id one the old path knows? ───────────────────────────────────────
 if [[ "$OLD_PATH_EXISTS" == "t" ]]; then
   KNOWN=$(psql_q "SELECT count(*) FROM scraper.rebate_tenant_status WHERE tenant_id = '${TENANT_ID//\'/\'\'}'" || echo 0)
