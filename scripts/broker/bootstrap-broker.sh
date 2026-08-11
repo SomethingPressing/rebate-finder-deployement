@@ -181,9 +181,13 @@ else
     warn "Point an A record at this box, then run:"
     warn "  APP_DOMAIN=$APP_DOMAIN CLOUDFLARE_API_TOKEN=… bash $DEPLOY_DIR/scripts/setup-ssl.sh"
   else
-    APP_DOMAIN="$APP_DOMAIN" bash "$DEPLOY_DIR/scripts/setup-nginx.sh" || warn "nginx step failed — see above"
-    APP_DOMAIN="$APP_DOMAIN" CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-}" \
-      bash "$DEPLOY_DIR/scripts/setup-ssl.sh" || warn "TLS step failed — see above"
+    # The broker-specific script, not the generic setup-nginx/setup-ssl pair.
+    # Those were written for tenant boxes: port 3000, unproxied, and they rely
+    # on certbot's nginx plugin, which silently does nothing when it cannot
+    # pattern-match a server block — leaving a valid certificate unserved.
+    APP_DOMAIN="$APP_DOMAIN" BROKER_PORT="${BROKER_PORT:-8080}" \
+      CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-}" \
+      bash "$DEPLOY_DIR/scripts/broker/setup-tls.sh" || warn "TLS step failed — see above"
   fi
 fi
 
