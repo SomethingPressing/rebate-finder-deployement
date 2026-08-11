@@ -70,15 +70,11 @@ fi
 
 # ── Register and issue a key ─────────────────────────────────────────────────
 log "Registering ${TENANT_NAME}"
-KEY=$(TENANT_ID="$TENANT_ID" TENANT_NAME="$TENANT_NAME" pnpm --silent exec tsx -e '
-import { createTenant, rotateApiKey } from "./src/tenants/store";
-import { prisma } from "./src/prisma";
-const id = process.env.TENANT_ID!, name = process.env.TENANT_NAME!;
-const existing = await prisma.tenant.findUnique({ where: { id } });
-const key = existing ? await rotateApiKey(id) : (await createTenant({ id, name, domains: [] })).apiKey;
-process.stdout.write(key ?? "");
-process.exit(0);
-' 2>/dev/null) || fail "registration failed — try the console at http://localhost:${PORT}/tenants"
+# stderr is shown, not swallowed: the previous version hid the real failure
+# behind 2>/dev/null and reported a generic message the operator could not act
+# on. Only the key comes back on stdout.
+KEY=$(TENANT_ID="$TENANT_ID" TENANT_NAME="$TENANT_NAME" pnpm --silent exec tsx scripts/register-tenant.ts) \
+  || fail "registration failed — see the error above, or use the console at https://${APP_DOMAIN:-localhost:$PORT}/tenants"
 [[ -n "$KEY" ]] || fail "no key was issued"
 ok "registered, key issued (shown once)"
 
