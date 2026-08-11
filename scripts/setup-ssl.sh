@@ -100,6 +100,25 @@ if [[ -f "$CERT_PATH" ]]; then
   # Certificate already exists — check expiry
   EXPIRY=$(openssl x509 -noout -enddate -in "$CERT_PATH" 2>/dev/null | cut -d= -f2 || echo "unknown")
   skip "Certificate already exists (expires: $EXPIRY)"
+
+  # Having a certificate does not mean it is being SERVED. The DNS-01 path
+  # obtains without installing, so a re-run would otherwise skip this branch
+  # entirely and leave nginx on port 80 — the exact state that produced a 521
+  # with a valid certificate sitting on disk.
+  if ss -tln 2>/dev/null | grep -q ':443 '; then
+    ok "already being served on 443"
+  else
+    warn "certificate present but nothing is listening on 443 — installing it into nginx"
+    if certbot install --nginx --cert-name "$APP_DOMAIN" --non-interactive; then
+      systemctl reload nginx 2>/dev/null || true
+      ss -tln 2>/dev/null | grep -q ':443 ' \
+        && ok "now serving on 443" \
+        || warn "still nothing on 443 — check: nginx -t && journalctl -u nginx -n 30"
+    else
+      warn "could not install it. Run by hand:"
+      warn "  certbot install --nginx --cert-name $APP_DOMAIN --non-interactive && systemctl reload nginx"
+    fi
+  fi
   info "To force-renew: certbot renew --force-renewal --cert-name $APP_DOMAIN"
 else
   # ── Which challenge ──────────────────────────────────────────────────────
