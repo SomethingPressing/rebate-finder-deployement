@@ -188,11 +188,19 @@ else
 fi
 
 IP=$(hostname -I | awk '{print $1}')
+# Computed, not interpolated. ${VAR:+a}${VAR:-b} are not exclusive: with the
+# variable set the first expands and the second is empty, so both printed and
+# the URL came out as "https://hostbroker.incenva.com".
+if [[ -n "${APP_DOMAIN:-}" ]]; then
+  CONSOLE_URL="https://${APP_DOMAIN}"
+else
+  CONSOLE_URL="http://${IP}:${BROKER_PORT:-8080}"
+fi
 cat <<SUMMARY
 
 $(printf '\033[1;32m─── broker bootstrapped ───\033[0m')
 
-  Console   ${APP_DOMAIN:+https://$APP_DOMAIN}${APP_DOMAIN:-http://$IP:${BROKER_PORT:-8080}}
+  Console   ${CONSOLE_URL}
 
 $(printf '\033[1;33m  Two things this did NOT do, on purpose:\033[0m')
 
@@ -200,7 +208,10 @@ $(printf '\033[1;33m  Two things this did NOT do, on purpose:\033[0m')
      is passed inline so it never lands in a file:
 
        cd /opt/rebate-finder-broker
-       BROKER_ADMINS="${BROKER_ADMIN_EMAIL}:a-long-passphrase:Your Name" pnpm seed:admins
+       BROKER_ADMINS='${BROKER_ADMIN_EMAIL}:your-password:Your Name' pnpm seed:admins
+
+     Single quotes matter: a password containing ! is history-expanded by bash
+     inside double quotes, and fails with "unrecognized history modifier".
 
   2. Back up /opt/rebate-finder-broker/.env. It holds BROKER_SECRETS_KEY, and
      losing that makes every stored credential unreadable — quietly, with every

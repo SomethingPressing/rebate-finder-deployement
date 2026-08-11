@@ -221,7 +221,7 @@ $(printf '\033[1;33m  Store that password now — it is not recoverable.\033[0m'
 $(printf '\033[1;33m  Create your console login now — nothing can sign in until you do:\033[0m')
 
     cd $APP_DIR
-    BROKER_ADMINS="you@incenva.com:a-long-passphrase:Your Name" pnpm seed:admins
+    BROKER_ADMINS='you@incenva.com:your-password:Your Name' pnpm seed:admins
 
   Passed inline on purpose, so the password is never written to .env. Re-running
   it resets that admin's password, which is also the way back in if you are ever
