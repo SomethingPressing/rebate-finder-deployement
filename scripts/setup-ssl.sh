@@ -141,8 +141,21 @@ else
   fi
   echo ""
 
-  if certbot certonly "${CERTBOT_FLAGS[@]}" || certbot "${CERTBOT_FLAGS[@]}"; then
-    ok "Certificate issued for $APP_DOMAIN"
+  # Obtaining and INSTALLING are two different things, and the DNS plugin only
+  # does the first: --dns-cloudflare cannot rewrite nginx, so `certonly` is the
+  # only option there. Running just that leaves a perfectly good certificate on
+  # disk with nginx still listening on port 80 alone — which from outside looks
+  # exactly like the certificate failed, and behind Cloudflare shows up as a
+  # 521 with no clue in any log on the box.
+  #
+  # So: obtain, then install as a separate step.
+  if certbot certonly "${CERTBOT_FLAGS[@]}"; then
+    ok "Certificate obtained for $APP_DOMAIN"
+    if certbot install --nginx --cert-name "$APP_DOMAIN" --non-interactive; then
+      ok "Installed into nginx — listening on 443"
+    else
+      fail "Certificate obtained but nginx was not configured. Run:\n  certbot install --nginx --cert-name $APP_DOMAIN --non-interactive"
+    fi
     CERT_ISSUED=true
   else
     fail "Certbot failed. Check:\n  - DNS: dig +short $APP_DOMAIN\n  - If the record is PROXIED, HTTP-01 cannot work — set CLOUDFLARE_API_TOKEN and re-run\n  - Token needs Zone:DNS:Edit on this zone\n  - Nginx config: nginx -t"
@@ -150,6 +163,13 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# A certificate that exists but is not being served is the failure this script
+# just shipped. Check the port, not the file.
+if ! ss -tln 2>/dev/null | grep -q ':443 '; then
+  warn "Nothing is listening on 443 — TLS is not actually being served."
+  warn "Try: certbot install --nginx --cert-name $APP_DOMAIN --non-interactive && systemctl reload nginx"
+fi
+
 log "4/5  Verify auto-renewal"
 
 if certbot renew --dry-run --quiet 2>/dev/null; then
