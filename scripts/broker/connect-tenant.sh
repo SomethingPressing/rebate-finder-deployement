@@ -39,14 +39,25 @@ DB_URL=$(grep -E '^DATABASE_URL=' .env | cut -d= -f2- | tr -d '"')
 PORT=$(grep -E '^PORT=' .env | cut -d= -f2 || echo 8080)
 [[ -n "$DB_URL" ]] || fail "DATABASE_URL is missing from $APP_DIR/.env"
 
-psql_q() { psql "${DB_URL%%\?*}" -tAc "$1"; }
+psql_q() { psql "${DB_URL%%\?*}" -tAc "$1" 2>/dev/null; }
+
+# scraper.* belongs to the collectors' GORM migrations, so on a staging host
+# where no collector has run yet the table genuinely does not exist. That is a
+# normal state for a first tenant, not an error — and treating it as one made
+# the script abort under `set -e` before it registered anything.
+OLD_PATH_EXISTS=$(psql_q "SELECT to_regclass('scraper.rebate_tenant_status') IS NOT NULL" || echo f)
 
 # ── Which tenant ─────────────────────────────────────────────────────────────
 if [[ -z "${TENANT_ID:-}" ]]; then
   echo ""
-  echo "Tenants the OLD direct-write path already knows:"
-  psql_q "SELECT '  ' || tenant_id || '  (' || count(*) || ' rows)'
-          FROM scraper.rebate_tenant_status GROUP BY tenant_id ORDER BY count(*) DESC" || true
+  if [[ "$OLD_PATH_EXISTS" == "t" ]]; then
+    echo "Tenants the OLD direct-write path already knows:"
+    psql_q "SELECT '  ' || tenant_id || '  (' || count(*) || ' rows)'
+            FROM scraper.rebate_tenant_status GROUP BY tenant_id ORDER BY count(*) DESC" || true
+  else
+    echo "No collector has written to this staging host yet, so there is no old"
+    echo "path here to compare against. That is expected on a new host."
+  fi
   echo ""
   echo "Use the customer's OWN client id — the one in its scraper_source_configs."
   echo "A different id makes the shadow comparison permanently 'not comparable'."
@@ -57,8 +68,15 @@ fi
 TENANT_NAME="${TENANT_NAME:-$TENANT_ID}"
 
 # ── Is this id one the old path knows? ───────────────────────────────────────
-KNOWN=$(psql_q "SELECT count(*) FROM scraper.rebate_tenant_status WHERE tenant_id = '${TENANT_ID//\'/\'\'}'")
-if [[ "$KNOWN" == "0" ]]; then
+if [[ "$OLD_PATH_EXISTS" == "t" ]]; then
+  KNOWN=$(psql_q "SELECT count(*) FROM scraper.rebate_tenant_status WHERE tenant_id = '${TENANT_ID//\'/\'\'}'" || echo 0)
+else
+  KNOWN="n/a"
+fi
+
+if [[ "$KNOWN" == "n/a" ]]; then
+  ok "nothing to compare against on this host yet — the shadow comparison starts once collectors run"
+elif [[ "$KNOWN" == "0" ]]; then
   warn "the old path has no rows for '${TENANT_ID}'."
   warn "That is correct for a brand-new customer, and WRONG for one that already exists —"
   warn "in that case the shadow comparison will never be able to line the two paths up."
