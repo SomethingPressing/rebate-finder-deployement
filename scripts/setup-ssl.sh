@@ -61,8 +61,8 @@ if command -v certbot &>/dev/null; then
   skip "certbot $(certbot --version 2>&1 | grep -oP '\d+\.\d+\.\d+' | head -1) already installed"
 else
   apt-get update -qq
-  apt-get install -y certbot python3-certbot-nginx >/dev/null
-  ok "Installed certbot + python3-certbot-nginx"
+  apt-get install -y certbot python3-certbot-nginx python3-certbot-dns-cloudflare >/dev/null
+  ok "Installed certbot + nginx and Cloudflare DNS plugins"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -97,26 +97,52 @@ if [[ -f "$CERT_PATH" ]]; then
   # Certificate already exists — check expiry
   EXPIRY=$(openssl x509 -noout -enddate -in "$CERT_PATH" 2>/dev/null | cut -d= -f2 || echo "unknown")
   skip "Certificate already exists (expires: $EXPIRY)"
-  info "To force-renew: certbot renew --force-renewal --nginx -d $APP_DOMAIN"
+  info "To force-renew: certbot renew --force-renewal --cert-name $APP_DOMAIN"
 else
-  info "Running: certbot --nginx --non-interactive --agree-tos --no-eff-email -d $APP_DOMAIN"
-  info "(Using --register-unsafely-without-email — add --email you@example.com for expiry alerts)"
-  echo ""
-
-  # Use --register-unsafely-without-email for automated runs.
-  # If you want expiry email alerts, set CERTBOT_EMAIL env var.
-  CERTBOT_FLAGS=(--nginx --non-interactive --agree-tos --no-eff-email -d "$APP_DOMAIN")
+  # ── Which challenge ──────────────────────────────────────────────────────
+  #
+  # HTTP-01 (--nginx) proves control by serving a file on port 80. That cannot
+  # work when the hostname is PROXIED through Cloudflare: the challenge hits
+  # Cloudflare's edge and never reaches this box, so issuance fails with a
+  # confusing "connection refused"-style error that looks like a firewall
+  # problem.
+  #
+  # DNS-01 proves control by writing a TXT record instead, which works whether
+  # the record is proxied or not — and the broker already needs a Cloudflare
+  # token with Zone:DNS:Edit, so it is the same credential.
+  #
+  # So: use DNS-01 whenever a token is available, HTTP-01 otherwise.
+  CERTBOT_FLAGS=(--non-interactive --agree-tos -d "$APP_DOMAIN")
   if [[ -n "${CERTBOT_EMAIL:-}" ]]; then
     CERTBOT_FLAGS+=(--email "$CERTBOT_EMAIL")
-    CERTBOT_FLAGS=("${CERTBOT_FLAGS[@]/--no-eff-email}")  # remove conflicting flag
-    CERTBOT_FLAGS=(--nginx --non-interactive --agree-tos --email "$CERTBOT_EMAIL" -d "$APP_DOMAIN")
+  else
+    CERTBOT_FLAGS+=(--no-eff-email --register-unsafely-without-email)
   fi
 
-  if certbot "${CERTBOT_FLAGS[@]}"; then
+  if [[ -n "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+    CF_INI=/root/.secrets/cloudflare.ini
+    mkdir -p /root/.secrets
+    printf 'dns_cloudflare_api_token = %s\n' "$CLOUDFLARE_API_TOKEN" > "$CF_INI"
+    # certbot refuses to use a credentials file others can read, and it is
+    # holding a token that can edit DNS for the whole zone.
+    chmod 600 "$CF_INI"
+    CERTBOT_FLAGS+=(--dns-cloudflare --dns-cloudflare-credentials "$CF_INI")
+    # Cloudflare's DNS propagates fast, but not instantly; the default 10s is
+    # optimistic often enough to be worth raising.
+    CERTBOT_FLAGS+=(--dns-cloudflare-propagation-seconds 30)
+    info "Using DNS-01 via Cloudflare — works with the record proxied"
+  else
+    CERTBOT_FLAGS+=(--nginx)
+    warn "No CLOUDFLARE_API_TOKEN — falling back to HTTP-01."
+    warn "That FAILS if $APP_DOMAIN is proxied through Cloudflare (orange cloud)."
+  fi
+  echo ""
+
+  if certbot certonly "${CERTBOT_FLAGS[@]}" || certbot "${CERTBOT_FLAGS[@]}"; then
     ok "Certificate issued for $APP_DOMAIN"
     CERT_ISSUED=true
   else
-    fail "Certbot failed. Check:\n  - DNS: dig +short $APP_DOMAIN\n  - Port 80 open: ufw status\n  - Nginx running: systemctl status nginx\n  - Nginx config: nginx -t"
+    fail "Certbot failed. Check:\n  - DNS: dig +short $APP_DOMAIN\n  - If the record is PROXIED, HTTP-01 cannot work — set CLOUDFLARE_API_TOKEN and re-run\n  - Token needs Zone:DNS:Edit on this zone\n  - Nginx config: nginx -t"
   fi
 fi
 
@@ -140,7 +166,10 @@ fi
 log "5/5  Update app .env (NEXT_BASE_URL)"
 
 if [[ -f "$ENV_FILE" ]]; then
-  CURRENT_URL=$(grep -E '^NEXT_BASE_URL=' "$ENV_FILE" | cut -d= -f2- | tr -d '"' || true)
+  # The quote character is deleted via its octal escape: writing it literally
+  # inside this command substitution leaves bash unable to parse the file at
+  # all, so the whole script silently never runs.
+  CURRENT_URL=$(grep -E '^NEXT_BASE_URL=' "$ENV_FILE" | cut -d= -f2- | tr -d '\042' || true)
   EXPECTED_URL="https://$APP_DOMAIN"
 
   if [[ "$CURRENT_URL" == "$EXPECTED_URL" ]]; then
