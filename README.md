@@ -168,6 +168,7 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 | `scripts/scraper/setup-fly.sh` | First-time Fly.io app setup for the scraper (called by provision Step 11) |
 | `scripts/scraper/deploy-fly.sh` | Every code update to the scraper (deploys to Fly.io) |
 | `scripts/scraper/setup-server.sh` | **Not used in production** (scraper is Fly-only) — installs Go + builds binaries on a server; the v0.8 all-in-one test box will reuse it |
+| `scripts/broker/bootstrap-broker.sh` | **Start here.** Blank Ubuntu droplet → running broker, in one command. Handles the deploy key, clones this repo, then calls the two scripts below. |
 | `scripts/broker/setup-staging-host.sh` | Provision the **shared staging host** (v0.8): Postgres + Redis + the broker under PM2 as two processes. Run on the target machine. |
 | `scripts/broker/deploy.sh` | Pull, push the `broker.*` schema, rebuild and restart. Never touches `.env` or the write mode — going live stays a deliberate decision, not a side effect of a deploy. |
 | `scripts/broker/connect-tenant.sh` | Point one customer site at the broker: register it, issue its key, print the `.env` lines. Warns if the id is one the old path does not know, because that silently breaks the shadow comparison. |
@@ -182,6 +183,26 @@ bash /home/rf/apps/deployment/scripts/verify-deploy-keys.sh
 The order matters in two places, and both are called out below.
 
 ### 1. The staging host
+
+One command on a blank droplet:
+
+```bash
+BROKER_ADMIN_PASSWORD='a-long-passphrase' \
+BROKER_ADMIN_EMAIL=you@incenva.com \
+APP_DOMAIN=broker.incenva.com \
+CLOUDFLARE_API_TOKEN=… \
+  bash <(curl -fsSL https://raw.githubusercontent.com/SomethingPressing/rebate-finder-deployement/main/scripts/broker/bootstrap-broker.sh)
+```
+
+`bash <(curl …)` rather than `curl … | bash`: the script pauses to let you paste
+a deploy key into GitHub, and a pipe takes the stdin it needs to read your
+keypress.
+
+It installs packages, sets up repo access, clones this project, runs
+`setup-staging-host.sh`, and finishes with nginx and TLS when `APP_DOMAIN`
+resolves. Idempotent — re-run it after fixing whatever stopped it.
+
+To do the middle step alone, on a box that is already prepared:
 
 ```bash
 STAGING_DB_PASSWORD=…  \
