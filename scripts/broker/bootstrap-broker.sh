@@ -55,7 +55,13 @@ BROKER_ADMIN_EMAIL="${BROKER_ADMIN_EMAIL:-admin@incenva.com}"
 echo -e "\n${BOLD}Incenva broker — staging host bootstrap${NC}"
 echo    "  admin        ${BROKER_ADMIN_EMAIL}"
 echo    "  domain       ${APP_DOMAIN:-<none — TLS will be skipped>}"
-echo    "  cloudflare   ${CLOUDFLARE_API_TOKEN:+token supplied}${CLOUDFLARE_API_TOKEN:-not supplied}"
+# Presence only. The previous line used ${VAR:+a}${VAR:-b}, which are not
+# exclusive — with the variable set it printed "token supplied" AND the token.
+if [[ -n "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+  echo  "  cloudflare   token supplied"
+else
+  echo  "  cloudflare   not supplied — TLS will fall back to HTTP-01"
+fi
 echo ""
 
 # ── 1. Base packages ─────────────────────────────────────────────────────────
@@ -69,6 +75,12 @@ ok "git, curl, openssh"
 # The broker repo is private, so the box needs its own key. Generated here and
 # left in place: re-running finds it and skips straight past.
 log "2/5  GitHub access for the broker repo"
+# A token short-circuits the whole deploy-key dance. Useful when the key is
+# already spoken for on another repo, which GitHub does not let you reuse.
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+  BROKER_REPO_SSH="https://x-access-token:${GITHUB_TOKEN}@github.com/SomethingPressing/rebate-finder-broker.git"
+  ok "using GITHUB_TOKEN instead of a deploy key"
+else
 KEY=/root/.ssh/id_ed25519_broker
 mkdir -p /root/.ssh && chmod 700 /root/.ssh
 
@@ -104,10 +116,29 @@ else
   cat "${KEY}.pub"
   echo ""
   read -rp "  Pressed 'Add key'? [Enter] " _ < /dev/tty
-  if ! ssh -T -o BatchMode=yes git@github-broker 2>&1 | grep -q "successfully authenticated"; then
-    fail "GitHub still refuses that key. Check it was added to rebate-finder-broker (not another repo), then re-run."
+  SSH_OUT=$(ssh -T -o BatchMode=yes -o StrictHostKeyChecking=accept-new git@github-broker 2>&1 || true)
+  if ! grep -q "successfully authenticated" <<<"$SSH_OUT"; then
+    echo ""
+    warn "GitHub did not accept the key. What ssh actually said:"
+    echo "$SSH_OUT" | sed 's/^/    /'
+    echo ""
+    warn "Common causes, in the order they usually are:"
+    warn "  · the key was pasted into the wrong repository, or into Settings > SSH keys"
+    warn "    (your account) instead of the repo's Deploy keys"
+    warn "  · this exact key is already a deploy key on another repo — GitHub allows"
+    warn "    a deploy key on only ONE repo, and silently refuses it elsewhere"
+    warn "  · a stale github.com entry in /root/.ssh/known_hosts"
+    echo ""
+    warn "If the key is already used elsewhere, make a fresh one and re-run:"
+    warn "    rm -f $KEY $KEY.pub && re-run this script"
+    echo ""
+    warn "Or skip SSH entirely with a GitHub token that can read the repo:"
+    warn "    GITHUB_TOKEN=ghp_… <re-run this script>"
+    fail "stopped — nothing has been changed on this box beyond packages and a key"
   fi
   ok "authenticated"
+fi
+
 fi
 
 # ── 3. This deployment repo ──────────────────────────────────────────────────
