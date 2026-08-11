@@ -96,8 +96,13 @@ server {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    http2 on;
     server_name ${APP_DOMAIN};
+
+    # No http2 directive on purpose. Its syntax changed in nginx 1.25.1
+    # ("http2 on;" vs "listen ... http2") and Ubuntu 22.04 ships 1.18, so
+    # either form breaks on some hosts. It also buys nothing here: Cloudflare
+    # serves HTTP/2 and HTTP/3 to browsers and talks HTTP/1.1 to the origin,
+    # so this connection is never the one a visitor uses.
 
     ssl_certificate     ${LIVE}/fullchain.pem;
     ssl_certificate_key ${LIVE}/privkey.pem;
