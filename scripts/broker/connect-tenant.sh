@@ -96,7 +96,21 @@ KEY=$(TENANT_ID="$TENANT_ID" TENANT_NAME="$TENANT_NAME" pnpm --silent exec tsx s
 [[ -n "$KEY" ]] || fail "no key was issued"
 ok "registered, key issued (shown once)"
 
-BASE="https://$(hostname -f 2>/dev/null || hostname -I | awk '{print $1}')"
+# The PUBLIC url, which `hostname -f` is not — on a droplet that returns the
+# provider's internal name, and the key printed below is useless with it.
+#
+# The certificate is the most reliable source on the box: whatever name TLS was
+# issued for is by definition the name clients reach. APP_DOMAIN overrides it,
+# and the IP is a last resort that at least resolves.
+if [[ -n "${APP_DOMAIN:-}" ]]; then
+  BASE="https://${APP_DOMAIN}"
+elif CERT_NAME=$(ls -1 /etc/letsencrypt/live 2>/dev/null | grep -v README | head -1) && [[ -n "$CERT_NAME" ]]; then
+  BASE="https://${CERT_NAME}"
+else
+  BASE="http://$(hostname -I | awk '{print $1}'):${PORT:-8080}"
+  warn "no certificate found — falling back to the IP. A tenant site REFUSES"
+  warn "plain HTTP to a public host, so this URL will not work from a customer box."
+fi
 
 cat <<SUMMARY
 
