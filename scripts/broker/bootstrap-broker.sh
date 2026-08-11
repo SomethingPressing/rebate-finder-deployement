@@ -40,7 +40,11 @@ fail() { echo -e "${RED}✖${NC} $*" >&2; exit 1; }
 skip() { echo -e "${GREEN}✔${NC} $* ${YELLOW}(already done)${NC}"; }
 
 DEPLOY_REPO="${DEPLOY_REPO:-https://github.com/SomethingPressing/rebate-finder-deployement.git}"
-BROKER_REPO_SSH="${BROKER_REPO:-git@github.com:SomethingPressing/rebate-finder-broker.git}"
+# NOTE the github-broker alias, not github.com. The deploy key is bound to that
+# alias in ~/.ssh/config (IdentityFile + IdentitiesOnly), so a plain
+# git@github.com URL never offers it — which is exactly how this passed its own
+# verification and then failed at the clone.
+BROKER_REPO_SSH="${BROKER_REPO:-git@github-broker:SomethingPressing/rebate-finder-broker.git}"
 DEPLOY_DIR="${DEPLOY_DIR:-/opt/rebate-finder-deployement}"
 
 # ── 0. Preflight ─────────────────────────────────────────────────────────────
