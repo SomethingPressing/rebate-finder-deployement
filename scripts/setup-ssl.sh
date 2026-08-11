@@ -73,7 +73,10 @@ DNS_IP="$(getent hosts "$APP_DOMAIN" | awk '{print $1; exit}' || true)"
 
 if [[ -z "$DNS_IP" ]]; then
   warn "DNS: $APP_DOMAIN does not resolve yet."
-  warn "Create an A record: $APP_DOMAIN → ${SERVER_IP:-<this server's IP>}"
+  # No apostrophe inside ${...}: bash processes quotes in a :- default even
+  # within double quotes, so "server's" opened a single-quoted string that
+  # never closed — and silently swallowed the rest of the file.
+  warn "Create an A record: $APP_DOMAIN → ${SERVER_IP:-the public IP of this server}"
   warn "Let's Encrypt will fail until DNS propagates."
   echo ""
   read -rp "  Continue anyway? (y/N) " CONFIRM < /dev/tty
@@ -166,10 +169,7 @@ fi
 log "5/5  Update app .env (NEXT_BASE_URL)"
 
 if [[ -f "$ENV_FILE" ]]; then
-  # The quote character is deleted via its octal escape: writing it literally
-  # inside this command substitution leaves bash unable to parse the file at
-  # all, so the whole script silently never runs.
-  CURRENT_URL=$(grep -E '^NEXT_BASE_URL=' "$ENV_FILE" | cut -d= -f2- | tr -d '\042' || true)
+  CURRENT_URL=$(grep -E '^NEXT_BASE_URL=' "$ENV_FILE" | cut -d= -f2- | tr -d '"' || true)
   EXPECTED_URL="https://$APP_DOMAIN"
 
   if [[ "$CURRENT_URL" == "$EXPECTED_URL" ]]; then
