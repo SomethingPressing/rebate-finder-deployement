@@ -38,6 +38,14 @@
 # =============================================================================
 set -euo pipefail
 
+# Nothing in a provisioner should wait on a keypress. corepack prompts before
+# fetching a package manager, and Ubuntu's needrestart interrupts apt to ask
+# which services may be restarted — both stall an unattended run indefinitely.
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=a
+export NEEDRESTART_SUSPEND=1
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
 log()  { printf '\033[1;36m▶ %s\033[0m\n' "$*"; }
 ok()   { printf '\033[1;32m✔ %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m! %s\033[0m\n' "$*"; }
@@ -70,10 +78,14 @@ apt-get update -qq
 apt-get install -y -qq postgresql postgresql-contrib redis-server git curl ca-certificates >/dev/null
 
 if ! command -v node >/dev/null || [[ "$(node -v | cut -c2- | cut -d. -f1)" -lt 20 ]]; then
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - >/dev/null
+  curl -fsSL https://deb.nodesource.com/setup_24.x | bash - >/dev/null
   apt-get install -y -qq nodejs >/dev/null
 fi
-corepack enable >/dev/null 2>&1 || npm install -g pnpm >/dev/null
+# Activate the exact version the repo pins, rather than whatever corepack
+# resolves as "latest" — that is how a host ended up with a pnpm needing a
+# newer Node than the one just installed.
+corepack enable >/dev/null 2>&1 || true
+corepack prepare pnpm@10.17.1 --activate >/dev/null 2>&1 || npm install -g pnpm@10 >/dev/null 2>&1 || true
 command -v pm2 >/dev/null || npm install -g pm2 >/dev/null
 ok "packages installed ($(node -v), $(psql --version | awk '{print $3}'))"
 

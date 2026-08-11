@@ -71,6 +71,9 @@ echo ""
 # ── 1. Base packages ─────────────────────────────────────────────────────────
 log "1/5  System packages"
 export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=a
+export NEEDRESTART_SUSPEND=1
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 apt-get update -qq
 apt-get install -y -qq git curl ca-certificates openssh-client >/dev/null
 ok "git, curl, openssh"
