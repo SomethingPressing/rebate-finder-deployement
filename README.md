@@ -184,12 +184,24 @@ The order matters in two places, and both are called out below.
 ### 1. The staging host
 
 ```bash
-STAGING_DB_PASSWORD=…  BROKER_ADMIN_PASSWORD=…  bash scripts/broker/setup-staging-host.sh
+STAGING_DB_PASSWORD=…  \
+BROKER_ADMIN_PASSWORD=…  \
+BROKER_ADMIN_EMAIL=you@incenva.com  \
+  bash scripts/broker/setup-staging-host.sh
 ```
 
+`BROKER_ADMIN_PASSWORD` must be 12+ characters — the seed rejects anything
+shorter, and it is better to find that out before the script runs than halfway
+through. `BROKER_ADMIN_EMAIL` defaults to `admin@incenva.com`; it is the address
+you sign in with, so set it to something real.
+
 Installs Postgres, Redis and the broker as two PM2 processes, creates the
-`broker.*` schema, seeds a super-admin, and **generates `BROKER_SECRETS_KEY`
-and `BROKER_SESSION_SECRET`** for you.
+`broker.*` schema, seeds a super-admin you can actually sign in as, and
+**generates `BROKER_SECRETS_KEY` and `BROKER_SESSION_SECRET`** for you.
+
+Once you have signed in, delete `BROKER_ADMINS` from the broker's `.env` — it
+exists only to create the accounts, and it holds a password in a file that is
+read on every deploy. Re-add it temporarily if you are ever locked out.
 
 > **Back up `/opt/rebate-finder-broker/.env` before going further.**
 > `BROKER_SECRETS_KEY` encrypts everything in Managed config. If it is lost or

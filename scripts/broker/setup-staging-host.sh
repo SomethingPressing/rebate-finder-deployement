@@ -15,7 +15,9 @@
 #   ./setup-staging-host.sh
 #
 # ── Required env vars ────────────────────────────────────────────────────────
-#   BROKER_ADMIN_PASSWORD   password for the super-admin console
+#   BROKER_ADMIN_PASSWORD   password for the super-admin console (12+ chars)
+#   BROKER_ADMIN_EMAIL      who signs in         (default admin@incenva.com)
+#   BROKER_ADMIN_NAME       display name         (default "Super Admin")
 #
 # ── Optional env vars ────────────────────────────────────────────────────────
 #   BROKER_REPO             git URL for rebate-finder-broker
@@ -43,6 +45,14 @@ fail() { printf '\033[1;31m✖ %s\033[0m\n' "$*" >&2; exit 1; }
 
 [[ $EUID -eq 0 ]] || fail "run as root (or with sudo)"
 [[ -n "${BROKER_ADMIN_PASSWORD:-}" ]] || fail "BROKER_ADMIN_PASSWORD is required — the console is locked without it"
+# The console signs in by email, so the seed needs one. Defaulted rather than
+# made mandatory: one more required variable is one more way a first deploy
+# stops halfway.
+BROKER_ADMIN_EMAIL="${BROKER_ADMIN_EMAIL:-admin@incenva.com}"
+BROKER_ADMIN_NAME="${BROKER_ADMIN_NAME:-Super Admin}"
+if [[ ${#BROKER_ADMIN_PASSWORD} -lt 12 ]]; then
+  fail "BROKER_ADMIN_PASSWORD must be at least 12 characters — the seed rejects anything shorter"
+fi
 
 BROKER_REPO="${BROKER_REPO:-git@github.com:SomethingPressing/rebate-finder-broker.git}"
 BROKER_BRANCH="${BROKER_BRANCH:-main}"
@@ -126,6 +136,10 @@ LOG_FORMAT=json
 PROMOTER_INTERVAL_MS=60000
 PROMOTER_WRITE_MODE=${PROMOTER_WRITE_MODE}
 BROKER_ADMIN_PASSWORD=${BROKER_ADMIN_PASSWORD}
+# What \`pnpm seed:admins\` reads: email:password[:name], comma separated.
+# Re-running the seed resets that admin's password, which is also the recovery
+# path if everyone is locked out.
+BROKER_ADMINS=${BROKER_ADMIN_EMAIL}:${BROKER_ADMIN_PASSWORD}:${BROKER_ADMIN_NAME}
 # Signs console sessions. Rotating it logs everybody out without changing a password.
 BROKER_SESSION_SECRET=${BROKER_SESSION_SECRET}
 # Encrypts everything in Managed config. KEEP IT — see the note above.
@@ -174,6 +188,7 @@ cat <<SUMMARY
 $(printf '\033[1;32m─── staging host ready ───\033[0m')
 
   Console       http://$(hostname -I | awk '{print $1}'):${BROKER_PORT}/
+  Sign in as    ${BROKER_ADMIN_EMAIL}
   Health        http://$(hostname -I | awk '{print $1}'):${BROKER_PORT}/healthz
   Wire contract http://$(hostname -I | awk '{print $1}'):${BROKER_PORT}/v1/...
   Write mode    ${PROMOTER_WRITE_MODE}
@@ -193,6 +208,11 @@ $(printf '\033[1;33m  Store that password now — it is not recoverable.\033[0m'
     2. Connect each tenant:  bash scripts/broker/connect-tenant.sh
     3. Leave PROMOTER_WRITE_MODE=shadow until the comparison is clean run after
        run (console → Comparison, or \`pnpm compare\`).
+
+  Once you have signed in, delete BROKER_ADMINS from $APP_DIR/.env — it is only
+  needed to create the accounts, and leaving a password in a file that is read
+  on every deploy is worth avoiding. Re-add it temporarily if you are ever
+  locked out; re-running the seed resets that admin's password.
 
   Secrets written to $APP_DIR/.env — back it up:
     BROKER_SECRETS_KEY      lose it and stored credentials become unreadable
