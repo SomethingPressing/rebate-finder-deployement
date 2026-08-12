@@ -8,7 +8,14 @@
 # entirely: after this runs, a new tenant needs DNS and a database row, and
 # nothing on this machine changes ever again.
 #
-#   BASE_DOMAIN=incenva.com DO_TOKEN=dop_v1_... bash scripts/setup-wildcard-tls.sh
+#   BASE_DOMAIN=incenva.com CLOUDFLARE_TOKEN=... bash scripts/setup-wildcard-tls.sh
+#   BASE_DOMAIN=incenva.com DO_TOKEN=dop_v1_...   bash scripts/setup-wildcard-tls.sh
+#
+# Use the provider that hosts the DNS ZONE, which is not necessarily the one
+# hosting the server. The plugin has to create an _acme-challenge record, so it
+# needs authority over the domain — pointing it at the wrong provider fails with
+# "Unable to determine base domain", which reads like a syntax problem and is
+# really "that zone is not in this account".
 #
 # Safe to re-run. It reissues nothing that already covers the wildcard, and it
 # will not reload nginx unless `nginx -t` passes — a bad config plus a reload
@@ -43,35 +50,49 @@ fail() { echo -e "${RED}✖${NC} $*" >&2; exit 1; }
 
 BASE_DOMAIN="${BASE_DOMAIN:-}"
 DO_TOKEN="${DO_TOKEN:-}"
+CLOUDFLARE_TOKEN="${CLOUDFLARE_TOKEN:-}"
 INCLUDE_APEX="${INCLUDE_APEX:-0}"
 EMAIL="${LETSENCRYPT_EMAIL:-admin@${BASE_DOMAIN}}"
-CREDS="/root/.secrets/digitalocean.ini"
+# Which DNS provider holds the zone. Decided by which token was supplied.
+if [[ -n "$CLOUDFLARE_TOKEN" ]]; then
+  DNS_PROVIDER="cloudflare"
+elif [[ -n "$DO_TOKEN" ]]; then
+  DNS_PROVIDER="digitalocean"
+else
+  DNS_PROVIDER="${DNS_PROVIDER:-}"
+fi
+CREDS="/root/.secrets/${DNS_PROVIDER:-dns}.ini"
 PROPAGATION="${DNS_PROPAGATION_SECONDS:-60}"
 
 [[ $EUID -eq 0 ]] || fail "run as root — certbot writes to /etc/letsencrypt and nginx"
 [[ -n "$BASE_DOMAIN" ]] || fail "BASE_DOMAIN is required, e.g. BASE_DOMAIN=incenva.com"
 
-# ── 1. certbot and the DigitalOcean DNS plugin ───────────────────────────────
-log "1/5  Installing certbot and the DigitalOcean DNS plugin"
+# ── 1. certbot and the DNS plugin for whichever provider holds the zone ──────
+log "1/5  Installing certbot and the DNS plugin"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y -qq certbot python3-certbot-dns-digitalocean nginx >/dev/null
-ok "certbot $(certbot --version 2>&1 | awk '{print $2}')"
+[[ -n "$DNS_PROVIDER" ]] || fail "supply CLOUDFLARE_TOKEN or DO_TOKEN — whichever hosts the ${BASE_DOMAIN} zone"
+apt-get install -y -qq certbot "python3-certbot-dns-${DNS_PROVIDER}" nginx >/dev/null
+ok "certbot $(certbot --version 2>&1 | awk '{print $2}') with the ${DNS_PROVIDER} plugin"
 
 # ── 2. Credentials ───────────────────────────────────────────────────────────
-log "2/5  DigitalOcean API credentials"
-if [[ -n "$DO_TOKEN" ]]; then
+log "2/5  ${DNS_PROVIDER} API credentials"
+if [[ -n "$CLOUDFLARE_TOKEN" || -n "$DO_TOKEN" ]]; then
   mkdir -p "$(dirname "$CREDS")"
   # Written with restrictive permissions BEFORE the token goes in, so it is
   # never briefly world-readable. certbot also refuses a loose file outright.
   install -m 600 /dev/null "$CREDS"
-  printf 'dns_digitalocean_token = %s\n' "$DO_TOKEN" > "$CREDS"
+  if [[ "$DNS_PROVIDER" == "cloudflare" ]]; then
+    printf 'dns_cloudflare_api_token = %s\n' "$CLOUDFLARE_TOKEN" > "$CREDS"
+  else
+    printf 'dns_digitalocean_token = %s\n' "$DO_TOKEN" > "$CREDS"
+  fi
   ok "wrote $CREDS (0600)"
 elif [[ -f "$CREDS" ]]; then
   chmod 600 "$CREDS"
   ok "using the existing $CREDS"
 else
-  fail "no DO_TOKEN given and no $CREDS on disk — the DNS challenge needs one"
+  fail "no token given and no $CREDS on disk — the DNS challenge needs one"
 fi
 
 # ── 3. The certificate ───────────────────────────────────────────────────────
@@ -92,9 +113,9 @@ else
   # certonly, not --nginx: the nginx installer cannot wire up a wildcard, and
   # we edit the server block ourselves in step 4 where it can be checked.
   certbot certonly \
-    --dns-digitalocean \
-    --dns-digitalocean-credentials "$CREDS" \
-    --dns-digitalocean-propagation-seconds "$PROPAGATION" \
+    "--dns-${DNS_PROVIDER}" \
+    "--dns-${DNS_PROVIDER}-credentials" "$CREDS" \
+    "--dns-${DNS_PROVIDER}-propagation-seconds" "$PROPAGATION" \
     --non-interactive --agree-tos -m "$EMAIL" \
     --cert-name "$BASE_DOMAIN" \
     "${DOMAIN_ARGS[@]}"
