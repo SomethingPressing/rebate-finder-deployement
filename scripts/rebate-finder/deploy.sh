@@ -63,7 +63,24 @@ BACKUP_FILE="$BACKUP_DIR/deploy_$(date '+%Y-%m-%d_%H-%M').sql"
 PG_URL="$(echo "$DATABASE_URL" | sed 's/?.*$//')"
 pg_dump --no-owner --no-acl --clean --if-exists "$PG_URL" > "$BACKUP_FILE"
 ok "DB backed up → $BACKUP_FILE"
-pnpm prisma db push --skip-generate --accept-data-loss
+# Constraints first, then a PLAIN push.
+#
+# --accept-data-loss used to be here, and on 2026-08-14 it destroyed a shared
+# database serving six tenants: the schema had gained a new NOT NULL column and
+# a widened primary key, Prisma could not do either in place, and the flag told
+# it to go ahead anyway. It did — by recreating the tables empty.
+#
+# The flag exists for the case where you have READ the warning and accept it.
+# In an unattended script nobody reads it, so it means "destroy whatever is in
+# the way", every time, forever.
+#
+# db:constraints does the work the warning is usually about — adding a unique,
+# widening a key — safely and idempotently, and REFUSES with the offending rows
+# when it genuinely cannot. The push that follows then has nothing to warn
+# about. If it still refuses, that refusal is the correct outcome: the deploy
+# fails and the data survives.
+sudo -u rf bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm db:constraints --apply"
+pnpm prisma db push --skip-generate
 ok "Schema synced"
 
 log "4a/6  scraper config trigger (idempotent)"

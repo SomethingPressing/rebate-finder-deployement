@@ -289,7 +289,12 @@ ok "Installing npm dependencies…"
 sudo -u "$APP_USER" pnpm install --frozen-lockfile 2>&1 | tail -3
 
 ok "Pushing Prisma schema…"
-sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db push --skip-generate --accept-data-loss"
+# NEVER --accept-data-loss. Re-running provisioning against a host that is
+# already serving tenants used to wipe their shared database — see deploy.sh
+# for the incident. Provisioning must be safe to repeat, because "carry out"
+# on an already-provisioned tenant is a normal thing to do.
+sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm db:constraints --apply || true"
+sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma db push --skip-generate"
 
 ok "Regenerating Prisma client…"
 sudo -u "$APP_USER" bash -c "export DATABASE_URL='$DATABASE_URL'; pnpm prisma generate" 2>&1 | tail -1
